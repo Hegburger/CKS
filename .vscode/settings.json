@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "MOUSE.C": "cpp",
+        "main.h": "c",
+        "common.h": "c",
+        "verify.h": "c"
+    }
+}
