@@ -30,9 +30,13 @@ int page_login() {
         mou_pos(&MouseX, &MouseY, &press);
         
         if (mouse_press(265+65, 128, 265+65+280, 128+height) == 1) {
-            input_str(265+65+16, 128+5, input_name, 0, 3);
+            setfillstyle(SOLID_FILL,LIGHTGRAY);
+            bar(265+120+1,128, 265+65+280, 128+height);
+            input_str(265+120+16, 128+5, input_name, 1, 3);
         } else if (mouse_press(265+65, 128+height+gap, 265+65+280, 128+height*2+gap) == 1) {
-            input_str(265+65+16, 128+height+gap+5, password, 0, 3);
+            setfillstyle(SOLID_FILL,LIGHTGRAY);
+            bar(265+65+1, 128+height+gap, 265+65+280, 128+height*2+gap);
+            input_str(265+65+16, 128+height+gap+5, password, 1, 3);
         } else if (mouse_press(290, 128+height*2+gap*2, 290+70, 128+height*2+gap*2+50) == 1) {
             if ((fr = fopen("list.dat", "rb")) == NULL) {
                 puthz(310, 128+height*2+gap*2+5, "数据库打开失败", 16, 16, RED);

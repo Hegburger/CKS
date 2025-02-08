@@ -1,29 +1,29 @@
 #include"common.h"
 #include"mouse.h"
 /****
-function:å°†è¾“å…¥çš„å­—ç¬¦ä¸²æ˜¾ç¤ºåœ¨å±å¹•ï¼Œ
-å¹¶å°†è¾“å…¥å†…å®¹å­˜å‚¨åˆ°æŒ‡å®šåœ°ç‚¹
+function:½«ÊäÈëµÄ×Ö·û´®ÏÔÊ¾ÔÚÆÁÄ»£¬
+²¢½«ÊäÈëÄÚÈİ´æ´¢µ½Ö¸¶¨µØµã
 (based on outtextxy)
 author:Chengkai Huang
 *****/
 
 void input_str(int x, int y, char *save_str, int font ,int size) {
-    char tepStr[20];   // ç”¨äºå­˜å‚¨å½“å‰è¾“å…¥çš„å­—ç¬¦ä¸²
-    char kip;          // å½“å‰é”®å…¥å€¼
-    int num = 0;       // é”®å…¥çš„å­—ç¬¦ä¸ªæ•°
-        // æ–‡æœ¬åŒºåŸŸçš„å®½åº¦å’Œé«˜åº¦
+    char tepStr[20];   // ÓÃÓÚ´æ´¢µ±Ç°ÊäÈëµÄ×Ö·û´®
+    char kip;          // µ±Ç°¼üÈëÖµ
+    int num = 0;       // ¼üÈëµÄ×Ö·û¸öÊı
+        // ÎÄ±¾ÇøÓòµÄ¿í¶ÈºÍ¸ß¶È
     int text_width ;
     int text_height;
     int max_x,max_y,right_x,bottom_y;
     unsigned int malloc_size;
     void *background;
     strcpy(tepStr,save_str);
-    num = strlen(tepStr);  // åˆå§‹åŒ–å­—ç¬¦ä¸²
+    num = strlen(tepStr);  // ³õÊ¼»¯×Ö·û´®
     max_x = getmaxx();
     max_y = getmaxy();
-    // è®¾ç½®æ–‡æœ¬æ ·å¼ï¼Œå…è®¸æ ¹æ®ç”¨æˆ·è¾“å…¥è°ƒæ•´å­—ä½“å¤§å°
-    settextstyle(font, 0, size);  // æŒ‡å®šçš„å­—ä½“æ ·å¼å’Œå¤§å°
-    text_width = textwidth("W") * 20;  // ä¸ºäº†é¿å…è¶…å‡ºè¾¹ç•Œï¼Œç»™å®šè¶³å¤Ÿå®½åº¦
+    // ÉèÖÃÎÄ±¾ÑùÊ½£¬ÔÊĞí¸ù¾İÓÃ»§ÊäÈëµ÷Õû×ÖÌå´óĞ¡
+    settextstyle(font, 0, size);  // Ö¸¶¨µÄ×ÖÌåÑùÊ½ºÍ´óĞ¡
+    text_width = textwidth("W") * 20;  // ÎªÁË±ÜÃâ³¬³ö±ß½ç£¬¸ø¶¨×ã¹»¿í¶È
     text_height = textheight("W")+10;
     
     right_x = (x + text_width) > max_x ? max_x : (x + text_width);
@@ -35,42 +35,43 @@ void input_str(int x, int y, char *save_str, int font ,int size) {
     if (background == NULL){
         printf("malloc error!");
         return;
-    }             // åˆ†é…è¶³å¤Ÿçš„å†…å­˜
+    }             // ·ÖÅä×ã¹»µÄÄÚ´æ
 
-    // æš‚å­˜å½“å‰è¾“å…¥åŒºåŸŸçš„èƒŒæ™¯å›¾åƒ
+    // Ôİ´æµ±Ç°ÊäÈëÇøÓòµÄ±³¾°Í¼Ïñ
     getimage(x, y, right_x, bottom_y, background);
-
-    // æŒç»­è·å–é”®ç›˜è¾“å…¥
+    outtextxy(x,y,tepStr);
+    // ³ÖĞø»ñÈ¡¼üÅÌÊäÈë
     while (1) {
         if (kbhit()) {
-            kip = getche();  // è·å–ç”¨æˆ·è¾“å…¥çš„å­—ç¬¦å¹¶æ˜¾ç¤º
+            kip = getche();  // »ñÈ¡ÓÃ»§ÊäÈëµÄ×Ö·û²¢ÏÔÊ¾
 
-            if (kip == 13) {  // å¦‚æœæŒ‰ä¸‹å›è½¦é”®ï¼Œç»“æŸè¾“å…¥
+            if (kip == 13) {  // Èç¹û°´ÏÂ»Ø³µ¼ü£¬½áÊøÊäÈë
                 save_bk_mou(MouseX,MouseY);
                 drawmous(MouseX,MouseY);
                 break;
-            } else if (kip == 8 && num > 0) {  // å¦‚æœæŒ‰ä¸‹åˆ é™¤é”®
-                // æ¸…é™¤å½“å‰è¾“å…¥åŒºåŸŸï¼ˆé€šè¿‡æ¢å¤èƒŒæ™¯å›¾åƒï¼‰
-                putimage(x, y, background, COPY_PUT);  // æ¢å¤èƒŒæ™¯å›¾åƒ
+            } else if (kip == 8 && num > 0) {  // Èç¹û°´ÏÂÉ¾³ı¼ü
+                // Çå³ıµ±Ç°ÊäÈëÇøÓò£¨Í¨¹ı»Ö¸´±³¾°Í¼Ïñ£©
+                putimage(x, y, background, COPY_PUT);  // »Ö¸´±³¾°Í¼Ïñ
 
-                // åˆ é™¤æœ€åä¸€ä¸ªå­—ç¬¦
+                // É¾³ı×îºóÒ»¸ö×Ö·û
                 tepStr[--num] = '\0';
 
-                // é‡æ–°ç»˜åˆ¶æ›´æ–°åçš„æ–‡æœ¬
-                outtextxy(x, y, tepStr);  // æ˜¾ç¤ºæ›´æ–°åçš„æ–‡æœ¬
-            } else if (num < 20&&kip != 8) {  // å¦‚æœè¾“å…¥çš„å­—ç¬¦æœªè¶…è¿‡é™åˆ¶
-                tepStr[num++] = kip;  // æ·»åŠ æ–°å­—ç¬¦
-                tepStr[num] = '\0';   // ä¿è¯å­—ç¬¦ä¸²ç»“æŸç¬¦æ­£ç¡®
+                // ÖØĞÂ»æÖÆ¸üĞÂºóµÄÎÄ±¾
+                outtextxy(x, y, tepStr);  // ÏÔÊ¾¸üĞÂºóµÄÎÄ±¾
+            } else if (num < 20&&kip != 8) {  // Èç¹ûÊäÈëµÄ×Ö·ûÎ´³¬¹ıÏŞÖÆ
+                tepStr[num++] = kip;  // Ìí¼ÓĞÂ×Ö·û
+                tepStr[num] = '\0';   // ±£Ö¤×Ö·û´®½áÊø·ûÕıÈ·
 
-                // é‡æ–°ç»˜åˆ¶å­—ç¬¦
-                outtextxy(x, y, tepStr);  // æ˜¾ç¤ºæ–°çš„æ–‡æœ¬
+                // ÖØĞÂ»æÖÆ×Ö·û
+                outtextxy(x, y, tepStr);  // ÏÔÊ¾ĞÂµÄÎÄ±¾
             }
         }
     }
 
-    // å°†å½“å‰è¾“å…¥çš„å­—ç¬¦ä¸²ä¿å­˜åˆ°æŒ‡å®šçš„ä½ç½®
+    // ½«µ±Ç°ÊäÈëµÄ×Ö·û´®±£´æµ½Ö¸¶¨µÄÎ»ÖÃ
     strcpy(save_str, tepStr);
 
-    // é‡Šæ”¾æš‚å­˜çš„èƒŒæ™¯å›¾åƒå†…å­˜
+    // ÊÍ·ÅÔİ´æµÄ±³¾°Í¼ÏñÄÚ´æ
     free(background);
 }
+

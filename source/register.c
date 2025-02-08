@@ -25,13 +25,21 @@ int page_register(){
     while(1){
         mou_pos(&MouseX,&MouseY,&press);
         if(mouse_press(265+65,128,265+65+280,128+height)==1){
-            input_str(265+65+16,128+5,x.phone,0,3);
+            setfillstyle(SOLID_FILL,LIGHTGRAY);
+            bar(265+65+16,128,265+65+280,128+height);
+            input_str(265+65+16,128+5,x.phone,1,3);
         }else if(mouse_press(265+65,128+height+gap,265+65+280,128+height*2+gap)==1){
-            input_str(265+65+16,128+height+gap+5,x.name,0,3);
+            setfillstyle(SOLID_FILL,LIGHTGRAY);
+            bar(265+65+16,128+height+gap,265+65+280,128+height*2+gap);
+            input_str(265+65+16,128+height+gap+5,x.name,1,3);
         }else if(mouse_press(265+65,128+height*2+gap*2,265+65+280,128+height*3+gap*2)==1){
-            input_str(265+65+16,128+height*2+gap*2+5,x.password,0,3);
+            setfillstyle(SOLID_FILL,LIGHTGRAY);
+            bar(265+65+16,128+height*2+gap*2,265+65+280,128+height*3+gap*2);
+            input_str(265+65+16,128+height*2+gap*2+5,x.password,1,3);
         }else if(mouse_press(265+65,128+height*3+gap*3,265+65+280,128+height*4+gap*3)==1){
-            input_str(265+65+16,128+height*3+gap*3+5,password,0,3);
+            setfillstyle(SOLID_FILL,LIGHTGRAY);
+            bar(265+65+16,128+height*3+gap*3,265+65+280,128+height*4+gap*3);
+            input_str(265+65+16,128+height*3+gap*3+5,password,1,3);
         }else if(mouse_press(290,128+height*4+gap*4,290+70,128+height*4+gap*4+50)==1){
         if(validate_phone(x.phone)==1){
             if(len_verify(x.name,3,18)==1){
@@ -88,22 +96,23 @@ void register_screen(){
     setlinestyle(SOLID_LINE,0,NORM_WIDTH);
     setfillstyle(SOLID_FILL,LIGHTGRAY);
     line(220,0,220,480);
-    bar(350,50,350+132,50+58);//“注册�?
-    bar(265,128,265+65,128+height);//“手机号�?
+    bar(350,50,350+132,50+58);//“注册�?
+
+    bar(265,128,265+65,128+height);//“手机号�???
     bar(265+65,128,265+65+280,128+height);
     
-    bar(265,128+height+gap,265+65,128+height*2+gap);//“用户名�?
+    bar(265,128+height+gap,265+65,128+height*2+gap);//“用户名�???
     bar(265+65,128+height+gap,265+65+280,128+height*2+gap);
 
-    bar(265,128+height*2+gap*2,265+65,128+height*3+gap*2);//“serect�?
+    bar(265,128+height*2+gap*2,265+65,128+height*3+gap*2);//“serect�???
     bar(265+65,128+height*2+gap*2,265+65+280,128+height*3+gap*2);
 
-    bar(265,128+height*3+gap*3,265+65,128+height*4+gap*3);//“secret again�?
+    bar(265,128+height*3+gap*3,265+65,128+height*4+gap*3);//“secret again�???
     bar(265+65,128+height*3+gap*3,265+65+280,128+height*4+gap*3);
 
     setfillstyle(SOLID_FILL,LIGHTBLUE);
-    bar(290,128+height*4+gap*4,290+70,128+height*4+gap*4+50);//确认
-    bar(290+70+90,128+height*4+gap*4,290+70+90+70,128+height*4+gap*4+50);//登录
+    bar(290,128+height*4+gap*4,290+70,128+height*4+gap*4+50);//ȷ��
+    bar(290+70+90,128+height*4+gap*4,290+70+90+70,128+height*4+gap*4+50);//��¼
 
     setcolor(BROWN);
     for(i =0;i<4;i++){
