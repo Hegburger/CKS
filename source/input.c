@@ -75,3 +75,70 @@ void input_str(int x, int y, char *save_str, int font ,int size) {
     free(background);
 }
 
+/****
+function:让用户鼠标选中省份，并将省份存储到指定位置
+author:Chengkai Huang
+finished time:2025/2/19
+*****/
+void input_province(char *save_province){
+    char provinces[33][3] = {
+        "京", "津", "冀", "晋", "蒙", "辽", "吉", "黑", "沪", "苏",
+        "浙", "皖", "闽", "赣", "鲁", "豫", "鄂", "湘", "粤", "桂",
+        "琼", "川", "贵", "云", "陕", "甘", "青", "宁", "新", "藏",
+        "港", "澳", "台"
+    };
+    char province_current[3];
+    int num_provinces = 33;
+    int max_per_row = 10;  // 每行最多显示10个省份
+    int width = 50;
+    int height = 50;
+  
+
+    // 按钮排列的起始坐标
+    int start_x = 100;
+    int start_y = 100;
+    int x,y,row,col,i;
+    int press_num;
+    void *background;
+    unsigned int image_size;
+    //存储画面
+    image_size = imagesize(start_x, start_y, start_x + (max_per_row * (width)), start_y + ((num_provinces / max_per_row + 1) * (height)));
+    background = malloc(image_size);
+    if (background == NULL){
+        printf("malloc error!");
+        return;
+    }
+    getimage(start_x, start_y, start_x + (max_per_row * (width)), start_y + ((num_provinces / max_per_row + 1) * (height)),background);
+    
+    // 绘制按钮
+    for (i = 0; i < num_provinces; i++) {
+        row = i / max_per_row;  // 计算当前省份所在的行
+        col = i % max_per_row;  // 计算当前省份所在的列
+        strcpy(province_current,provinces[i]);
+        x = start_x + col * (width); // 计算按钮的横坐标
+        y = start_y + row * (height); // 计算按钮的纵坐标
+        setfillstyle(SOLID_FILL, LIGHTGRAY);
+        bar(x, y, x + width, y + height); // 绘制按钮背景
+        setcolor(BROWN);
+        rectangle(x, y, x + width, y + height); // 绘制按钮边框
+        puthz(x + 15, y + 15, province_current, 16, 16, BROWN);  // 显示省份简称
+    }
+    
+    //选择省份
+    while(1){
+        mou_pos(&MouseX,&MouseY,&press);
+        //判断是否点击省份区域
+        if(mouse_press(start_x, start_y, start_x + (max_per_row * (width)), start_y + ((num_provinces / max_per_row + 1) * (height)))==1
+        &&mouse_press(start_x+(num_provinces%max_per_row)*width,start_y+(num_provinces/max_per_row)*height,start_x+(max_per_row)*width,start_y+(num_provinces/max_per_row+1)*height)!=1){
+            //计算点击身份在数组中的位置
+            press_num = (MouseX-start_x)/width+((MouseY-start_y)/height)*max_per_row;
+            strcpy(save_province,provinces[press_num]);//存储选中省份
+            putimage(start_x,start_y,background,COPY_PUT);
+            free(background);//释放内存
+            break;
+        }
+        
+    }
+
+    
+}
