@@ -7,8 +7,8 @@ function:将输入的字符串显示在屏幕，
 author:Chengkai Huang
 *****/
 
-void input_str(int x, int y, char *save_str, int font ,int size) {
-    char tepStr[20];   // 用于存储当前输入的字符串
+void input_str(int x, int y, char *save_str, int font ,int size,int num_max) {
+    char tepStr[21];   // 用于存储当前输入的字符串
     char kip;          // 当前键入值
     int num = 0;       // 键入的字符个数
         // 文本区域的宽度和高度
@@ -58,7 +58,7 @@ void input_str(int x, int y, char *save_str, int font ,int size) {
 
                 // 重新绘制更新后的文本
                 outtextxy(x, y, tepStr);  // 显示更新后的文本
-            } else if (num < 20&&kip != 8) {  // 如果输入的字符未超过限制
+            } else if (num < num_max&&kip != 8) {  // 如果输入的字符未超过限制
                 tepStr[num++] = kip;  // 添加新字符
                 tepStr[num] = '\0';   // 保证字符串结束符正确
 
@@ -142,3 +142,211 @@ void input_province(char *save_province){
 
     
 }
+
+/****
+function:让用户鼠标选中天气，并将天气存储到指定位置
+author:Chengkai Huang
+finished time:2025/2/20
+*****/
+void input_weather(char *save_weather) {
+    char weather_options[10][7] = {
+        "晴", "阴", "多云", "雷阵雨", "小雨", 
+        "中雨", "大雨", "暴雨", "雾霾", "雪"
+    };
+    char weather_current[7];
+    int num_accident_type = 10;
+    int max_per_row = 1;  // 每行最多显示1个天气选项
+    int width = 100;         // 按钮宽度
+    int height = 25;         // 按钮高度
+    int start_x = 250;       // 起始横坐标
+    int start_y = 100;       // 起始纵坐标
+    int x, y, row, i;
+    int press_num;
+    void *background;
+    unsigned int image_size;
+
+    // 存储画面
+    image_size = imagesize(start_x, start_y, start_x + (width), start_y + ((num_accident_type / max_per_row + 1) * (height)));
+    background = malloc(image_size);
+    if (background == NULL) {
+        printf("malloc error!");
+        return;
+    }
+    getimage(start_x, start_y, start_x + (width), start_y + ((num_accident_type / max_per_row + 1) * (height)), background);
+
+    // 绘制按钮
+    for (i = 0; i < num_accident_type; i++) {
+        row = i / max_per_row;  // 计算当前天气选项所在的行
+        y = start_y + row * (height); // 计算按钮的纵坐标
+        x = start_x+(i%max_per_row)*width;
+
+        strcpy(weather_current, weather_options[i]);
+        
+        setfillstyle(SOLID_FILL, WHITE);
+        bar(x, y, x + width, y + height); // 绘制按钮背景
+        setcolor(BLACK);
+        rectangle(x, y, x + width, y + height); // 绘制按钮边框
+        settextstyle(DEFAULT_FONT, HORIZ_DIR, 1); // 使用较小字体
+        puthz(x + (width - textwidth(weather_current)) / 2, y + (height - textheight(weather_current)) / 2, weather_current,16,16,BLACK); // 显示天气选项
+    }
+
+    // 选择天气
+    while (1) {
+        mou_pos(&MouseX, &MouseY, &press);
+
+        // 判断是否点击天气区域
+        if(mouse_press(start_x, start_y, start_x + (max_per_row * (width)), start_y + ((num_accident_type / max_per_row + 1) * (height)))==1
+        &&mouse_press(start_x+(num_accident_type%max_per_row)*width,start_y+(num_accident_type/max_per_row)*height,start_x+(max_per_row)*width,start_y+(num_accident_type/max_per_row+1)*height)!=1){
+            // 计算点击位置在数组中的位置
+            press_num = (MouseY - start_y) / height;
+            if (press_num < num_accident_type) {
+                strcpy(save_weather, weather_options[press_num]); // 存储选中的天气
+                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
+                free(background); // 释放内存
+                break;
+            }
+        }
+    }
+}
+/****
+function:让用户鼠标选中事故，并将事故类型对应代号存储到指定位置
+author:Chengkai Huang
+finished time:2025/2/21
+*****/
+
+void input_accident_type(char *save_accident_type) {
+    char accident_type_options[5][20] = {
+        "人—电动车", "人—汽车", "电动车—电动车", "电动车—汽车", "汽车—汽车", 
+    };
+    const char accident_type_char[5] = {
+        'A','B','C','D','E'
+        };
+    char weather_current[20];
+    int num_accident_type = 5;
+    int max_per_row = 1;  // 每行最多个数
+    int width = 130;         // 按钮宽度
+    int height = 25;         // 按钮高度
+    int start_x = 250;       // 起始横坐标
+    int start_y = 100;       // 起始纵坐标
+    int x, y, row, i;
+    int press_num;
+    void *background;
+    unsigned int image_size;
+
+    // 存储画面
+    image_size = imagesize(start_x, start_y, start_x + (width), start_y + ((num_accident_type / max_per_row + 1) * (height)));
+    background = malloc(image_size);
+    if (background == NULL) {
+        printf("malloc error!");
+        return;
+    }
+    getimage(start_x, start_y, start_x + (width), start_y + ((num_accident_type / max_per_row + 1) * (height)), background);
+
+    // 绘制按钮
+    for (i = 0; i < num_accident_type; i++) {
+        row = i / max_per_row;  // 计算当前天气选项所在的行
+        y = start_y + row * (height); // 计算按钮的纵坐标
+        x = start_x+(i%max_per_row)*width;
+
+        strcpy(weather_current, accident_type_options[i]);
+        
+        setfillstyle(SOLID_FILL, WHITE);
+        bar(x, y, x + width, y + height); // 绘制按钮背景
+        setcolor(BLACK);
+        rectangle(x, y, x + width, y + height); // 绘制按钮边框
+        settextstyle(DEFAULT_FONT, HORIZ_DIR, 1); // 使用较小字体
+        puthz(x + (width - textwidth(weather_current)) / 2, y + (height - textheight(weather_current)) / 2, weather_current,16,16,BLACK); // 显示天气选项
+    }
+
+    // 选择天气
+    while (1) {
+        mou_pos(&MouseX, &MouseY, &press);
+
+        // 判断是否点击天气区域
+        if(mouse_press(start_x, start_y, start_x + (max_per_row * (width)), start_y + ((num_accident_type / max_per_row + 1) * (height)))==1
+        &&mouse_press(start_x+(num_accident_type%max_per_row)*width,start_y+(num_accident_type/max_per_row)*height,start_x+(max_per_row)*width,start_y+(num_accident_type/max_per_row+1)*height)!=1){
+            // 计算点击位置在数组中的位置
+            press_num = (MouseY - start_y) / height;
+            if (press_num < num_accident_type) {
+                *save_accident_type = accident_type_char[press_num]; // 存储选中的天气
+                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
+                free(background); // 释放内存
+                break;
+            }
+        }
+    }
+}
+
+/*将事故字符转化为汉字并显示，x,y为左上角坐标，s为字符串，flag为图像大小（16，24，32，48），
+part为汉字间隔，color为颜色*/
+void put_accident_type(char type,int x, int y, int flag, int part, int color){
+    char accident_type_options[5][20] = {
+        "人—电动车", "人—汽车", "电动车—电动车", "电动车—汽车", "汽车—汽车", 
+    };
+    puthz(x,y,accident_type_options[type-'A'],flag,part,color);
+}
+
+/****
+function:让用户鼠标选中地点，并将地点存储到指定位置
+author:Chengkai Huang
+finished time:2025/2/21
+*****/
+void input_location(char *save_location) {
+    char location_options[9][17] = {
+        "东九楼下", "东九楼前路口", "韵苑食堂路口", "喻园大道", 
+        "绝望坡", "启明路", "华中路", "紫荆路", "其他"
+    };
+    char location_current[17];
+    int num_locations = 9;  // 总共9个地点选项
+    int max_per_column = 1; // 每列最多显示1个地点选项
+    int width = 200;        // 按钮宽度
+    int height = 30;        // 按钮高度
+    int start_x = 100;      // 起始横坐标
+    int start_y = 100;      // 起始纵坐标
+    int x, y, row, i;
+    int press_num;
+    void *background;
+    unsigned int image_size;
+
+    // 存储画面
+    image_size = imagesize(start_x, start_y, start_x + (width), start_y + ((num_locations / max_per_column + 1) * (height)));
+    background = malloc(image_size);
+    if (background == NULL) {
+        printf("malloc error!");
+        return;
+    }
+    getimage(start_x, start_y, start_x + (width), start_y + ((num_locations / max_per_column + 1) * (height)), background);
+
+    // 绘制按钮
+    for (i = 0; i < num_locations; i++) {
+        row = i / max_per_column;  // 计算当前地点选项所在的行
+        y = start_y + row * (height); // 计算按钮的纵坐标
+        x = start_x + (i % max_per_column) * width; // 计算按钮的横坐标
+
+        strcpy(location_current, location_options[i]);
+        
+        setfillstyle(SOLID_FILL, LIGHTGRAY);
+        bar(x, y, x + width, y + height); // 绘制按钮背景
+        setcolor(BLACK);
+        rectangle(x, y, x + width, y + height); // 绘制按钮边框
+        puthz(x + (width - textwidth(location_current)) / 2, y + (height - textheight(location_current)) / 2, location_current, 16, 16, BLACK); // 显示地点选项
+    }
+
+    // 选择地点
+    while (1) {
+        mou_pos(&MouseX, &MouseY, &press);
+
+        // 判断是否点击地点区域
+        if (mouse_press(start_x, start_y, start_x + (max_per_column * width), start_y + ((num_locations / max_per_column + 1) * height)) == 1) {
+            // 计算点击位置在数组中的位置
+            press_num = (MouseY - start_y) / height;
+            if (press_num < num_locations) {
+                strcpy(save_location, location_options[press_num]); // 存储选中的地点
+                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
+                free(background); // 释放内存
+                break;
+            }
+        }
+    }
+}
+

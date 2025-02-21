@@ -10,13 +10,12 @@ int page_register();
 int page_register(){
     int gap,height;
     char password[20];
-    user x;
+    User x;
     FILE *fw;
     gap = 30; 
     height = 35; 
     password[0]='\0';
-    x.id[0] = x.name[0] = x.password[0] = x.phone[0] = '\0';
-
+    x.username[0] = x.password[0] = x.phone[0] = '\0';
     clrmous(MouseX,MouseY);
     delay(100);
     cleardevice();
@@ -27,30 +26,32 @@ int page_register(){
         if(mouse_press(265+65,128,265+65+280,128+height)==1){
             setfillstyle(SOLID_FILL,LIGHTGRAY);
             bar(265+65+16,128,265+65+280,128+height);
-            input_str(265+65+16,128+5,x.phone,1,3);
+            input_str(265+65+16,128+5,x.phone,1,3,20);
         }else if(mouse_press(265+65,128+height+gap,265+65+280,128+height*2+gap)==1){
             setfillstyle(SOLID_FILL,LIGHTGRAY);
             bar(265+65+16,128+height+gap,265+65+280,128+height*2+gap);
-            input_str(265+65+16,128+height+gap+5,x.name,1,3);
+            input_str(265+65+16,128+height+gap+5,x.username,1,3,20);
         }else if(mouse_press(265+65,128+height*2+gap*2,265+65+280,128+height*3+gap*2)==1){
             setfillstyle(SOLID_FILL,LIGHTGRAY);
             bar(265+65+16,128+height*2+gap*2,265+65+280,128+height*3+gap*2);
-            input_str(265+65+16,128+height*2+gap*2+5,x.password,1,3);
+            input_str(265+65+16,128+height*2+gap*2+5,x.password,1,3,20);
         }else if(mouse_press(265+65,128+height*3+gap*3,265+65+280,128+height*4+gap*3)==1){
             setfillstyle(SOLID_FILL,LIGHTGRAY);
             bar(265+65+16,128+height*3+gap*3,265+65+280,128+height*4+gap*3);
-            input_str(265+65+16,128+height*3+gap*3+5,password,1,3);
+            input_str(265+65+16,128+height*3+gap*3+5,password,1,3,20);
         }else if(mouse_press(290,128+height*4+gap*4,290+70,128+height*4+gap*4+50)==1){
+            setfillstyle(SOLID_FILL,WHITE);
+            bar(310,128+height*4+gap*3+5,610,128+height*4+gap*3+25);
         if(validate_phone(x.phone)==1){
-            if(len_verify(x.name,3,18)==1){
+            if(len_verify(x.username,3,18)==1){
                 if(strcmp(x.password,password)==0){
                     if(validate_password(x.password)==1){
                         if((fw = fopen("list.dat","ab"))==NULL){
                             puthz(310,128+height*4+gap*3+5,"数据库打开失败",16,16,RED);    //打开文件失败
                         }else{
-                            fwrite(&x,sizeof(user),1,fw);
+                            fwrite(&x,sizeof(User),1,fw);
                             fclose(fw);
-                            puthz(310,128+height*4+gap*3+5,"注册成功",16,16,RED);//完成注册
+                            puthz(310,128+height*4+gap*3+5,"注册成功",16,16,GREEN);//完成注册
                             delay(1000);
                             clrmous(MouseX,MouseY);
                             return 2;
