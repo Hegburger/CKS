@@ -70,10 +70,86 @@ void input_str(int x, int y, char *save_str, int font ,int size,int num_max) {
 
     // 将当前输入的字符串保存到指定的位置
     strcpy(save_str, tepStr);
+    // 释放暂存的背景图像内存
+    free(background);
+    background = NULL;
+}
+void input_password(int x, int y, char *save_str, int font ,int size,int num_max) {
+    char tepStr[21];   // 用于存储当前输入的字符串
+    char passShow[21];
+    char kip;          // 当前键入值
+    int num = 0,i;       // 键入的字符个数
+        // 文本区域的宽度和高度
+    int text_width ;
+    int text_height;
+    int max_x,max_y,right_x,bottom_y;
+    unsigned int malloc_size;
+    void *background;
+    strcpy(tepStr,save_str);
+    num = strlen(tepStr);  // 初始化字符串
+    for(i = 0;i<num;i++){
+        passShow[i] = '*';
+    }
+    passShow[num] = '\0';
+    max_x = getmaxx();
+    max_y = getmaxy();
+    // 设置文本样式，允许根据用户输入调整字体大小
+    settextstyle(font, 0, size);  // 指定的字体样式和大小
+    text_width = textwidth("W") * 20;  // 为了避免超出边界，给定足够宽度
+    text_height = textheight("W")+10;
+    
+    right_x = (x + text_width) > max_x ? max_x : (x + text_width);
+    bottom_y = (y + text_height) > max_y ? max_y : (y + text_height);
+
+    clrmous(MouseX,MouseY);
+    malloc_size = imagesize(x,y,right_x,bottom_y);
+    background = malloc(malloc_size);
+    if (background == NULL){
+        printf("malloc error!");
+        return;
+    }             // 分配足够的内存
+
+    // 暂存当前输入区域的背景图像
+    getimage(x, y, right_x, bottom_y, background);
+    outtextxy(x,y,passShow);
+    // 持续获取键盘输入
+    while (1) {
+        if (kbhit()) {
+            kip = getche();  // 获取用户输入的字符并显示
+
+            if (kip == 13) {  // 如果按下回车键，结束输入
+                save_bk_mou(MouseX,MouseY);
+                drawmous(MouseX,MouseY);
+                break;
+            } else if (kip == 8 && num > 0) {  // 如果按下删除键
+                // 清除当前输入区域（通过恢复背景图像）
+                putimage(x, y, background, COPY_PUT);  // 恢复背景图像
+                // 删除最后一个字符
+                num--;
+                tepStr[num] = '\0';
+                passShow[num] = '\0';
+
+                // 重新绘制更新后的文本
+                outtextxy(x, y, passShow);  // 显示更新后的文本
+            } else if (num < num_max&&kip != 8) {  // 如果输入的字符未超过限制
+                tepStr[num] = kip;  // 添加新字符
+                passShow[num] = '*';
+                num++;
+                tepStr[num] = '\0';   // 保证字符串结束符正确
+                passShow[num] = '\0';
+                // 重新绘制字符
+                outtextxy(x, y, passShow);  // 显示新的文本
+            }
+        }
+    }
+
+    // 将当前输入的字符串保存到指定的位置
+    strcpy(save_str, tepStr);
 
     // 释放暂存的背景图像内存
     free(background);
 }
+
 
 /****
 function:让用户鼠标选中省份，并将省份存储到指定位置
@@ -81,17 +157,16 @@ author:Chengkai Huang
 finished time:2025/2/19
 *****/
 void input_province(char *save_province){
-    char provinces[33][3] = {
-        "京", "津", "冀", "晋", "蒙", "辽", "吉", "黑", "沪", "苏",
-        "浙", "皖", "闽", "赣", "鲁", "豫", "鄂", "湘", "粤", "桂",
-        "琼", "川", "贵", "云", "陕", "甘", "青", "宁", "新", "藏",
-        "港", "澳", "台"
+    char provinces[28][3] = {
+        "京", "津", "冀", "晋", "蒙", "吉", "黑", "沪", "苏",
+        "浙", "闽", "赣", "鲁", "豫", "鄂", "湘", "粤", "桂",
+        "琼", "川", "贵", "云", "陕", "青", "宁", "新", "藏", "台"
     };
     char province_current[3];
-    int num_provinces = 33;
-    int max_per_row = 10;  // 每行最多显示10个省份
-    int width = 50;
-    int height = 50;
+    int num_provinces = 28;
+    int max_per_row = 7;  // 每行最多显示10个省份
+    int width = 45;
+    int height = 45;
   
 
     // 按钮排列的起始坐标
@@ -134,12 +209,11 @@ void input_province(char *save_province){
             press_num = (MouseX-start_x)/width+((MouseY-start_y)/height)*max_per_row;
             strcpy(save_province,provinces[press_num]);//存储选中省份
             putimage(start_x,start_y,background,COPY_PUT);
-            free(background);//释放内存
             break;
         }
         
     }
-
+    free(background);//释放内存
     
 }
 
@@ -187,7 +261,7 @@ void input_weather(char *save_weather) {
         setcolor(BLACK);
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
         settextstyle(DEFAULT_FONT, HORIZ_DIR, 1); // 使用较小字体
-        puthz(x + (width - textwidth(weather_current)) / 2, y + (height - textheight(weather_current)) / 2, weather_current,16,16,BLACK); // 显示天气选项
+        puthz(x + (width - textwidth(weather_current)) / 2, y + (height - textheight(weather_current)) / 2, weather_current,16,16,BROWN); // 显示天气选项
     }
 
     // 选择天气
@@ -202,11 +276,11 @@ void input_weather(char *save_weather) {
             if (press_num < num_accident_type) {
                 strcpy(save_weather, weather_options[press_num]); // 存储选中的天气
                 putimage(start_x, start_y, background, COPY_PUT); // 还原画面
-                free(background); // 释放内存
                 break;
             }
         }
     }
+    free(background); // 释放内存
 }
 /****
 function:让用户鼠标选中事故，并将事故类型对应代号存储到指定位置
@@ -244,7 +318,7 @@ void input_accident_type(char *save_accident_type) {
 
     // 绘制按钮
     for (i = 0; i < num_accident_type; i++) {
-        row = i / max_per_row;  // 计算当前天气选项所在的行
+        row = i / max_per_row;  // 计算当前选项所在的行
         y = start_y + row * (height); // 计算按钮的纵坐标
         x = start_x+(i%max_per_row)*width;
 
@@ -255,29 +329,29 @@ void input_accident_type(char *save_accident_type) {
         setcolor(BLACK);
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
         settextstyle(DEFAULT_FONT, HORIZ_DIR, 1); // 使用较小字体
-        puthz(x + (width - textwidth(weather_current)) / 2, y + (height - textheight(weather_current)) / 2, weather_current,16,16,BLACK); // 显示天气选项
+        puthz(x + (width - textwidth(weather_current)) / 2, y + (height - textheight(weather_current)) / 2, weather_current,16,16,BROWN); 
     }
 
     // 选择天气
     while (1) {
         mou_pos(&MouseX, &MouseY, &press);
 
-        // 判断是否点击天气区域
+        // 判断是否点击区域
         if(mouse_press(start_x, start_y, start_x + (max_per_row * (width)), start_y + ((num_accident_type / max_per_row + 1) * (height)))==1
         &&mouse_press(start_x+(num_accident_type%max_per_row)*width,start_y+(num_accident_type/max_per_row)*height,start_x+(max_per_row)*width,start_y+(num_accident_type/max_per_row+1)*height)!=1){
             // 计算点击位置在数组中的位置
             press_num = (MouseY - start_y) / height;
             if (press_num < num_accident_type) {
-                *save_accident_type = accident_type_char[press_num]; // 存储选中的天气
+                *save_accident_type = accident_type_char[press_num]; // 存储
                 putimage(start_x, start_y, background, COPY_PUT); // 还原画面
-                free(background); // 释放内存
                 break;
             }
         }
     }
+    free(background); // 释放内存
 }
 
-/*将事故字符转化为汉字并显示，x,y为左上角坐标，s为字符串，flag为图像大小（16，24，32，48），
+/*将事故字符转化为汉字并显示，x,y为左上角坐标，flag为图像大小（16，24，32，48），
 part为汉字间隔，color为颜色*/
 void put_accident_type(char type,int x, int y, int flag, int part, int color){
     char accident_type_options[5][20] = {
@@ -301,7 +375,7 @@ void input_location(char *save_location) {
     int max_per_column = 1; // 每列最多显示1个地点选项
     int width = 200;        // 按钮宽度
     int height = 30;        // 按钮高度
-    int start_x = 100;      // 起始横坐标
+    int start_x = 250;      // 起始横坐标
     int start_y = 100;      // 起始纵坐标
     int x, y, row, i;
     int press_num;
@@ -343,10 +417,153 @@ void input_location(char *save_location) {
             if (press_num < num_locations) {
                 strcpy(save_location, location_options[press_num]); // 存储选中的地点
                 putimage(start_x, start_y, background, COPY_PUT); // 还原画面
-                free(background); // 释放内存
                 break;
             }
         }
     }
+    free(background); // 释放内存
 }
+/****
+function:让用户鼠标选中车辆类型，并将类型存储到指定位置
+author:Chengkai Huang
+finished time:2025/2/24
+*****/
+void input_car_type(char *save_car_type) {
+    char car_type_options[5][7] = {
+        "小轿车","面包车","卡车","越野车","长款车"
+    };
+    char car_current[7];
+    int num_locations = 5;  // 总共9个地点选项
+    int max_per_column = 1; // 每列最多显示1个地点选项
+    int width = 200;        // 按钮宽度
+    int height = 30;        // 按钮高度
+    int start_x = 250;      // 起始横坐标
+    int start_y = 100;      // 起始纵坐标
+    int x, y, row, i;
+    int press_num;
+    void *background;
+    unsigned int image_size;
 
+    // 存储画面
+    image_size = imagesize(start_x, start_y, start_x + (width), start_y + ((num_locations / max_per_column + 1) * (height)));
+    background = malloc(image_size);
+    if (background == NULL) {
+        printf("malloc error!");
+        return;
+    }
+    getimage(start_x, start_y, start_x + (width), start_y + ((num_locations / max_per_column + 1) * (height)), background);
+
+    // 绘制按钮
+    for (i = 0; i < num_locations; i++) {
+        row = i / max_per_column;  // 计算当前地点选项所在的行
+        y = start_y + row * (height); // 计算按钮的纵坐标
+        x = start_x + (i % max_per_column) * width; // 计算按钮的横坐标
+
+        strcpy(car_current, car_type_options[i]);
+        
+        setfillstyle(SOLID_FILL, LIGHTGRAY);
+        bar(x, y, x + width, y + height); // 绘制按钮背景
+        setcolor(BLACK);
+        rectangle(x, y, x + width, y + height); // 绘制按钮边框
+        puthz(x + (width - textwidth(car_current)) / 2, y + (height - textheight(car_current)) / 2, car_current, 16, 16, BROWN); // 显示地点选项
+    }
+
+    // 选择地点
+    while (1) {
+        mou_pos(&MouseX, &MouseY, &press);
+
+        // 判断是否点击类型区域
+        if (mouse_press(start_x, start_y, start_x + (max_per_column * width), start_y + ((num_locations / max_per_column + 1) * height)) == 1) {
+            // 计算点击位置在数组中的位置
+            press_num = (MouseY - start_y) / height;
+            if (press_num < num_locations) {
+                strcpy(save_car_type, car_type_options[press_num]); // 存储选中的类型
+                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
+                break;
+            }
+        }
+    }
+    free(background); // 释放内存
+}
+/****
+function:输入时间
+author:Chengkai Huang
+finished time:2025/3/1
+*****/
+
+void input_time(int x, int y, char *save_str, int font ,int size) {
+    char tepStr[21];   // 用于存储当前输入的字符串
+    char kip;          // 当前键入值
+    int num = 0;       // 键入的字符个数
+        // 文本区域的宽度和高度
+    int text_width ;
+    int text_height;
+    int max_x,max_y,right_x,bottom_y;
+    unsigned int malloc_size;
+    void *background;
+    strcpy(tepStr,save_str);
+    num = strlen(tepStr);  // 初始化字符串
+    max_x = getmaxx();
+    max_y = getmaxy();
+    // 设置文本样式，允许根据用户输入调整字体大小
+    settextstyle(font, 0, size);  // 指定的字体样式和大小
+    text_width = textwidth("W") * 20;  // 为了避免超出边界，给定足够宽度
+    text_height = textheight("W")+10;
+    
+    right_x = (x + text_width) > max_x ? max_x : (x + text_width);
+    bottom_y = (y + text_height) > max_y ? max_y : (y + text_height);
+
+    clrmous(MouseX,MouseY);
+    malloc_size = imagesize(x,y,right_x,bottom_y);
+    background = malloc(malloc_size);
+    if (background == NULL){
+        printf("malloc error!");
+        return;
+    }             // 分配足够的内存
+
+    // 暂存当前输入区域的背景图像
+    getimage(x, y, right_x, bottom_y, background);
+    outtextxy(x,y,tepStr);
+    // 持续获取键盘输入
+    while (1) {
+        
+        if (kbhit()) {
+            kip = getche();  // 获取用户输入的字符并显示
+
+            if (kip == 13) {  // 如果按下回车键，结束输入
+                save_bk_mou(MouseX,MouseY);
+                drawmous(MouseX,MouseY);
+                break;
+            } else if (kip == 8 && num > 0) {  // 如果按下删除键
+                // 清除当前输入区域（通过恢复背景图像）
+                putimage(x, y, background, COPY_PUT);  // 恢复背景图像
+
+                // 删除最后一个字符
+                tepStr[--num] = '\0';
+
+                // 重新绘制更新后的文本
+                outtextxy(x, y, tepStr);  // 显示更新后的文本
+            } else if (num < 16&&kip >=48&&kip<=57) {  // 如果输入的字符未超过限制
+                tepStr[num++] = kip;  // 添加新字符
+                if(num==4){
+                    tepStr[num++] = '/';
+                }else if(num==7){
+                    tepStr[num++] = '/';
+                }else if(num == 10){
+                    tepStr[num++] = ' ';
+                }else if(num == 13){
+                    tepStr[num++] = ':';
+                }
+                tepStr[num] = '\0';   // 保证字符串结束符正确
+                
+                // 重新绘制字符
+                outtextxy(x, y, tepStr);  // 显示新的文本
+            }
+        }
+    }
+     // 将当前输入的字符串保存到指定的位置
+     strcpy(save_str, tepStr);
+
+     // 释放暂存的背景图像内存
+     free(background);
+}

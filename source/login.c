@@ -36,7 +36,7 @@ int page_login() {
         } else if (mouse_press(265+65, 128+height+gap, 265+65+280, 128+height*2+gap) == 1) {
             setfillstyle(SOLID_FILL,LIGHTGRAY);
             bar(265+65+1, 128+height+gap, 265+65+280, 128+height*2+gap);
-            input_str(265+65+16, 128+height+gap+5, password, 1, 3,20);
+            input_password(265+65+16, 128+height+gap+5, password, 1, 3,20);
         } else if (mouse_press(290, 128+height*2+gap*2, 290+70, 128+height*2+gap*2+50) == 1) {
             //更新提示行
             setfillstyle(SOLID_FILL,WHITE);

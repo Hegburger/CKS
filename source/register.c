@@ -34,11 +34,11 @@ int page_register(){
         }else if(mouse_press(265+65,128+height*2+gap*2,265+65+280,128+height*3+gap*2)==1){
             setfillstyle(SOLID_FILL,LIGHTGRAY);
             bar(265+65+16,128+height*2+gap*2,265+65+280,128+height*3+gap*2);
-            input_str(265+65+16,128+height*2+gap*2+5,x.password,1,3,20);
+            input_password(265+65+16,128+height*2+gap*2+5,x.password,1,3,20);
         }else if(mouse_press(265+65,128+height*3+gap*3,265+65+280,128+height*4+gap*3)==1){
             setfillstyle(SOLID_FILL,LIGHTGRAY);
             bar(265+65+16,128+height*3+gap*3,265+65+280,128+height*4+gap*3);
-            input_str(265+65+16,128+height*3+gap*3+5,password,1,3,20);
+            input_password(265+65+16,128+height*3+gap*3+5,password,1,3,20);
         }else if(mouse_press(290,128+height*4+gap*4,290+70,128+height*4+gap*4+50)==1){
             setfillstyle(SOLID_FILL,WHITE);
             bar(310,128+height*4+gap*3+5,610,128+height*4+gap*3+25);

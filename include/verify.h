@@ -33,7 +33,7 @@ typedef struct {
     User per2;            // 事故的第二方（可能是人、汽车或电动车）
     char location[17];           // 事故发生地点
     char weather[7];             // 事故发生时的天气
-    char time[21];                // 事故发生时间，精确到分钟，例如："2025—05—10 14:30"
+    char time[17];                // 事故发生时间，精确到分钟，例如："2025—05—10 14:30"
     char accident_type;           // 事故类型代码（例如 'A' 表示 "人—车事故"，'B' 表示 "车—车事故"）
     //char description[255];       (后续考虑证词与事故说明等信息)
 } AccidentInfo;
@@ -58,5 +58,6 @@ int validate_phone(const char *phone);
 int validate_idcard(const char *idcard);
 // 验证密码是否符合要求（至少8位，包括数字、大写字母、小写字母和符号中的三种）
 int validate_password(const char *password);
-
+//验证车牌是否符合要求
+int validate_licence_car(const char *plate);
 #endif

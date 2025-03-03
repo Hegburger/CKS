@@ -1,8 +1,8 @@
 #include"common.h"
 #include<ctype.h>
 /*
-fincion:验证字符串长度是否符合规定。
-合规时返回1，不合规返回-1
+fincion:验证字符串长度是否符合规定�?
+合规时返�?1，不合规返回-1
 author:CHENGKAI HUANG
 */
 
@@ -29,7 +29,7 @@ int validate_phone(const char *phone) {
     return 1;
 }
 
-// 验证身份证号是否符合要求（18位数字）
+// 验证身份证号是否符合要求�?18位数字）
 int validate_idcard(const char *idcard) {
     int i;
     if (strlen(idcard) != 18) {
@@ -43,7 +43,7 @@ int validate_idcard(const char *idcard) {
     return 1;
 }
 
-// 验证密码是否符合要求（至少8位，包括数字、大写字母、小写字母和符号中的三种）
+// 验证密码是否符合要求（至�?8位，包括数字、大写字母、小写字母和符号中的三种�?
 int validate_password(const char *password) {
     int has_digit ;
     int has_lower;
@@ -53,7 +53,7 @@ int validate_password(const char *password) {
     int len,i;
     len = strlen(password);
     if (len < 8) {
-        return -1; // 密码长度至少 8 位
+        return -1; // 密码长度至少 8 �?
     }
 
     has_digit = 0;
@@ -78,4 +78,25 @@ int validate_password(const char *password) {
     }else{
         return -1;
     }
+}
+
+
+int validate_licence_car(const char *plate) {
+    int i;
+
+    // ���ƺų���Ӧ��Ϊ6
+    if (strlen(plate) != 6) {
+        return -1;
+    }
+    // ��һ���ַ��Ǵ�д��ĸ
+    if (!isupper(plate[0])) {
+        return -1;
+    }
+    // ���������ַ���������ĸ������
+    for (i = 1; i < 6; i++) {
+        if (!isalnum(plate[i])) {
+            return -1;
+        }
+    }
+    return 1; // ��֤ͨ��
 }
