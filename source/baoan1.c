@@ -1,25 +1,69 @@
 #include"common.h"
 #include"verify.h"
 #include"input.h"
+#include"file.h"
+int baoan();
 void baoan_1_screen();
-int baoan_1();
 void draw_triangle(int x,int y,int blank_width);
-void baoan_1_click(AccidentInfo *p);
-int baoan_1(){
+void baoan_1_click(AccidentInfo *p,int *page);
+void baoan_2_click(AccidentInfo *p,int *page);
+void baoan_2_screen();
+int verify_baoan_1(AccidentInfo *p);
+int verify_baoan_2(AccidentInfo *p);
+int baoan(){
     AccidentInfo x;
-    x.location[0] = x.time[0] = x.weather[0] = '\0';
-
-    baoan_1_screen();
-    while(1){
-        mou_pos(&MouseX,&MouseY,&press);
-        baoan_1_click(&x);
-        if(mouse_press(595,0,640,45)==1){
-            closegraph();//关闭画图
-				delay(1000);
-			    exit(0);//退出程序
+    int page = 1;
+    int height = 40;
+    int lineStart_y = 80,numBlank=9;
+    //初始化
+    x.location[0] = x.time[0] = x.weather[0] = x.accident_type='\0';
+    x.per1_phone[0] = x.per2_phone[0] = x.per2_destroied_part[0]=x.per1_destroied_part[0]='\0';
+    x.per1_idcard[0] = x.per2_idcard[0] = '\0';
+    x.per1_car.plate[0] = x.per2_car.plate[0] = '\0';
+    while (1)
+    {
+        switch (page)
+        {
+        case 1:
+        baoan_1_screen();
+        while(page ==1){
+            mou_pos(&MouseX,&MouseY,&press);
+            baoan_1_click(&x,&page);
+            if(mouse_press(595,0,640,45)==1){
+                    closegraph();//关闭画图
+                    delay(1000);
+                    exit(0);//退出程序
+            }
+        }
+            break;
+        
+        case 2:
+        
+        cleardevice();
+        baoan_2_screen();
+        puthz(50,lineStart_y+height*1+10,x.location,24,24,LIGHTGRAY);
+        puthz(400,lineStart_y+height*1+10,x.weather,24,24,LIGHTGRAY);
+        put_accident_type(x.accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);
+    
+        while(1){
+            mou_pos(&MouseX,&MouseY,&press);
+            baoan_2_click(&x,&page);
+            if(mouse_press(595,0,640,45)==1){
+                    closegraph();//关闭画图
+                    delay(1000);
+                    exit(0);//退出程序
+            }
+        }
+            break;
+        
+        default:
+            break;
         }
     }
+    return page;
 }
+
+
 
 
 
@@ -86,7 +130,7 @@ void draw_triangle(int x, int y, int blank_width) {
     fillpoly(3, points);  // 绘制并填充三角形
 }
 
-void baoan_1_click(AccidentInfo *p){
+void baoan_1_click(AccidentInfo *p,int *page){
     int height = 40;
     int lineStart_y = 80,numBlank=9;
     
@@ -100,6 +144,8 @@ void baoan_1_click(AccidentInfo *p){
     }
     //地点
     if(mouse_press(0,lineStart_y+height*1,325,lineStart_y+height*2)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(50,lineStart_y+height*1+10,150,lineStart_y+height*1+10+28);
         input_location(p->location);
         puthz(50,lineStart_y+height*1+10,p->location,24,24,LIGHTGRAY);
         clrmous(MouseX, MouseY);
@@ -127,7 +173,7 @@ void baoan_1_click(AccidentInfo *p){
     }
     //id card
     if(mouse_press(0,lineStart_y+height*4,640,lineStart_y+height*5)==1){
-        input_str(100,lineStart_y+height*4+10,p->per1.idcard,1,3,18);
+        input_str(100,lineStart_y+height*4+10,p->per1_idcard,1,3,18);
         clrmous(MouseX, MouseY);
         delay(100);
         save_bk_mou(MouseX,MouseY);
@@ -135,7 +181,7 @@ void baoan_1_click(AccidentInfo *p){
     }
     //phone number
     if(mouse_press(0,lineStart_y+height*5,640,lineStart_y+height*6)==1){
-        input_str(100,lineStart_y+height*5+10,p->per1.phone,1,3,11);
+        input_str(100,lineStart_y+height*5+10,p->per1_phone,1,3,11);
         clrmous(MouseX, MouseY);
         delay(100);
         save_bk_mou(MouseX,MouseY);
@@ -143,8 +189,8 @@ void baoan_1_click(AccidentInfo *p){
     }
     //car type
     if(mouse_press(0,lineStart_y+height*6,325,lineStart_y+height*7)==1){
-        input_car_type(p->per1.car.type);
-        puthz(120,lineStart_y+height*6+10,p->per1.car.type,24,24,LIGHTGRAY);
+        input_car_type(p->per1_car.type);
+        puthz(120,lineStart_y+height*6+10,p->per1_car.type,24,24,LIGHTGRAY);
         clrmous(MouseX, MouseY);
         delay(100);
         save_bk_mou(MouseX,MouseY);
@@ -152,8 +198,9 @@ void baoan_1_click(AccidentInfo *p){
     }
     //车牌号
     if(mouse_press(325,lineStart_y+height*6,640,lineStart_y+height*7)==1){
-        input_province(p->per1.car.province);
-        puthz(410,lineStart_y+height*6+10,p->per1.car.province,24,24,LIGHTGRAY);
+        input_province(p->per1_car.province);
+        puthz(410,lineStart_y+height*6+10,p->per1_car.province,24,24,LIGHTGRAY);
+        input_str(430,lineStart_y+height*6+10,p->per1_car.plate,1,3,6);
         clrmous(MouseX, MouseY);
         delay(100);
         save_bk_mou(MouseX,MouseY);
@@ -161,6 +208,8 @@ void baoan_1_click(AccidentInfo *p){
     }
     //受损部位
     if(mouse_press(0,lineStart_y+height*7,640,lineStart_y+height*8)==1){
+        input_destroy_part(p->per1_destroied_part);
+        puthz(160,lineStart_y+height*7+10,p->per1_destroied_part,24,24,LIGHTGRAY);
         clrmous(MouseX, MouseY);
         delay(100);
         save_bk_mou(MouseX,MouseY);
@@ -168,10 +217,284 @@ void baoan_1_click(AccidentInfo *p){
     }
     //进入对方信息
     if(mouse_press(0,lineStart_y+height*8,640,lineStart_y+height*9)==1){
+        if(verify_baoan_1(p)==1){
+            *page =2;
+            clrmous(MouseX, MouseY);
+            delay(100);
+            save_bk_mou(MouseX,MouseY);
+
+        }
         clrmous(MouseX, MouseY);
         delay(100);
         save_bk_mou(MouseX,MouseY);
     return;
     }
 
+}
+
+
+void baoan_2_screen(){
+    int height = 40,i;
+    int lineStart_y = 80,numBlank=8;
+
+    setbkcolor(WHITE);
+    //退出按键
+     setcolor(LIGHTGRAY);
+     setlinestyle(DOTTED_LINE,0,NORM_WIDTH);
+     rectangle(595,0,640,45);
+     setlinestyle(SOLID_LINE,0,THICK_WIDTH);
+     line(595,0,640,45);
+     line(640,0,595,45);
+    //画线
+    setcolor(LIGHTGRAY);
+    setlinestyle(SOLID_LINE,0,NORM_WIDTH);
+    for(i = 0 ;i <= numBlank;i++){
+        line(0,lineStart_y+height*i,640,lineStart_y+height*i);
+
+    }
+//画三角形
+    for(i = 0;i <= numBlank ; i++){
+        if(i == 0 ||i == 4){
+            continue;
+        }
+        draw_triangle(580,lineStart_y+height*(i-1),height);
+    }
+    draw_triangle(280,lineStart_y+height,height);
+    draw_triangle(280,lineStart_y+height*6,height);
+    //画下一步按钮
+    setcolor(GREEN);
+    setfillstyle(SOLID_FILL,GREEN);
+    rectangle(270,lineStart_y+height*8+5,390,lineStart_y+height*8+40);
+    puthz(280,lineStart_y+height*8+5,"下一步",32,32,GREEN);
+
+    puthz(5,lineStart_y-29,"事故基本信息",24,24,BROWN);
+    puthz(5,lineStart_y+height-29,"时间",24,24,GREEN);
+    puthz(5,lineStart_y+height*2-29,"地点",24,24,GREEN);
+    puthz(325,lineStart_y+height*2-29,"天气",24,24,GREEN);
+    puthz(5,lineStart_y+height*3-29,"事故类型",24,24,GREEN);
+    puthz(5,lineStart_y+height*4-29,"对方信息",24,24,BROWN);
+    puthz(5,lineStart_y+height*5-29,"身份证号",24,24,GREEN);
+    puthz(5,lineStart_y+height*6-29,"手机号",24,24,GREEN);
+    puthz(5,lineStart_y+height*7-29,"车辆类型",24,24,GREEN);
+    puthz(325,lineStart_y+height*7-29,"车牌号",24,24,GREEN);
+    puthz(5,lineStart_y+height*8-29,"显著受损部位",24,24,GREEN);
+    
+    puthz(300,5,"报案",32,32,RED);
+
+    
+
+
+}
+
+void baoan_2_click(AccidentInfo *p,int *page){
+
+    int height = 40;
+    int lineStart_y = 80,numBlank=9;
+    
+    //时间
+    if(mouse_press(0,lineStart_y+height*0,640,lineStart_y+height*1)==1){
+        input_time(60,lineStart_y+height*0+5,p->time,1,3);
+        clrmous(MouseX, MouseY);
+        delay(100);
+        save_bk_mou(MouseX,MouseY);
+        return;
+    }
+    //地点
+    if(mouse_press(0,lineStart_y+height*1,325,lineStart_y+height*2)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(50,lineStart_y+height*1+10,150,lineStart_y+height*1+10+28);
+        input_location(p->location);
+        puthz(50,lineStart_y+height*1+10,p->location,24,24,LIGHTGRAY);
+        clrmous(MouseX, MouseY);
+        delay(100);
+        save_bk_mou(MouseX,MouseY);
+    return;
+    }
+    //weather
+    if(mouse_press(325,lineStart_y+height*1,640,lineStart_y+height*2)==1){
+        input_weather(p->weather);
+        puthz(400,lineStart_y+height*1+10,p->weather,24,24,LIGHTGRAY);
+        clrmous(MouseX, MouseY);
+        delay(100);
+        save_bk_mou(MouseX,MouseY);
+        return;
+    }
+    //accident type
+    if(mouse_press(0,lineStart_y+height*2,640,lineStart_y+height*3)==1){
+        input_accident_type(&(p->accident_type));
+        put_accident_type(p->accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);
+        clrmous(MouseX, MouseY);
+        delay(100);
+        save_bk_mou(MouseX,MouseY);
+        return;
+    }
+    //id card
+    if(mouse_press(0,lineStart_y+height*4,640,lineStart_y+height*5)==1){
+        input_str(100,lineStart_y+height*4+10,p->per2_idcard,1,3,18);
+        clrmous(MouseX, MouseY);
+        delay(100);
+        save_bk_mou(MouseX,MouseY);
+        return;
+    }
+    //phone number
+    if(mouse_press(0,lineStart_y+height*5,640,lineStart_y+height*6)==1){
+        input_str(100,lineStart_y+height*5+10,p->per2_phone,1,3,11);
+        clrmous(MouseX, MouseY);
+        delay(100);
+        save_bk_mou(MouseX,MouseY);
+        return;
+    }
+    //car type
+    if(mouse_press(0,lineStart_y+height*6,325,lineStart_y+height*7)==1){
+        input_car_type(p->per2_car.type);
+        puthz(120,lineStart_y+height*6+10,p->per2_car.type,24,24,LIGHTGRAY);
+        clrmous(MouseX, MouseY);
+        delay(100);
+        save_bk_mou(MouseX,MouseY);
+        return;
+    }
+    //车牌号
+    if(mouse_press(325,lineStart_y+height*6,640,lineStart_y+height*7)==1){
+        input_province(p->per2_car.province);
+        puthz(410,lineStart_y+height*6+10,p->per2_car.province,24,24,LIGHTGRAY);
+        input_str(430,lineStart_y+height*6+10,p->per2_car.plate,1,3,6);
+        clrmous(MouseX, MouseY);
+        delay(100);
+        save_bk_mou(MouseX,MouseY);
+        return;
+    }
+    //受损部位
+    if(mouse_press(0,lineStart_y+height*7,640,lineStart_y+height*8)==1){
+        input_destroy_part(p->per2_destroied_part);
+        puthz(160,lineStart_y+height*7+10,p->per2_destroied_part,24,24,LIGHTGRAY);
+        clrmous(MouseX, MouseY);
+        delay(100);
+        save_bk_mou(MouseX,MouseY);
+        return;
+    }
+    
+    //下一步
+    if(mouse_press(270,lineStart_y+height*8+5,390,lineStart_y+height*8+40)==1){
+        if(verify_baoan_2(p)==1){
+            if(save_accident_info(p)==1){
+                puthz(250,450,"报案成功",16,16,GREEN);
+                *page =3;
+            }else{
+                puthz(250,450,"保存失败",16,16,RED);
+            }
+            clrmous(MouseX, MouseY);
+            delay(100);
+            save_bk_mou(MouseX,MouseY);
+            return;
+        }
+        clrmous(MouseX, MouseY);
+        delay(100);
+        save_bk_mou(MouseX,MouseY);
+        return;
+    }
+
+}
+/*
+function:验证信息是否完备，完备返回1，否则输出不足并返回-1
+author:CHENGKAI HAUNG
+time:2025/3/9
+ */
+
+int verify_baoan_1(AccidentInfo *p){
+    //time
+    if(strlen(p->time)!=16){
+        puthz(250,450,"时间输入错误",16,16,RED);
+        return -1;
+    }
+    //location
+    if(p->location[0]=='\0'){
+        puthz(250,450,"请输入事故发生地点",16,16,RED);
+        return -1;
+    }
+    //weather
+    if(p->weather[0]=='\0'){
+        puthz(250,450,"请输入事发时天气",16,16,RED);
+        return -1;
+    }
+    //type
+    if(p->accident_type=='\0'){
+        puthz(250,450,"请输入事故类型",16,16,RED);
+        return -1;
+    }
+    //per_1_idcard
+    if(validate_idcard(p->per1_idcard)!=1){
+        puthz(250,450,"身份证输入错误",16,16,RED);
+        return -1;
+    }
+    //per_1_phone
+    if(validate_phone(p->per1_phone)!=1){
+        puthz(250,450,"手机号输入错误",16,16,RED);
+        return -1;
+    }
+    //per_1_type
+    if(p->per1_car.type[0]=='\0'){
+        puthz(250,450,"请输入车辆类型",16,16,RED);
+        return -1;
+    }
+    //per_1_carplate
+    if(validate_licence_car(p->per1_car.plate)!=1){
+        puthz(250,450,"车牌号输入错误",16,16,RED);
+        return -1;
+    }
+    //per_1_despart
+    if(p->per1_destroied_part[0]=='\0'){
+        puthz(250,450,"请输入受损部位",16,16,RED);
+        return -1;
+    }
+
+    
+
+     return 1;
+}
+int verify_baoan_2(AccidentInfo *p){
+     //time
+     if(strlen(p->time)!=16){
+        puthz(250,450,"时间输入错误",16,16,RED);
+        return -1;
+    }
+    //location
+    if(p->location[0]=='\0'){
+        puthz(250,450,"请输入事故发生地点",16,16,RED);
+        return -1;
+    }
+    //weather
+    if(p->weather[0]=='\0'){
+        puthz(250,450,"请输入事发时天气",16,16,RED);
+        return -1;
+    }
+    //type
+    if(p->accident_type=='\0'){
+        puthz(250,450,"请输入事故类型",16,16,RED);
+        return -1;
+    }
+     //per_2_idcard
+     if(validate_idcard(p->per2_idcard)!=1){
+        puthz(250,450,"身份证号输入错误",16,16,RED);
+        return -1;
+     }
+     //per_2_phone
+     if(validate_phone(p->per2_phone)!=1){
+        puthz(250,450,"手机号输入错误",16,16,RED);
+        return -1;
+     }
+     //per_2_type
+     if(p->per2_car.type[0]=='\0'){
+        puthz(250,450,"请输入车辆类型",16,16,RED);
+        return -1;
+     }
+     //per_2_carplate
+     if(validate_licence_car(p->per2_car.plate)!=1){
+        puthz(250,450,"车牌号输入错误",16,16,RED);
+        return -1;
+     }
+     //per_2_despart
+     if(p->per2_destroied_part[0]=='\0'){
+        puthz(250,450,"请输入受损部位",16,16,RED);
+        return -1;
+     }
 }

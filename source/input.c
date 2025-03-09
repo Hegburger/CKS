@@ -157,13 +157,13 @@ author:Chengkai Huang
 finished time:2025/2/19
 *****/
 void input_province(char *save_province){
-    char provinces[28][3] = {
+    char provinces[18][3] = {
         "京", "津", "冀", "晋", "蒙", "吉", "黑", "沪", "苏",
         "浙", "闽", "赣", "鲁", "豫", "鄂", "湘", "粤", "桂",
-        "琼", "川", "贵", "云", "陕", "青", "宁", "新", "藏", "台"
+        
     };
     char province_current[3];
-    int num_provinces = 28;
+    int num_provinces = 18;
     int max_per_row = 7;  // 每行最多显示10个省份
     int width = 45;
     int height = 45;
@@ -429,7 +429,7 @@ author:Chengkai Huang
 finished time:2025/2/24
 *****/
 void input_car_type(char *save_car_type) {
-    char car_type_options[5][7] = {
+    char des_part_options[5][7] = {
         "小轿车","面包车","卡车","越野车","长款车"
     };
     char car_current[7];
@@ -459,7 +459,7 @@ void input_car_type(char *save_car_type) {
         y = start_y + row * (height); // 计算按钮的纵坐标
         x = start_x + (i % max_per_column) * width; // 计算按钮的横坐标
 
-        strcpy(car_current, car_type_options[i]);
+        strcpy(car_current, des_part_options[i]);
         
         setfillstyle(SOLID_FILL, LIGHTGRAY);
         bar(x, y, x + width, y + height); // 绘制按钮背景
@@ -477,7 +477,7 @@ void input_car_type(char *save_car_type) {
             // 计算点击位置在数组中的位置
             press_num = (MouseY - start_y) / height;
             if (press_num < num_locations) {
-                strcpy(save_car_type, car_type_options[press_num]); // 存储选中的类型
+                strcpy(save_car_type, des_part_options[press_num]); // 存储选中的类型
                 putimage(start_x, start_y, background, COPY_PUT); // 还原画面
                 break;
             }
@@ -566,4 +566,62 @@ void input_time(int x, int y, char *save_str, int font ,int size) {
 
      // 释放暂存的背景图像内存
      free(background);
+}
+
+void input_destroy_part(char *save_des_type) {
+    char des_part_options[6][9] = {
+        "车头","车侧身","车尾","人四肢","人胸腹部","人全身"
+    };
+    char car_current[9];
+    int num_locations = 6;  // 总共6个选项
+    int max_per_column = 1; // 每列最多显示1个选项
+    int width = 200;        // 按钮宽度
+    int height = 30;        // 按钮高度
+    int start_x = 250;      // 起始横坐标
+    int start_y = 100;      // 起始纵坐标
+    int x, y, row, i;
+    int press_num;
+    void *background;
+    unsigned int image_size;
+
+    // 存储画面
+    image_size = imagesize(start_x, start_y, start_x + (width), start_y + ((num_locations / max_per_column + 1) * (height)));
+    background = malloc(image_size);
+    if (background == NULL) {
+        printf("malloc error!");
+        return;
+    }
+    getimage(start_x, start_y, start_x + (width), start_y + ((num_locations / max_per_column + 1) * (height)), background);
+
+    // 绘制按钮
+    for (i = 0; i < num_locations; i++) {
+        row = i / max_per_column;  // 计算当前选项所在的行
+        y = start_y + row * (height); // 计算按钮的纵坐标
+        x = start_x + (i % max_per_column) * width; // 计算按钮的横坐标
+
+        strcpy(car_current, des_part_options[i]);
+        
+        setfillstyle(SOLID_FILL, LIGHTGRAY);
+        bar(x, y, x + width, y + height); // 绘制按钮背景
+        setcolor(BLACK);
+        rectangle(x, y, x + width, y + height); // 绘制按钮边框
+        puthz(x + (width - textwidth(car_current)) / 2, y + (height - textheight(car_current)) / 2, car_current, 16, 16, BROWN); // 显示地点选项
+    }
+
+    // 选择地点
+    while (1) {
+        mou_pos(&MouseX, &MouseY, &press);
+
+        // 判断是否点击类型区域
+        if (mouse_press(start_x, start_y, start_x + (max_per_column * width), start_y + ((num_locations / max_per_column + 1) * height)) == 1) {
+            // 计算点击位置在数组中的位置
+            press_num = (MouseY - start_y) / height;
+            if (press_num < num_locations) {
+                strcpy(save_des_type, des_part_options[press_num]); // 存储选中的类型
+                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
+                break;
+            }
+        }
+    }
+    free(background); // 释放内存
 }

@@ -16,7 +16,7 @@ typedef struct {
 // 个人信息结构体：存储个人基本信息和车辆信息
 typedef struct {
     char username[21];               // 用户名
-    char phone[21];                   //手机号
+    char phone[12];                   //手机号
     char password[21];               //密码
     char idcard[21];                 // 身份证号（18位数字+结束符）
     char student_id[21];             // 学号
@@ -29,12 +29,20 @@ typedef struct {
 
 // 事故信息结构体：包含所有事故相关信息
 typedef struct {
-    User per1;            // 事故的第一方（可能是人、汽车或电动车）
-    User per2;            // 事故的第二方（可能是人、汽车或电动车）
+    per1_idcard[21];
+    per2_idcard[21];
+    per1_phone[12];
+    per2_phone[12];
+    CarInfo per1_car;
+    CarInfo per2_car;
+    EBikeInfo per1_ebike;
+    EBikeInfo per2_ebike;
     char location[17];           // 事故发生地点
     char weather[7];             // 事故发生时的天气
     char time[17];                // 事故发生时间，精确到分钟，例如："2025—05—10 14:30"
     char accident_type;           // 事故类型代码（例如 'A' 表示 "人—车事故"，'B' 表示 "车—车事故"）
+    char per1_destroied_part [9];
+    char per2_destroied_part[9];      //受损部位
     //char description[255];       (后续考虑证词与事故说明等信息)
 } AccidentInfo;
 

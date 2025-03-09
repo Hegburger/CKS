@@ -88,8 +88,8 @@ int validate_licence_car(const char *plate) {
     if (strlen(plate) != 6) {
         return -1;
     }
-    // 第一个字符是大写字母
-    if (!isupper(plate[0])) {
+    // 第一个字符是字母
+    if ((!isupper(plate[0]))&&(!islower(plate[0]))) {
         return -1;
     }
     // 后面的五个字符可以是字母或数字
