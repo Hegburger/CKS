@@ -20,6 +20,7 @@ int baoan(){
     x.per1_phone[0] = x.per2_phone[0] = x.per2_destroied_part[0]=x.per1_destroied_part[0]='\0';
     x.per1_idcard[0] = x.per2_idcard[0] = '\0';
     x.per1_car.plate[0] = x.per2_car.plate[0] = '\0';
+    x.processed_status = 0;
     while (1)
     {
         switch (page)
@@ -41,6 +42,8 @@ int baoan(){
         
         cleardevice();
         baoan_2_screen();
+        settextstyle(1, 0, 3);  // 对应的字体样式和大小
+        outtextxy(60,lineStart_y+height*0+5,x.time);
         puthz(50,lineStart_y+height*1+10,x.location,24,24,LIGHTGRAY);
         puthz(400,lineStart_y+height*1+10,x.weather,24,24,LIGHTGRAY);
         put_accident_type(x.accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);

@@ -29,10 +29,10 @@ typedef struct {
 
 // 事故信息结构体：包含所有事故相关信息
 typedef struct {
-    per1_idcard[21];
-    per2_idcard[21];
-    per1_phone[12];
-    per2_phone[12];
+    char per1_idcard[21];
+    char per2_idcard[21];
+    char per1_phone[12];
+    char per2_phone[12];
     CarInfo per1_car;
     CarInfo per2_car;
     EBikeInfo per1_ebike;
@@ -44,6 +44,9 @@ typedef struct {
     char per1_destroied_part [9];
     char per2_destroied_part[9];      //受损部位
     //char description[255];       (后续考虑证词与事故说明等信息)
+    char processed_status;       // 处理状态：'0' 表示未处理，'1' 表示已处理
+    char liability_result[20];   // 责任认定结果，如 "主责", "次责", "同责", "无责"
+    char liability_ratio[10];      // 责任比例，例如 "80/20" 或 "50%"
 } AccidentInfo;
 
 // 映射事故类型字母和实际描述

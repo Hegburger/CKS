@@ -11,6 +11,8 @@ void input_accident_type(char *save_accident_type);
 
 void put_accident_type(char type,int x, int y, int flag, int part, int color);
 
+void accident_type_trans(char type,char *save_type);
+
 void input_location(char *save_location);
 
 void input_car_type(char *save_car_type);

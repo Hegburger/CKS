@@ -359,6 +359,12 @@ void put_accident_type(char type,int x, int y, int flag, int part, int color){
     };
     puthz(x,y,accident_type_options[type-'A'],flag,part,color);
 }
+void accident_type_trans(char type,char *save_type){
+    char accident_type_options[5][20] = {
+        "人—电动车", "人—汽车", "电动车—电动车", "电动车—汽车", "汽车—汽车", 
+    };
+    strcpy(save_type,accident_type_options[type-'A']);
+}
 
 /****
 function:让用户鼠标选中地点，并将地点存储到指定位置
