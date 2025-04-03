@@ -19,6 +19,9 @@ void history_indi(char *user_idcard) {
                 delay(1000);
                 exit(0);//退出程序
         }
+        if(mouse_press(0, 0, 45, 45)==1){
+            return 3;//返回主页面
+        }
         if(mouse_press(0,header_y+row_height,640,end_y)==1){
             num_press = (MouseY-header_y-row_height)/row_height;//点击的结构体的序号（0开始）
             fp = fopen("ACCIDENT.dat", "rb");
@@ -77,7 +80,7 @@ int his_indi_screen(char *user_idcard,AccidentInfo *p){
     int current_row = 0;
     int display_y;
     char accident_type[20];
-
+    clrmous(MouseX,MouseY);
     cleardevice();
     setbkcolor(WHITE);
     setcolor(DARKGRAY);
@@ -87,6 +90,11 @@ int his_indi_screen(char *user_idcard,AccidentInfo *p){
     puthz(col_time, header_y, "事故时间",16,16,BROWN);
     puthz(col_type, header_y, "事故类型",16,16,BROWN);
     puthz(col_status, header_y, "处理状态",16,16,BROWN);
+    // 绘制返回箭头（"<" 形状）
+    setcolor(BLUE);
+    setlinestyle(SOLID_LINE, 0, THICK_WIDTH);
+    line(30, 15, 15, 22);  // 右上角到箭头尖
+    line(15, 22, 30, 30);  // 箭头尖到右下角
      //退出按键
      setcolor(LIGHTGRAY);
      setlinestyle(DOTTED_LINE,0,NORM_WIDTH);
@@ -151,16 +159,17 @@ int show_per1(AccidentInfo *x){
      setlinestyle(SOLID_LINE,0,THICK_WIDTH);
      line(595,0,640,45);
      line(640,0,595,45);
+
      // 返回按键（左上角）
     setcolor(LIGHTGRAY);
     setlinestyle(SOLID_LINE, 0, NORM_WIDTH);
     rectangle(0, 0, 45, 45); // 绘制返回按钮边框
-
     // 绘制返回箭头（"<" 形状）
     setcolor(BLUE);
     setlinestyle(SOLID_LINE, 0, THICK_WIDTH);
     line(30, 15, 15, 22);  // 右上角到箭头尖
     line(15, 22, 30, 30);  // 箭头尖到右下角
+    
     //画线
     setcolor(LIGHTGRAY);
     setlinestyle(SOLID_LINE,0,NORM_WIDTH);
@@ -314,4 +323,18 @@ int show_per2(AccidentInfo *x) {
 
     }
     return page;
+}
+
+
+void warning_screen(){
+    clock_t start,current;
+    clrmous(MouseX,MouseY);
+    cleardevice();
+    setbkcolor(WHITE);
+    puthz(170,100,"请先补充个人信息",32,32,RED);
+    current = start = clock();
+    while((current - start)/CLK_TCK < 3){
+        mou_pos(&MouseX,&MouseY,&press);
+        current = clock();
+    }
 }

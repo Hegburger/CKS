@@ -167,8 +167,6 @@ void input_province(char *save_province){
     int max_per_row = 7;  // 每行最多显示10个省份
     int width = 45;
     int height = 45;
-  
-
     // 按钮排列的起始坐标
     int start_x = 100;
     int start_y = 100;
@@ -198,7 +196,7 @@ void input_province(char *save_province){
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
         puthz(x + 15, y + 15, province_current, 16, 16, BROWN);  // 显示省份简称
     }
-    
+    delay(100);
     //选择省份
     while(1){
         mou_pos(&MouseX,&MouseY,&press);
@@ -208,13 +206,14 @@ void input_province(char *save_province){
             //计算点击身份在数组中的位置
             press_num = (MouseX-start_x)/width+((MouseY-start_y)/height)*max_per_row;
             strcpy(save_province,provinces[press_num]);//存储选中省份
+            
             putimage(start_x,start_y,background,COPY_PUT);
             break;
         }
         
     }
     free(background);//释放内存
-    
+    exit_input();
 }
 
 /****
@@ -238,7 +237,7 @@ void input_weather(char *save_weather) {
     int press_num;
     void *background;
     unsigned int image_size;
-
+    clrmous(MouseX,MouseY);
     // 存储画面
     image_size = imagesize(start_x, start_y, start_x + (width), start_y + ((num_accident_type / max_per_row + 1) * (height)));
     background = malloc(image_size);
@@ -263,7 +262,7 @@ void input_weather(char *save_weather) {
         settextstyle(DEFAULT_FONT, HORIZ_DIR, 1); // 使用较小字体
         puthz(x + (width - textwidth(weather_current)) / 2, y + (height - textheight(weather_current)) / 2, weather_current,16,16,BROWN); // 显示天气选项
     }
-
+    delay(100);
     // 选择天气
     while (1) {
         mou_pos(&MouseX, &MouseY, &press);
@@ -281,6 +280,7 @@ void input_weather(char *save_weather) {
         }
     }
     free(background); // 释放内存
+    exit_input();
 }
 /****
 function:让用户鼠标选中事故，并将事故类型对应代号存储到指定位置
@@ -331,7 +331,7 @@ void input_accident_type(char *save_accident_type) {
         settextstyle(DEFAULT_FONT, HORIZ_DIR, 1); // 使用较小字体
         puthz(x + (width - textwidth(weather_current)) / 2, y + (height - textheight(weather_current)) / 2, weather_current,16,16,BROWN); 
     }
-
+    delay(100);
     // 选择天气
     while (1) {
         mou_pos(&MouseX, &MouseY, &press);
@@ -349,6 +349,7 @@ void input_accident_type(char *save_accident_type) {
         }
     }
     free(background); // 释放内存
+    exit_input();
 }
 
 /*将事故字符转化为汉字并显示，x,y为左上角坐标，flag为图像大小（16，24，32，48），
@@ -374,7 +375,7 @@ finished time:2025/2/21
 void input_location(char *save_location) {
     char location_options[9][17] = {
         "东九楼下", "东九楼前路口", "韵苑食堂路口", "喻园大道", 
-        "绝望坡", "启明路", "华中路", "紫荆路", "其他"
+        "绝望坡", "启明路", "华中路", "紫荆路", "紫菘路"
     };
     char location_current[17];
     int num_locations = 9;  // 总共9个地点选项
@@ -387,7 +388,8 @@ void input_location(char *save_location) {
     int press_num;
     void *background;
     unsigned int image_size;
-
+    clrmous(MouseX,MouseY);
+    delay(100);
     // 存储画面
     image_size = imagesize(start_x, start_y, start_x + (width), start_y + ((num_locations / max_per_column + 1) * (height)));
     background = malloc(image_size);
@@ -411,7 +413,7 @@ void input_location(char *save_location) {
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
         puthz(x + (width - textwidth(location_current)) / 2, y + (height - textheight(location_current)) / 2, location_current, 16, 16, BLACK); // 显示地点选项
     }
-
+    delay(100);
     // 选择地点
     while (1) {
         mou_pos(&MouseX, &MouseY, &press);
@@ -428,6 +430,7 @@ void input_location(char *save_location) {
         }
     }
     free(background); // 释放内存
+    exit_input();
 }
 /****
 function:让用户鼠标选中车辆类型，并将类型存储到指定位置
@@ -449,7 +452,8 @@ void input_car_type(char *save_car_type) {
     int press_num;
     void *background;
     unsigned int image_size;
-
+    clrmous(MouseX,MouseY);
+    delay(100);
     // 存储画面
     image_size = imagesize(start_x, start_y, start_x + (width), start_y + ((num_locations / max_per_column + 1) * (height)));
     background = malloc(image_size);
@@ -473,7 +477,7 @@ void input_car_type(char *save_car_type) {
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
         puthz(x + (width - textwidth(car_current)) / 2, y + (height - textheight(car_current)) / 2, car_current, 16, 16, BROWN); // 显示地点选项
     }
-
+    delay(100);
     // 选择地点
     while (1) {
         mou_pos(&MouseX, &MouseY, &press);
@@ -490,6 +494,7 @@ void input_car_type(char *save_car_type) {
         }
     }
     free(background); // 释放内存
+    exit_input();
 }
 /****
 function:输入时间
@@ -520,6 +525,7 @@ void input_time(int x, int y, char *save_str, int font ,int size) {
     bottom_y = (y + text_height) > max_y ? max_y : (y + text_height);
 
     clrmous(MouseX,MouseY);
+    delay(100);
     malloc_size = imagesize(x,y,right_x,bottom_y);
     background = malloc(malloc_size);
     if (background == NULL){
@@ -589,7 +595,8 @@ void input_destroy_part(char *save_des_type) {
     int press_num;
     void *background;
     unsigned int image_size;
-
+    clrmous(MouseX,MouseY);
+    delay(100);
     // 存储画面
     image_size = imagesize(start_x, start_y, start_x + (width), start_y + ((num_locations / max_per_column + 1) * (height)));
     background = malloc(image_size);
@@ -613,7 +620,7 @@ void input_destroy_part(char *save_des_type) {
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
         puthz(x + (width - textwidth(car_current)) / 2, y + (height - textheight(car_current)) / 2, car_current, 16, 16, BROWN); // 显示地点选项
     }
-
+    delay(100);
     // 选择地点
     while (1) {
         mou_pos(&MouseX, &MouseY, &press);
@@ -630,4 +637,5 @@ void input_destroy_part(char *save_des_type) {
         }
     }
     free(background); // 释放内存
+    exit_input();
 }

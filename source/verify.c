@@ -15,7 +15,7 @@ int len_verify(const char *s,int len_min,int len_max){
     }
 }
 
-// 楠岃瘉鎵嬫満鍙锋槸鍚︾鍚堣姹傦紙11浣嶆暟瀛楋級
+// 楠岃瘉鎵嬫満鍙锋槸鍚︾鍚堣姹傦紙11浣嶆暟瀛楋級author:CHENGKAI HUANG
 int validate_phone(const char *phone) {
     int i;
     if (strlen(phone) != 11) {
@@ -29,7 +29,7 @@ int validate_phone(const char *phone) {
     return 1;
 }
 
-// 楠岃瘉韬唤璇佸彿鏄惁绗﹀悎瑕佹眰锛?18浣嶆暟瀛楋級
+// 楠岃瘉韬唤璇佸彿鏄惁绗﹀悎瑕佹眰锛?18浣嶆暟瀛楋級author:CHENGKAI HUANG
 int validate_idcard(const char *idcard) {
     int i;
     if (strlen(idcard) != 18) {
@@ -44,6 +44,7 @@ int validate_idcard(const char *idcard) {
 }
 
 // 楠岃瘉瀵嗙爜鏄惁绗﹀悎瑕佹眰锛堣嚦灏?8浣嶏紝鍖呮嫭鏁板瓧銆佸ぇ鍐欏瓧姣嶃�佸皬鍐欏瓧姣嶅拰绗﹀彿涓殑涓夌锛?
+//author:CHENGKAI HUANG
 int validate_password(const char *password) {
     int has_digit ;
     int has_lower;
@@ -80,7 +81,7 @@ int validate_password(const char *password) {
     }
 }
 
-
+//author:CHENGKAI HUANG
 int validate_licence_car(const char *plate) {
     int i;
 
@@ -99,4 +100,28 @@ int validate_licence_car(const char *plate) {
         }
     }
     return 1; // 验证通过
+}
+
+
+//验证学号是否符合要求（一共10位，第一位是U）author:Peng Jian
+int validate_student_id(const char *student_id)
+{
+    int len,i;
+    len=strlen(student_id);
+    if(len!=10)
+    {
+        return -1;//学号必须10位 
+    }
+    if(student_id[0]!='U')
+    {
+        return -1;//首位必须是U 
+    }
+    for(i=1;i<10;i++)
+    {
+        if(!isdigit(student_id[i]))
+        {
+            return -1;//后面的都要是数字 
+        }
+    } 
+    return 1;
 }

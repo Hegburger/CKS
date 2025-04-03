@@ -1,6 +1,7 @@
 #include"common.h"
 #include"verify.h"
 #include"input.h"
+#include"file.h"
 /****
 function:画出注册界面完成注册操作
 author:Chengkai Huang
@@ -10,12 +11,16 @@ int page_register();
 int page_register(){
     int gap,height;
     char password[20];
-    User x;
+    User x,tep;
     FILE *fw;
     gap = 30; 
     height = 35; 
     password[0]='\0';
     x.username[0] = x.password[0] = x.phone[0] = '\0';
+    x.phone[0]=x.username[0]=x.idcard[0]=x.student_id[0]='\0';
+    x.driver_license_type[0]=x.driver_license_validity[0]='\0';
+    x.car.province[0]=x.car.plate[0]=x.car.type[0]='\0';
+    x.ebike.campus_plate[0]=x.ebike.wuhan_plate[0]='\0';
     clrmous(MouseX,MouseY);
     delay(100);
     cleardevice();
@@ -26,7 +31,7 @@ int page_register(){
         if(mouse_press(265+65,128,265+65+280,128+height)==1){
             setfillstyle(SOLID_FILL,LIGHTGRAY);
             bar(265+65+16,128,265+65+280,128+height);
-            input_str(265+65+16,128+5,x.phone,1,3,20);
+            input_str(265+65+16,128+5,x.phone,1,3,11);
         }else if(mouse_press(265+65,128+height+gap,265+65+280,128+height*2+gap)==1){
             setfillstyle(SOLID_FILL,LIGHTGRAY);
             bar(265+65+16,128+height+gap,265+65+280,128+height*2+gap);
@@ -39,22 +44,26 @@ int page_register(){
             setfillstyle(SOLID_FILL,LIGHTGRAY);
             bar(265+65+16,128+height*3+gap*3,265+65+280,128+height*4+gap*3);
             input_password(265+65+16,128+height*3+gap*3+5,password,1,3,20);
-        }else if(mouse_press(290,128+height*4+gap*4,290+70,128+height*4+gap*4+50)==1){
+        }else if(mouse_press(290+70+90,128+height*4+gap*4,290+70+90+70,128+height*4+gap*4+50)==1){
             setfillstyle(SOLID_FILL,WHITE);
             bar(310,128+height*4+gap*3+5,610,128+height*4+gap*3+25);
         if(validate_phone(x.phone)==1){
             if(len_verify(x.username,3,18)==1){
                 if(strcmp(x.password,password)==0){
                     if(validate_password(x.password)==1){
-                        if((fw = fopen("list.dat","ab"))==NULL){
-                            puthz(310,128+height*4+gap*3+5,"数据库打开失败",16,16,RED);    //打开文件失败
+                        if(match_user(x.phone,&tep)==-1){
+                            if((fw = fopen("list.dat","ab"))==NULL){
+                                puthz(310,128+height*4+gap*3+5,"数据库打开失败",16,16,RED);    //打开文件失败
+                            }else{
+                                fwrite(&x,sizeof(User),1,fw);
+                                fclose(fw);
+                                puthz(310,128+height*4+gap*3+5,"注册成功",16,16,GREEN);//完成注册
+                                delay(1000);
+                                clrmous(MouseX,MouseY);
+                                return 2;
+                            }
                         }else{
-                            fwrite(&x,sizeof(User),1,fw);
-                            fclose(fw);
-                            puthz(310,128+height*4+gap*3+5,"注册成功",16,16,GREEN);//完成注册
-                            delay(1000);
-                            clrmous(MouseX,MouseY);
-                            return 2;
+                            puthz(310,128+height*4+gap*3+5,"该手机号已注册",16,16,RED);
                         }
                     }else{
                         puthz(310,128+height*4+gap*3+5,"密码至少含三种字符且长度合适",16,16,RED);//密码不合法
@@ -68,7 +77,7 @@ int page_register(){
         }else{
             puthz(310,128+height*4+gap*3+5,"手机号不合法",16,16,RED);//手机号不合法
         }
-        }else if(mouse_press(290+70+90,128+height*4+gap*4,290+70+90+70,128+height*4+gap*4+50)==1){
+        }else if(mouse_press(290,128+height*4+gap*4,290+70,128+height*4+gap*4+50)==1){
             return 2;//进入登录页面
         }else if(mouse_press(595,0,640,45)==1){
             closegraph();//关闭画图
@@ -124,7 +133,7 @@ void register_screen(){
     puthz(270,128+height+gap,"用户名",24,24,BROWN);
     puthz(270,128+height*2+gap*2,"密码",24,24,BROWN);
     puthz(270,128+height*3+gap*3+10,"确定密码",16,16,BROWN);
-    puthz(290,128+height*4+gap*4,"确定",32,32,LIGHTRED);
-    puthz(290+70+90,128+height*4+gap*4,"登录",32,32,LIGHTRED);
+    puthz(290,128+height*4+gap*4,"登录",32,32,LIGHTRED);
+    puthz(290+70+90,128+height*4+gap*4,"确认",32,32,LIGHTRED);
     
 }

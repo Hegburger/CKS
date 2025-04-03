@@ -186,5 +186,10 @@ int mouse_press(int x1, int y1, int x2, int y2)
 	}
 }
 
+void exit_input(){
+	free(buffer);
+	save_bk_mou(MouseX,MouseY);
+}
+
 
 

@@ -1,7 +1,7 @@
 #include"verify.h"
 #ifndef BAOAN_1
 #define BAOAN_1
-int baoan();
+int baoan(char *phone_number);
 void baoan_1_screen();
 void draw_triangle(int x,int y,int blank_width);
 void baoan_1_click(AccidentInfo *p,int *page);

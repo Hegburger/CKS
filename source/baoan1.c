@@ -2,7 +2,7 @@
 #include"verify.h"
 #include"input.h"
 #include"file.h"
-int baoan();
+int baoan(char *phone_number);
 void baoan_1_screen();
 void draw_triangle(int x,int y,int blank_width);
 void baoan_1_click(AccidentInfo *p,int *page);
@@ -10,7 +10,10 @@ void baoan_2_click(AccidentInfo *p,int *page);
 void baoan_2_screen();
 int verify_baoan_1(AccidentInfo *p);
 int verify_baoan_2(AccidentInfo *p);
-int baoan(){
+void init_per1(char *num_phone, AccidentInfo *p);
+void show_per2_info(AccidentInfo *x);
+void show_per1_info(AccidentInfo *x);
+int baoan(char *phone_number){
     AccidentInfo x;
     int page = 1;
     int height = 40;
@@ -20,13 +23,20 @@ int baoan(){
     x.per1_phone[0] = x.per2_phone[0] = x.per2_destroied_part[0]=x.per1_destroied_part[0]='\0';
     x.per1_idcard[0] = x.per2_idcard[0] = '\0';
     x.per1_car.plate[0] = x.per2_car.plate[0] = '\0';
+    x.per1_car.province[0] = x.per2_car.province[0] = '\0';
     x.processed_status = 0;
+    clrmous(MouseX,MouseY);
+    cleardevice();
+    init_per1(phone_number,&x);
     while (1)
     {
         switch (page)
         {
+        case 0://返回键
+        return 3;
         case 1:
         baoan_1_screen();
+        show_per1_info(&x);
         while(page ==1){
             mou_pos(&MouseX,&MouseY,&press);
             baoan_1_click(&x,&page);
@@ -35,6 +45,10 @@ int baoan(){
                     delay(1000);
                     exit(0);//退出程序
             }
+            if(mouse_press(0, 0, 45, 45)==1){
+                page = 0;
+                delay(100);
+            }
         }
             break;
         
@@ -42,13 +56,14 @@ int baoan(){
         
         cleardevice();
         baoan_2_screen();
-        settextstyle(1, 0, 3);  // 对应的字体样式和大小
-        outtextxy(60,lineStart_y+height*0+5,x.time);
-        puthz(50,lineStart_y+height*1+10,x.location,24,24,LIGHTGRAY);
-        puthz(400,lineStart_y+height*1+10,x.weather,24,24,LIGHTGRAY);
-        put_accident_type(x.accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);
-    
-        while(1){
+        show_per2_info(&x);
+        // settextstyle(1, 0, 3);  // 对应的字体样式和大小
+        // outtextxy(60,lineStart_y+height*0+5,x.time);
+        // puthz(50,lineStart_y+height*1+10,x.location,24,24,LIGHTGRAY);
+        // puthz(400,lineStart_y+height*1+10,x.weather,24,24,LIGHTGRAY);
+        // put_accident_type(x.accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);
+        
+        while(page == 2){
             mou_pos(&MouseX,&MouseY,&press);
             baoan_2_click(&x,&page);
             if(mouse_press(595,0,640,45)==1){
@@ -56,14 +71,19 @@ int baoan(){
                     delay(1000);
                     exit(0);//退出程序
             }
+            if(mouse_press(0,0,45,45)==1){
+                page = 1;
+                delay(100);
+            }
         }
             break;
-        
+        case 3://报案成功
+            return 3;
         default:
             break;
         }
     }
-    return page;
+    
 }
 
 
@@ -74,8 +94,17 @@ int baoan(){
 void baoan_1_screen(){
     int height = 40,i;
     int lineStart_y = 80,numBlank=9;
-
+    cleardevice();
     setbkcolor(WHITE);
+    // 返回按键（左上角）
+    setcolor(LIGHTGRAY);
+    setlinestyle(SOLID_LINE, 0, NORM_WIDTH);
+    rectangle(0, 0, 45, 45); // 绘制返回按钮边框
+    // 绘制返回箭头（"<" 形状）
+    setcolor(BLUE);
+    setlinestyle(SOLID_LINE, 0, THICK_WIDTH);
+    line(30, 15, 15, 22);  // 右上角到箭头尖
+    line(15, 22, 30, 30);  // 箭头尖到右下角
     //退出按键
      setcolor(LIGHTGRAY);
      setlinestyle(DOTTED_LINE,0,NORM_WIDTH);
@@ -147,8 +176,8 @@ void baoan_1_click(AccidentInfo *p,int *page){
     }
     //地点
     if(mouse_press(0,lineStart_y+height*1,325,lineStart_y+height*2)==1){
-        setfillstyle(SOLID_FILL,WHITE);
-        bar(50,lineStart_y+height*1+10,150,lineStart_y+height*1+10+28);
+        // setfillstyle(SOLID_FILL,WHITE);
+        // bar(50,lineStart_y+height*1+10,150,lineStart_y+height*1+10+28);
         input_location(p->location);
         puthz(50,lineStart_y+height*1+10,p->location,24,24,LIGHTGRAY);
         clrmous(MouseX, MouseY);
@@ -239,8 +268,17 @@ void baoan_1_click(AccidentInfo *p,int *page){
 void baoan_2_screen(){
     int height = 40,i;
     int lineStart_y = 80,numBlank=8;
-
+    cleardevice();
     setbkcolor(WHITE);
+     // 返回按键（左上角）
+     setcolor(LIGHTGRAY);
+     setlinestyle(SOLID_LINE, 0, NORM_WIDTH);
+     rectangle(0, 0, 45, 45); // 绘制返回按钮边框
+     // 绘制返回箭头（"<" 形状）
+     setcolor(BLUE);
+     setlinestyle(SOLID_LINE, 0, THICK_WIDTH);
+     line(30, 15, 15, 22);  // 右上角到箭头尖
+     line(15, 22, 30, 30);  // 箭头尖到右下角
     //退出按键
      setcolor(LIGHTGRAY);
      setlinestyle(DOTTED_LINE,0,NORM_WIDTH);
@@ -405,6 +443,8 @@ time:2025/3/9
 
 int verify_baoan_1(AccidentInfo *p){
     //time
+    setfillstyle(SOLID_FILL,WHITE);
+    bar(250,450,390,470);
     if(strlen(p->time)!=16){
         puthz(250,450,"时间输入错误",16,16,RED);
         return -1;
@@ -500,4 +540,45 @@ int verify_baoan_2(AccidentInfo *p){
         puthz(250,450,"请输入受损部位",16,16,RED);
         return -1;
      }
+}
+
+void init_per1(char *num_phone, AccidentInfo *p){
+    User user;
+    match_user(num_phone, &user);
+    strcpy(p->per1_idcard,user.idcard);
+    strcpy(p->per1_phone,user.phone);
+    p->per1_car = user.car;
+}
+
+void show_per1_info(AccidentInfo *x){
+    int height = 40;
+    int lineStart_y = 80;
+        //信息输入
+        settextstyle(1, 0, 3);  // 对应的字体样式和大小
+        outtextxy(60,lineStart_y+height*0+5,x->time);
+        puthz(50,lineStart_y+height*1+10,x->location,24,24,LIGHTGRAY);
+        puthz(400,lineStart_y+height*1+10,x->weather,24,24,LIGHTGRAY);
+        put_accident_type(x->accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);//type
+        outtextxy(100,lineStart_y+height*4+10,x->per1_idcard);//idcard
+        outtextxy(100,lineStart_y+height*5+10,x->per1_phone);//phone
+        puthz(120,lineStart_y+height*6+10,x->per1_car.type,24,24,LIGHTGRAY);//car type
+        puthz(410,lineStart_y+height*6+10,x->per1_car.province,24,24,LIGHTGRAY);
+        outtextxy(430,lineStart_y+height*6+10,x->per1_car.plate);//plate
+        puthz(160,lineStart_y+height*7+10,x->per1_destroied_part,24,24,LIGHTGRAY);//受损 
+}
+
+void show_per2_info(AccidentInfo *x){
+    int height = 40;
+    int lineStart_y = 80;
+        settextstyle(1, 0, 3);  // 对应的字体样式和大小
+        outtextxy(60,lineStart_y+height*0+5,x->time);
+        puthz(50,lineStart_y+height*1+10,x->location,24,24,LIGHTGRAY);
+        puthz(400,lineStart_y+height*1+10,x->weather,24,24,LIGHTGRAY);
+        put_accident_type(x->accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);//type
+        outtextxy(100,lineStart_y+height*4+10,x->per2_idcard);//idcard
+        outtextxy(100,lineStart_y+height*5+10,x->per2_phone);//phone
+        puthz(120,lineStart_y+height*6+10,x->per2_car.type,24,24,LIGHTGRAY);//car type
+        puthz(410,lineStart_y+height*6+10,x->per2_car.province,24,24,LIGHTGRAY);
+        outtextxy(430,lineStart_y+height*6+10,x->per2_car.plate);//plate
+        puthz(160,lineStart_y+height*7+10,x->per2_destroied_part,24,24,LIGHTGRAY);//受损 
 }

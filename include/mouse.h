@@ -8,8 +8,7 @@ void mread(int *,int *,int*);
 void save_bk_mou(int x,int y);
 void clrmous(int x,int y);
 void drawmous(int x,int y);
-
-
+void exit_input();
 extern int MouseX;
 extern int MouseY;
 extern int press;
