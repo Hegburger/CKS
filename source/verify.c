@@ -125,3 +125,89 @@ int validate_student_id(const char *student_id)
     } 
     return 1;
 }
+
+int validate_time(const char* time) {
+    int len,year,month,day,hour,minute;
+    char min_str[3];
+    char year_str[5];
+    char month_str[3];
+    char hour_str[3];
+    char day_str[3];
+    int i;
+    len = strlen(time);
+    if (len != 16) {
+        return -1;
+    }
+
+    // 检查分隔符
+    if (time[4] != '/' || time[7] != '/' || time[10] != ' ' || time[13] != ':') {
+        return -1;
+    }
+
+    // 检查年份
+    for (i = 0; i < 4; i++) {
+        if (!isdigit(time[i])) {
+            return -1;
+        }
+    }
+ 
+    strncpy(year_str, time, 4);
+    year_str[4] = '\0';
+    year = atoi(year_str);
+    if (year < 2000 || year > 2025) {
+        return -1;
+    }
+
+    // 检查月份
+    if (!isdigit(time[5]) || !isdigit(time[6])) {
+        return -1;
+    }
+ 
+    month_str[0] = time[5];
+    month_str[1] = time[6];
+    month_str[2] = '\0';
+    month = atoi(month_str);
+    if (month < 1 || month > 12) {
+        return -1;
+    }
+
+    // 检查日期
+    if (!isdigit(time[8]) || !isdigit(time[9])) {
+        return -1;
+    }
+
+    day_str[0] = time[8];
+    day_str[1] = time[9];
+    day_str[2] = '\0';
+    day = atoi(day_str);
+    if (day < 1 || day > 31) {
+        return -1;
+    }
+
+    // 检查小时
+    if (!isdigit(time[11]) || !isdigit(time[12])) {
+        return -1;
+    }
+
+    hour_str[0] = time[11];
+    hour_str[1] = time[12];
+    hour_str[2] = '\0';
+    hour = atoi(hour_str);
+    if (hour < 0 || hour > 23) {
+        return -1;
+    }
+
+    // 检查分钟
+    if (!isdigit(time[14]) || !isdigit(time[15])) {
+        return -1;
+    }
+
+    min_str[0] = time[14];
+    min_str[1] = time[15];
+    min_str[2] = '\0';
+    minute = atoi(min_str);
+    if (minute < 0 || minute > 59) {
+        return -1;
+    }
+    return 1; // 格式正确
+}

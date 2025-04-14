@@ -2,16 +2,26 @@
 #include"verify.h"
 #include"input.h"
 int show_per1(AccidentInfo *x);
-int show_per2(AccidentInfo *x);
+int show_per2(AccidentInfo *x,char flag);
 int his_indi_screen(char *user_idcard,AccidentInfo *p);
 void history_indi(char *user_idcard) {
     int num,end_y,num_press,page;
     int header_y = 50;
     int row_height = 50;
-    FILE *fp;
     AccidentInfo incident;
-    num = his_indi_screen(user_idcard,&incident);
-    end_y = header_y + row_height*(num+1);
+    int page_current = 0;
+    int perpage_max = 6;
+    int pagenum_max;
+    int current_num;
+    int flag;
+    char date_filter [1];
+    char status_filter,type_filter;
+    status_filter = type_filter = date_filter[0]='\0';
+    cleardevice();
+    his_indi_screen(NULL,NULL);
+    current_num = list(&incident,date_filter,type_filter,status_filter,user_idcard,page_current);
+    pagenum_max = (current_num + perpage_max - 1) / perpage_max;
+    pagefresh(page_current,pagenum_max);
     while(1){
         mou_pos(&MouseX,&MouseY,&press);
         if(mouse_press(595,0,640,45)==1){
@@ -22,59 +32,94 @@ void history_indi(char *user_idcard) {
         if(mouse_press(0, 0, 45, 45)==1){
             return 3;//返回主页面
         }
-        if(mouse_press(0,header_y+row_height,640,end_y)==1){
-            num_press = (MouseY-header_y-row_height)/row_height;//点击的结构体的序号（0开始）
-            fp = fopen("ACCIDENT.dat", "rb");
-            if (fp == NULL) {
-                puthz(50, header_y + row_height, "无历史记录！",16,16,RED);
-                getch();
-                closegraph();
-                return;
-            }
-            fseek(fp,num_press*sizeof(AccidentInfo),SEEK_SET);//将指针指在指定位置
-            if(fread(&incident, sizeof(AccidentInfo), 1, fp) == 1){
-                page =1;
-                while(1){
-                    if(page == 0){
-                        cleardevice();
-                        num = his_indi_screen(user_idcard,&incident);
-                        break;//点击返回
-                    }
-                    switch (page)
-                    {
-                    case 0 : //点击返回键
+
+        if(mouse_press(30,430,120,460)==1&&page_current>0){
+            page_current--;
+            current_num =  list(&incident,date_filter,type_filter,status_filter,user_idcard,page_current);
+            pagefresh(page_current,pagenum_max);
+            delay(100);
+            //点击上一页
+        }
+        if(mouse_press(540,430,620,460)==1&&page_current<pagenum_max-1){
+            page_current++;
+            current_num =  list(&incident,date_filter,type_filter,status_filter,user_idcard,page_current);
+            pagefresh(page_current,pagenum_max);
+            delay(100);
+            //下一页
+        }
+
+        flag = record_click(&incident,page_current,date_filter,type_filter,status_filter,user_idcard,0);
+
+        if(flag == 1){
+            clrmous(MouseX,MouseY);
+            his_indi_screen(NULL,NULL);
+            current_num =  list(&incident,date_filter,type_filter,status_filter,user_idcard,page_current);
+            pagenum_max = (current_num + perpage_max - 1) / perpage_max;
+            page_current = 0;
+            pagefresh(page_current,pagenum_max);
+        }else if(flag == 11){
+            return 11;
+        }
+
+        // if(mouse_press(0,header_y+row_height,640,end_y)==1){
+        //     num_press = (MouseY-header_y-row_height)/row_height;//点击的结构体的序号（0开始）
+        //     fp = fopen("ACCIDENT.dat", "rb");
+        //     if (fp == NULL) {
+        //         puthz(50, header_y + row_height, "无历史记录！",16,16,RED);
+        //         getch();
+        //         closegraph();
+        //         return;
+        //     }
+        //     fseek(fp,num_press*sizeof(AccidentInfo),SEEK_SET);//将指针指在指定位置
+        //     if(fread(&incident, sizeof(AccidentInfo), 1, fp) == 1){
+        //         page =1;
+        //         while(1){
+        //             if(page == 0){
+        //                 cleardevice();
+        //                 num = his_indi_screen(user_idcard,&incident);
+        //                 break;//点击返回
+        //             }
+        //             switch (page)
+        //             {
+        //             case 0 : //点击返回键
                        
-                        break;
-                    case 1://第一人信息
-                        page=show_per1(&incident);
-                        break;
+        //                 break;
+        //             case 1://第一人信息
+        //                 page=show_per1(&incident);
+        //                 delay(100);
+        //                 break;
                     
-                    case 2://第二人信息
-                        page = show_per2(&incident);
-                        break;
-                    default:
-                        break;
-                    }
-                }
-            }else{
-                fclose(fp);
-                puthz(50, header_y + row_height, "文件打开失败",16,16,RED);
-                getch();
-                closegraph();
-                return;
-            }
+        //             case 2://第二人信息
+        //                 page = show_per2(&incident,'\0');
+        //                 delay(100);
+        //                 break;
+                    
+        //             default:
+        //                 break;
+        //             }
+        //         }
+        //         fclose(fp);
+
+                
+        //     }else{
+        //         fclose(fp);
+        //         puthz(50, header_y + row_height, "文件打开失败",16,16,RED);
+        //         getch();
+        //         closegraph();
+        //         return;
+        //     }
             
 
-        }
+        // }
     }
 
 }
 
 int his_indi_screen(char *user_idcard,AccidentInfo *p){
-    FILE *fp;
+    FILE *fp = NULL;
     int header_y = 50;
     int row_height = 50;
-    int col_time = 50;              // 事故时间显示起始横坐标
+    int col_time = 78;              // 事故时间显示起始横坐标
     int col_type = col_time + 180;    // 事故类型显示起始横坐标
     int col_status = col_type + 180;  // 处理状态显示起始横坐标
     int current_row = 0;
@@ -102,46 +147,50 @@ int his_indi_screen(char *user_idcard,AccidentInfo *p){
      setlinestyle(SOLID_LINE,0,THICK_WIDTH);
      line(595,0,640,45);
      line(640,0,595,45);
-    // 打开二进制事故数据文件
-    fp = fopen("ACCIDENT.dat", "rb");
-    if (fp == NULL) {
-        puthz(50, header_y + row_height, "无历史记录！",16,16,RED);
-        getch();
-        closegraph();
-        return 0;
-    }
+     rectangle(30,430,120,460);
+     puthz(30+5,430+2,"上一页",24,24,LIGHTBLUE);
+     rectangle(540,430,620,460);
+     puthz(540+5,430+2,"下一页",24,24,LIGHTBLUE);
+    // // 打开二进制事故数据文件
+    // fp = fopen("ACCIDENT.dat", "rb");
+    // if (fp == NULL) {
+    //     puthz(50, header_y + row_height, "无历史记录！",16,16,RED);
+    //     getch();
+    //     closegraph();
+    //     return 0;
+    // }
 
 
-    // 遍历文件中的所有事故记录
-    while (fread(p, sizeof(AccidentInfo), 1, fp) == 1) {
-        // 检查是否为该用户的记录（匹配身份证）
-        if (strcmp(p->per1_idcard, user_idcard) == 0 ||
-            strcmp(p->per2_idcard, user_idcard) == 0) {
-            current_row++;
-            display_y = header_y + current_row * row_height;
-            // 显示事故发生时间
-            settextstyle(COMPLEX_FONT, HORIZ_DIR, 1);
-            setcolor(LIGHTGREEN);
-            outtextxy(col_time-20, display_y, p->time);
-            // 显示事故类型（转换为文字描述）
-            accident_type_trans(p->accident_type,accident_type);
-            puthz(col_type, display_y,accident_type,24,24,DARKGRAY);
-            // 显示处理状态
-            if(p->processed_status == 1){
-                puthz(col_status, display_y, "已处理",24,24,GREEN);
-            }else if(p->processed_status == 0){
-                puthz(col_status, display_y, "未处理",24,24,RED);
-            }
+    // // 遍历文件中的所有事故记录
+    // while (fread(p, sizeof(AccidentInfo), 1, fp) == 1) {
+    //     // 检查是否为该用户的记录（匹配身份证）
+    //     if (strcmp(p->per1_idcard, user_idcard) == 0 ||
+    //         strcmp(p->per2_idcard, user_idcard) == 0) {
+    //         current_row++;
+    //         display_y = header_y + current_row * row_height;
+    //         // 显示事故发生时间
+    //         settextstyle(COMPLEX_FONT, HORIZ_DIR, 1);
+    //         setcolor(LIGHTGREEN);
+    //         outtextxy(col_time-20, display_y, p->time);
+    //         // 显示事故类型（转换为文字描述）
+    //         accident_type_trans(p->accident_type,accident_type);
+    //         puthz(col_type, display_y,accident_type,24,24,DARKGRAY);
+    //         // 显示处理状态
+    //         if(p->processed_status == '1'){
+    //             puthz(col_status, display_y, "已处理",24,24,GREEN);
+    //         }else if(p->processed_status == '0'){
+    //             puthz(col_status, display_y, "未处理",24,24,RED);
+    //         }
                 
-        }
-    }
-    fclose(fp);
+    //     }
+    // }
+    // fclose(fp);
 
-    // 如果未找到任何记录，则显示提示信息
-    if (current_row == 0) {
-        puthz(50, header_y + row_height, "没有找到相关记录",24,24,GREEN);
-    }
-    return current_row;
+    // // 如果未找到任何记录，则显示提示信息
+    // if (current_row == 0) {
+    //     puthz(50, header_y + row_height, "没有找到相关记录",24,24,GREEN);
+    // }
+    // return current_row;
 }
 
 //展示第一个人信息，返回2进入第二个人信息
@@ -223,6 +272,7 @@ int show_per1(AccidentInfo *x){
 
         if(mouse_press(0, 0, 45, 45)==1){
             page =0;
+            delay(100);
             break;
         }
 
@@ -230,8 +280,8 @@ int show_per1(AccidentInfo *x){
     return page;
 
 }
-
-int show_per2(AccidentInfo *x) {
+// flag = 1 表示管理端，可以进入取证
+int show_per2(AccidentInfo *x, char flag) {
     int height = 40, i,page;
     int lineStart_y = 80, numBlank = 9;
     
@@ -300,6 +350,12 @@ int show_per2(AccidentInfo *x) {
     puthz(160, lineStart_y + height * 6 + 10, x->liability_result,24,24,BROWN);    // 责任认定结果
     outtextxy(120, lineStart_y + height * 7 + 10, x->liability_ratio);       // 责任比例
     
+    if(flag != '\0'&&x->processed_status!='1'){
+        setcolor(LIGHTCYAN);
+        setlinestyle(SOLID_LINE, 0, THICK_WIDTH);
+        rectangle(295,lineStart_y + height * 9+7,405,lineStart_y + height * 9+38);
+        puthz(300,lineStart_y + height * 9+10,"进入取证",24,24,BLUE);
+    }
     while (1)
     {
         mou_pos(&MouseX,&MouseY,&press);
@@ -316,7 +372,13 @@ int show_per2(AccidentInfo *x) {
         }
 
         if(mouse_press(0, 0, 45, 45)==1){
-            page =0;
+            page =1;
+            delay(100);
+            break;
+        }
+        if(mouse_press(295,lineStart_y + height * 9+7,405,lineStart_y + height * 9+38)==1 && flag !='\0'&&x->processed_status!='1'){
+            page = 3;
+            delay(100);
             break;
         }
         

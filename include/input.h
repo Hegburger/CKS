@@ -22,4 +22,6 @@ void input_time(int x, int y, char *save_str, int font ,int size);
 void input_password(int x, int y, char *save_str, int font ,int size,int num_max);
 
 void input_destroy_part(char *save_des_type);
+
+void input_status(char *processed_status);
 #endif

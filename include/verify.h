@@ -1,5 +1,6 @@
 #ifndef _VERIFY_
 #define _VERIFY_
+#include "manage.h"
 // 汽车信息结构体：一个人至多有一辆汽车
 typedef struct {
     char province[3];    // 车牌省份代码（例如 'a' 表示北京）
@@ -26,6 +27,12 @@ typedef struct {
     EBikeInfo ebike;                 // 电动车信息（至多一辆）
 } User;
 
+typedef struct {
+    char account[20];
+    char password[20];
+    // 其他管理端信息（如需要）
+} Admin;
+
 
 // 事故信息结构体：包含所有事故相关信息
 typedef struct {
@@ -47,8 +54,18 @@ typedef struct {
     char processed_status;       // 处理状态：'0' 表示未处理，'1' 表示已处理
     char liability_result[20];   // 责任认定结果，如 "主责", "次责", "同责", "无责"
     char liability_ratio[10];      // 责任比例，例如 "80/20" 或 "50%"
+    char description1[10];       //证词第一段
+    char description2[10];       //证词第二段
+    char description3[10];       //证词第三段
+    char description4[10];       //证词第四段
+    char evidence_per1[7];		//证人1 
+    char evidence_per2[7];		//证人2 
+    char photo1;//证据图片1
+    char photo2;
+    char photo3;
+    char photo4;
+    Judge judge;
 } AccidentInfo;
-
 // 映射事故类型字母和实际描述
 /*const char accident_type_desc[5][20] = {
     "人—电动车事故", // 'A'

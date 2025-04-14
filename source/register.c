@@ -123,7 +123,6 @@ void register_screen(){
     setfillstyle(SOLID_FILL,LIGHTBLUE);
     bar(290,128+height*4+gap*4,290+70,128+height*4+gap*4+50);//确认
     bar(290+70+90,128+height*4+gap*4,290+70+90+70,128+height*4+gap*4+50);//登录
-
     setcolor(BROWN);
     for(i =0;i<4;i++){
         line(265+80,128+height*i+gap*i,265+80,128+height*(i+1)+gap*i);
@@ -135,5 +134,9 @@ void register_screen(){
     puthz(270,128+height*3+gap*3+10,"确定密码",16,16,BROWN);
     puthz(290,128+height*4+gap*4,"登录",32,32,LIGHTRED);
     puthz(290+70+90,128+height*4+gap*4,"确认",32,32,LIGHTRED);
-    
+	bmp_convert("C:\\PROJECT\\photo\\H.bmp","C:\\PROJECT\\photo\\H.dbm");
+	show_dbm(0,0,"C:\\PROJECT\\photo\\H.dbm",0);
+	puthz(5,410,"研发人：",24,24,BLUE);
+	puthz(5,440,"彭减",24,24,RED);
+	puthz(70,440,"黄城楷",24,24,RED);
 }

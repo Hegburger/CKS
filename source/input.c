@@ -6,74 +6,157 @@ function:将输入的字符串显示在屏幕，
 (based on outtextxy)
 author:Chengkai Huang
 *****/
+#include <graphics.h>
+#include <conio.h>
+#include <time.h>
+#include <string.h>
+#include <stdio.h>
 
-void input_str(int x, int y, char *save_str, int font ,int size,int num_max) {
-    char tepStr[21];   // 用于存储当前输入的字符串
-    char kip;          // 当前键入值
-    int num = 0;       // 键入的字符个数
-        // 文本区域的宽度和高度
-    int text_width ;
-    int text_height;
-    int max_x,max_y,right_x,bottom_y;
-    unsigned int malloc_size;
-    void *background;
-    strcpy(tepStr,save_str);
-    num = strlen(tepStr);  // 初始化字符串
-    max_x = getmaxx();
-    max_y = getmaxy();
-    // 设置文本样式，允许根据用户输入调整字体大小
-    settextstyle(font, 0, size);  // 指定的字体样式和大小
-    text_width = textwidth("W") * 20;  // 为了避免超出边界，给定足够宽度
-    text_height = textheight("W")+10;
+void input_str(int x, int y, char *save_str, int font, int size, int num_max) {
+    char tepStr[21];        // 存储输入字符串的缓冲区
+    char kip;               // 当前按键字符
+    int num = 0;            // 当前字符数
+    int cursor_on = 1;       // 光标显示状态
+    int need_redraw = 0;
+    clock_t last_toggle ;// 光标计时器
     
-    right_x = (x + text_width) > max_x ? max_x : (x + text_width);
-    bottom_y = (y + text_height) > max_y ? max_y : (y + text_height);
+    // 图形相关变量
+    int text_width = textwidth("W") * num_max;
+    int text_height = textheight("W") + 10;
+    void *background;
+    int max_x = getmaxx();
+    int max_y = getmaxy();
+    int right_x = (x + text_width) > max_x ? max_x : (x + text_width);
+    int bottom_y = (y + text_height) > max_y ? max_y : (y + text_height);
+    last_toggle = clock();
+    // 初始化字符串
+    strcpy(tepStr, save_str);
+    num = strlen(tepStr);
+    settextstyle(font, 0, size);
 
-    clrmous(MouseX,MouseY);
-    malloc_size = imagesize(x,y,right_x,bottom_y);
-    background = malloc(malloc_size);
-    if (background == NULL){
-        printf("malloc error!");
-        return;
-    }             // 分配足够的内存
-
-    // 暂存当前输入区域的背景图像
+    // 备份背景
+    background = malloc(imagesize(x, y, right_x, bottom_y));
     getimage(x, y, right_x, bottom_y, background);
-    outtextxy(x,y,tepStr);
-    // 持续获取键盘输入
+    outtextxy(x, y, tepStr);
+
+    // 主输入循环
     while (1) {
+        need_redraw = 0;
+        
+        // 处理键盘输入
         if (kbhit()) {
-            kip = getche();  // 获取用户输入的字符并显示
-
-            if (kip == 13) {  // 如果按下回车键，结束输入
-                save_bk_mou(MouseX,MouseY);
-                drawmous(MouseX,MouseY);
+            kip = getch(); // 使用无回显的getch
+            
+            if (kip == 13) { // 回车确认
                 break;
-            } else if (kip == 8 && num > 0) {  // 如果按下删除键
-                // 清除当前输入区域（通过恢复背景图像）
-                putimage(x, y, background, COPY_PUT);  // 恢复背景图像
-
-                // 删除最后一个字符
+            } else if (kip == 8 && num > 0) { // 退格删除
                 tepStr[--num] = '\0';
+                need_redraw = 1;
+            } else if (num < num_max && kip >= 32 && kip <= 126) { // 可打印字符
+                tepStr[num++] = kip;
+                tepStr[num] = '\0';
+                need_redraw = 1;
+            }
+            
+            cursor_on = 1; // 输入后重置光标状态
+            last_toggle = clock();
+        }
 
-                // 重新绘制更新后的文本
-                outtextxy(x, y, tepStr);  // 显示更新后的文本
-            } else if (num < num_max&&kip != 8) {  // 如果输入的字符未超过限制
-                tepStr[num++] = kip;  // 添加新字符
-                tepStr[num] = '\0';   // 保证字符串结束符正确
+        // 处理光标闪烁
+        if ((clock() - last_toggle) * 1000.0 / CLOCKS_PER_SEC > 500) {
+            cursor_on = !cursor_on;
+            last_toggle = clock();
+            need_redraw = 1;
+        }
 
-                // 重新绘制字符
-                outtextxy(x, y, tepStr);  // 显示新的文本
+        // 重绘界面
+        if (need_redraw) {
+            putimage(x, y, background, COPY_PUT); // 恢复背景
+            outtextxy(x, y, tepStr);              // 绘制文本
+            
+            // 绘制光标
+            if (cursor_on&&num>0) {
+                int text_w = textwidth(tepStr);
+                line(x + text_w-5, y, x + text_w-5, y + textheight("W"));
             }
         }
+        
+        delay(10); // 降低CPU占用
     }
 
-    // 将当前输入的字符串保存到指定的位置
+    // 保存结果并清理
     strcpy(save_str, tepStr);
-    // 释放暂存的背景图像内存
+    putimage(x, y, background, COPY_PUT);
+    outtextxy(x, y, tepStr);
     free(background);
-    background = NULL;
 }
+// void input_str(int x, int y, char *save_str, int font ,int size,int num_max) {
+//     char tepStr[21];   // 用于存储当前输入的字符串
+//     char kip;          // 当前键入值
+//     int num = 0;       // 键入的字符个数
+//         // 文本区域的宽度和高度
+//     int text_width ;
+//     int text_height;
+//     int max_x,max_y,right_x,bottom_y;
+//     unsigned int malloc_size;
+//     void *background;
+//     strcpy(tepStr,save_str);
+//     num = strlen(tepStr);  // 初始化字符串
+//     max_x = getmaxx();
+//     max_y = getmaxy();
+//     // 设置文本样式，允许根据用户输入调整字体大小
+//     settextstyle(font, 0, size);  // 指定的字体样式和大小
+//     text_width = textwidth("W") * 20;  // 为了避免超出边界，给定足够宽度
+//     text_height = textheight("W")+10;
+    
+//     right_x = (x + text_width) > max_x ? max_x : (x + text_width);
+//     bottom_y = (y + text_height) > max_y ? max_y : (y + text_height);
+
+//     clrmous(MouseX,MouseY);
+//     malloc_size = imagesize(x,y,right_x,bottom_y);
+//     background = malloc(malloc_size);
+//     if (background == NULL){
+//         printf("malloc error!");
+//         return;
+//     }             // 分配足够的内存
+
+//     // 暂存当前输入区域的背景图像
+//     getimage(x, y, right_x, bottom_y, background);
+//     outtextxy(x,y,tepStr);
+//     // 持续获取键盘输入
+//     while (1) {
+//         if (kbhit()) {
+//             kip = getche();  // 获取用户输入的字符并显示
+
+//             if (kip == 13) {  // 如果按下回车键，结束输入
+//                 save_bk_mou(MouseX,MouseY);
+//                 drawmous(MouseX,MouseY);
+//                 break;
+//             } else if (kip == 8 && num > 0) {  // 如果按下删除键
+//                 // 清除当前输入区域（通过恢复背景图像）
+//                 putimage(x, y, background, COPY_PUT);  // 恢复背景图像
+
+//                 // 删除最后一个字符
+//                 tepStr[--num] = '\0';
+
+//                 // 重新绘制更新后的文本
+//                 outtextxy(x, y, tepStr);  // 显示更新后的文本
+//             } else if (num < num_max&&kip != 8) {  // 如果输入的字符未超过限制
+//                 tepStr[num++] = kip;  // 添加新字符
+//                 tepStr[num] = '\0';   // 保证字符串结束符正确
+
+//                 // 重新绘制字符
+//                 outtextxy(x, y, tepStr);  // 显示新的文本
+//             }
+//         }
+//     }
+
+//     // 将当前输入的字符串保存到指定的位置
+//     strcpy(save_str, tepStr);
+//     // 释放暂存的背景图像内存
+//     free(background);
+//     background = NULL;
+// }
 void input_password(int x, int y, char *save_str, int font ,int size,int num_max) {
     char tepStr[21];   // 用于存储当前输入的字符串
     char passShow[21];
@@ -306,7 +389,8 @@ void input_accident_type(char *save_accident_type) {
     int press_num;
     void *background;
     unsigned int image_size;
-
+    clrmous(MouseX,MouseY);
+    delay(100);
     // 存储画面
     image_size = imagesize(start_x, start_y, start_x + (width), start_y + ((num_accident_type / max_per_row + 1) * (height)));
     background = malloc(image_size);
@@ -380,7 +464,7 @@ void input_location(char *save_location) {
     char location_current[17];
     int num_locations = 9;  // 总共9个地点选项
     int max_per_column = 1; // 每列最多显示1个地点选项
-    int width = 200;        // 按钮宽度
+    int width = 160;        // 按钮宽度
     int height = 30;        // 按钮高度
     int start_x = 250;      // 起始横坐标
     int start_y = 100;      // 起始纵坐标
@@ -509,6 +593,9 @@ void input_time(int x, int y, char *save_str, int font ,int size) {
         // 文本区域的宽度和高度
     int text_width ;
     int text_height;
+    int cursor_on = 1;       // 光标显示状态
+    int need_redraw = 0;
+    clock_t last_toggle ;// 光标计时器
     int max_x,max_y,right_x,bottom_y;
     unsigned int malloc_size;
     void *background;
@@ -538,7 +625,7 @@ void input_time(int x, int y, char *save_str, int font ,int size) {
     outtextxy(x,y,tepStr);
     // 持续获取键盘输入
     while (1) {
-        
+        need_redraw = 0;
         if (kbhit()) {
             kip = getche();  // 获取用户输入的字符并显示
 
@@ -547,14 +634,11 @@ void input_time(int x, int y, char *save_str, int font ,int size) {
                 drawmous(MouseX,MouseY);
                 break;
             } else if (kip == 8 && num > 0) {  // 如果按下删除键
-                // 清除当前输入区域（通过恢复背景图像）
-                putimage(x, y, background, COPY_PUT);  // 恢复背景图像
 
                 // 删除最后一个字符
                 tepStr[--num] = '\0';
+                need_redraw = 1;
 
-                // 重新绘制更新后的文本
-                outtextxy(x, y, tepStr);  // 显示更新后的文本
             } else if (num < 16&&kip >=48&&kip<=57) {  // 如果输入的字符未超过限制
                 tepStr[num++] = kip;  // 添加新字符
                 if(num==4){
@@ -568,16 +652,37 @@ void input_time(int x, int y, char *save_str, int font ,int size) {
                 }
                 tepStr[num] = '\0';   // 保证字符串结束符正确
                 
-                // 重新绘制字符
-                outtextxy(x, y, tepStr);  // 显示新的文本
+                need_redraw = 1;
             }
+            cursor_on = 1; // 输入后重置光标状态
+            last_toggle = clock();
         }
-    }
-     // 将当前输入的字符串保存到指定的位置
-     strcpy(save_str, tepStr);
+                // 处理光标闪烁
+                if ((clock() - last_toggle) * 1000.0 / CLOCKS_PER_SEC > 500) {
+                    cursor_on = !cursor_on;
+                    last_toggle = clock();
+                    need_redraw = 1;
+                }
 
-     // 释放暂存的背景图像内存
-     free(background);
+                // 重绘界面
+                if (need_redraw) {
+                    putimage(x, y, background, COPY_PUT); // 恢复背景
+                    outtextxy(x, y, tepStr);              // 绘制文本
+                    
+                    // 绘制光标
+                    if (cursor_on&&num>0) {
+                        int text_w = textwidth(tepStr);
+                        line(x + text_w-5, y, x + text_w-5, y + textheight("W"));
+                    }
+                }
+                delay(10);
+                
+    }
+    // 保存结果并清理
+    strcpy(save_str, tepStr);
+    putimage(x, y, background, COPY_PUT);
+    outtextxy(x, y, tepStr);
+    free(background);
 }
 
 void input_destroy_part(char *save_des_type) {
@@ -637,5 +742,68 @@ void input_destroy_part(char *save_des_type) {
         }
     }
     free(background); // 释放内存
+    exit_input();
+}
+
+
+/****
+function: 让用户鼠标选择事故处理状态，并将状态存入 processed_status
+author: Chengkai Huang
+finished time: 2025/4/6
+*****/
+void input_status(char *processed_status) {
+    char *status_options[3] = { "未处理", "已处理", "空" };
+    char status_values[3] = { '0', '1', '\0' };
+    int num_status = 3;
+    int width = 150;
+    int height = 30;
+    int start_x = 250;
+    int start_y = 100;
+    int i, x, y;
+    int press_index;
+    void *background;
+    unsigned int image_size;
+
+    clrmous(MouseX, MouseY);
+    delay(100);
+
+    // 保存当前屏幕区域图像
+    image_size = imagesize(start_x, start_y, start_x + width, start_y + num_status * height);
+    background = malloc(image_size);
+    if (background == NULL) {
+        printf("malloc error!");
+        return;
+    }
+    getimage(start_x, start_y, start_x + width, start_y + num_status * height, background);
+
+    // 绘制选项按钮
+    for (i = 0; i < num_status; i++) {
+        y = start_y + i * height;
+        x = start_x;
+
+        setfillstyle(SOLID_FILL, LIGHTGRAY);
+        bar(x, y, x + width, y + height);
+        setcolor(BLACK);
+        rectangle(x, y, x + width, y + height);
+        puthz(x + (width - textwidth(status_options[i])) / 2, y + (height - textheight(status_options[i])) / 2,
+              status_options[i], 16, 16, BLACK);
+    }
+
+    delay(100);
+
+    // 等待用户点击
+    while (1) {
+        mou_pos(&MouseX, &MouseY, &press);
+        if (mouse_press(start_x, start_y, start_x + width, start_y + num_status * height) == 1) {
+            press_index = (MouseY - start_y) / height;
+            if (press_index >= 0 && press_index < num_status) {
+                *processed_status = status_values[press_index];
+                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
+                break;
+            }
+        }
+    }
+
+    free(background);
     exit_input();
 }

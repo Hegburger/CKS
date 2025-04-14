@@ -27,7 +27,10 @@ int page_login(char *phone_nuber,char *id_card) {
     save_bk_mou(MouseX,MouseY);
     while (1) {
         mou_pos(&MouseX, &MouseY, &press);
-        
+        if(mouse_press(450,430,620,455)==1){
+            //点击管理端
+            return 7;
+        }
         if (mouse_press(265+65, 128, 265+65+280, 128+height) == 1) {
             setfillstyle(SOLID_FILL,LIGHTGRAY);
             bar(265+120+1,128, 265+65+280, 128+height);
@@ -114,4 +117,14 @@ void login_screen() {
     puthz(270, 128+height+gap, "密码", 24, 24, BROWN);
     puthz(290, 128+height*2+gap*2, "注册", 32, 32, LIGHTRED);
     puthz(290+70+90, 128+height*2+gap*2, "确定", 32, 32, LIGHTRED);
+	bmp_convert("C:\\PROJECT\\photo\\H.bmp","C:\\PROJECT\\photo\\H.dbm");
+	show_dbm(0,0,"C:\\PROJECT\\photo\\H.dbm",0);
+    //管理登录
+    setfillstyle(SOLID_FILL,LIGHTMAGENTA);
+    bar(450,430,620,455);
+    puthz(450,430,"管理员账号登录",24,24,LIGHTCYAN);
+	puthz(5,410,"研发人：",24,24,BLUE);
+	puthz(5,440,"彭减",24,24,RED);
+	puthz(70,440,"黄城楷",24,24,RED);
 }
+

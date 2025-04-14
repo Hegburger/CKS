@@ -2,25 +2,36 @@
 #include"verify.h"
 #include"input.h"
 #include"file.h"
+
+void pagefresh(int current, int max);
 void initial_screen();
-int record_manage();
+int record_manage(char status);
 int list(AccidentInfo *p, const char *date_filter, char type_filter, char status_filter,const char *id_card,int current_page);
-int record_manage(){
+int record_manage(char status){
     AccidentInfo x;
     char date_filter [17];
     char idcard_filter[21];
     char status_filter,type_filter;
-    int current_num;
+    int current_num;// 符合条件个数
     int page_current = 0;//当前页数，从0开始
     int perpage_max = 6;
     int pagenum_max;
+    int flag = 0;//是否进入取证
 
     status_filter = type_filter = date_filter[0]=idcard_filter[0]='\0';
-    
+    status_filter = status;
     cleardevice();
     initial_screen();
     current_num = list(&x,date_filter,type_filter,status_filter,idcard_filter,page_current);
     pagenum_max = (current_num + perpage_max - 1) / perpage_max;
+    pagefresh(page_current,pagenum_max);
+    if(status_filter == '0'){
+        //未处理
+        puthz(100,61,"未处理",24,24,DARKGRAY);
+    }else if(status_filter == '1'){
+        //已处理
+        puthz(100,61,"已处理",24,24,DARKGRAY);
+    }
     while(1){
         mou_pos(&MouseX,&MouseY,&press);
         
@@ -28,6 +39,7 @@ int record_manage(){
             closegraph();
             delay(1000);
             exit(0);
+            continue;
         }//exit
         if(mouse_press(600,30,640,90)==1){
             status_filter = type_filter = date_filter[0]=idcard_filter[0]='\0';
@@ -40,6 +52,8 @@ int record_manage(){
             current_num = list(&x,date_filter,type_filter,status_filter,idcard_filter,page_current);
             pagenum_max = (current_num + perpage_max - 1) / perpage_max;//更新最大页数
             page_current = 0;
+            pagefresh(page_current,pagenum_max);
+            continue;
         }
         if(mouse_press(0,30,320,60) == 1){//date
             bar(60,31,318,59);
@@ -47,6 +61,8 @@ int record_manage(){
             current_num = list(&x,date_filter,type_filter,status_filter,idcard_filter,page_current);
             pagenum_max = (current_num + perpage_max - 1) / perpage_max;
             page_current = 0;
+            pagefresh(page_current,pagenum_max);
+            continue;
         }
         if(mouse_press(320,30,600,60)==1){
             bar(430,32,599,59);
@@ -55,11 +71,28 @@ int record_manage(){
             current_num = list(&x,date_filter,type_filter,status_filter,idcard_filter,page_current);
             pagenum_max = (current_num + perpage_max - 1) / perpage_max;
             page_current = 0;
+            pagefresh(page_current,pagenum_max);
+            continue;
             //accident type
         }
 
         if(mouse_press(0,60,220,90)==1){
             bar(100,61,219,89);
+            input_status(&status_filter);
+            if(status_filter == '0'){
+                //未处理
+                puthz(100,61,"未处理",24,24,DARKGRAY);
+            }else if(status_filter == '1'){
+                //已处理
+                puthz(100,61,"已处理",24,24,DARKGRAY);
+            }
+            current_num = list(&x,date_filter,type_filter,status_filter,idcard_filter,page_current);
+            pagenum_max = (current_num + perpage_max - 1) / perpage_max;
+            page_current = 0;
+            pagefresh(page_current,pagenum_max);
+            clrmous(MouseX,MouseY);
+            delay(100);
+            continue;
             //status
         }
         if(mouse_press(220,60,600,90)==1){
@@ -69,24 +102,34 @@ int record_manage(){
             current_num = list(&x,date_filter,type_filter,status_filter,idcard_filter,page_current);
             pagenum_max = (current_num + perpage_max - 1) / perpage_max;
             page_current = 0;
+            pagefresh(page_current,pagenum_max);
         }
         if(mouse_press(30,430,120,460)==1&&page_current>0){
             page_current--;
             current_num = list(&x,date_filter,type_filter,status_filter,idcard_filter,page_current);
+            pagefresh(page_current,pagenum_max);
             delay(100);
             //点击上一页
         }
         if(mouse_press(540,430,620,460)==1&&page_current<pagenum_max-1){
             page_current++;
             current_num = list(&x,date_filter,type_filter,status_filter,idcard_filter,page_current);
+            pagefresh(page_current,pagenum_max);
             delay(100);
             //下一页
         }
-        if(record_click(&x,page_current,date_filter,type_filter,status_filter,idcard_filter)==1){
+
+        flag = record_click(&x,page_current,date_filter,type_filter,status_filter,idcard_filter,1);
+
+        if(flag == 1){
+            clrmous(MouseX,MouseY);
             initial_screen();
             current_num = list(&x,date_filter,type_filter,status_filter,idcard_filter,page_current);
             pagenum_max = (current_num + perpage_max - 1) / perpage_max;
             page_current = 0;
+            pagefresh(page_current,pagenum_max);
+        }else if(flag == 11){
+            return 11;
         }
 
         
@@ -164,9 +207,9 @@ int list(AccidentInfo *p, const char *date_filter, char type_filter, char status
                 accident_type_trans(p->accident_type,accident_type);
                 puthz(col_type, display_y,accident_type,24,24,DARKGRAY);
                 // 显示处理状态
-                if(p->processed_status == 1){
+                if(p->processed_status == '1'){
                     puthz(col_status, display_y, "已处理",24,24,GREEN);
-                }else if(p->processed_status == 0){
+                }else if(p->processed_status == '0'){
                     puthz(col_status, display_y, "未处理",24,24,RED);
                 }    
             }
@@ -175,17 +218,19 @@ int list(AccidentInfo *p, const char *date_filter, char type_filter, char status
         // 检查是否为该用户的记录
     }
     fclose(fp);
+
     return current_row;
 }
 //点击成功返回1,否则-1
-int record_click(AccidentInfo *incident,int current_page,const char *date_filter, char type_filter, char status_filter,const char *id_card){
-    FILE *fp;
+int record_click(AccidentInfo *incident,int current_page,const char *date_filter, char type_filter, char status_filter,const char *id_card,int flag){
+    FILE *fp = NULL;
     int header_y= 60;
     int row_height = 50;
-    int end_y,num_press;
+    int end_y,num_press;//匹配的结构体序号
     int page_max = 6;
     int page;
     int num = 0;
+    int num_solid = 0;//真实的结构体序号
     end_y = header_y + (page_max+1)*row_height;
     
     if(mouse_press(0,header_y+row_height,640,end_y)==1){
@@ -200,7 +245,7 @@ int record_click(AccidentInfo *incident,int current_page,const char *date_filter
             fseek(fp,0,SEEK_SET);
         }
         while(fread(incident, sizeof(AccidentInfo), 1, fp) == 1){//将指针指在指定位置
-           
+            num_solid++;
             if(match(incident,date_filter,type_filter,status_filter,id_card)==1 ){
                 num++;
                 if(num == num_press){
@@ -219,11 +264,21 @@ int record_click(AccidentInfo *incident,int current_page,const char *date_filter
                         break;
                     case 1://第一人信息
                         page=show_per1(incident);
+                        delay(100);
                         break;
-                
+
                     case 2://第二人信息
-                        page = show_per2(incident);
+                        page = show_per2(incident,flag);
+                        delay(100);
                         break;
+                    case 3://取证
+                        fclose(fp);
+                        page = page_evidence(incident,num_solid);
+                        break;
+                    case 11://结束
+                        return 11;
+                    case 17://
+                        page = page_judge(incident,num_solid);
                     default:
                         break;
                     }
@@ -240,4 +295,21 @@ int record_click(AccidentInfo *incident,int current_page,const char *date_filter
     }
     fclose(fp);
     return -1;
+}
+
+void pagefresh(int current, int max){
+    char str[10];
+    char current_s,max_s;
+    setfillstyle(SOLID_FILL, WHITE);
+    bar(270,430,400,470);
+    settextstyle(0,0,3);
+    current_s = current+'1';//start from 0
+    max_s = max +'0';
+    str[0]=current_s;
+    str[1]='/';
+    str[2] = max_s;
+    str[3] = '\0';
+    setcolor(GREEN);
+    outtextxy(270,430,str);
+    puthz(340,430,"页",24,24,GREEN);
 }

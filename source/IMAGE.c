@@ -112,7 +112,7 @@ int show_dbm(int x,int y,char *dbm,int nowpage)	//输入dbmp的路径,在(x,y)输出图片
   //	printf("%d %d",ImageW,ImageH);
 	hangsize=(ImageW-1)/8;
 	per=per+x/8+y*80;
-	if((ImageH+y)>350)	ImageH=350-y; 	//VGAMED  640*350
+	if((ImageH+y)>480)	ImageH=480-y; 	//VGAMED  640*350
 	for(i=0;i<ImageH;i++)
 	{
 		for(n=8;n>=1;n>>=1)	//从第三位颜色平面写到第0
@@ -300,4 +300,3 @@ void open_display()		//打开屏幕显示
 	_AL=0x00;
 	geninterrupt(0x10);
 } 
-

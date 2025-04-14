@@ -22,9 +22,10 @@ int baoan(char *phone_number){
     x.location[0] = x.time[0] = x.weather[0] = x.accident_type='\0';
     x.per1_phone[0] = x.per2_phone[0] = x.per2_destroied_part[0]=x.per1_destroied_part[0]='\0';
     x.per1_idcard[0] = x.per2_idcard[0] = '\0';
-    x.per1_car.plate[0] = x.per2_car.plate[0] = '\0';
+    x.per1_car.plate[0] = x.per2_car.plate[0] = x.per1_car.type[0] = x.per2_car.type[0]='\0';
     x.per1_car.province[0] = x.per2_car.province[0] = '\0';
-    x.processed_status = 0;
+    x.processed_status = '0';
+    x.liability_ratio[0] = x.liability_result[0] = '\0';
     clrmous(MouseX,MouseY);
     cleardevice();
     init_per1(phone_number,&x);
@@ -168,6 +169,8 @@ void baoan_1_click(AccidentInfo *p,int *page){
     
     //时间
     if(mouse_press(0,lineStart_y+height*0,640,lineStart_y+height*1)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(60,lineStart_y+height*0+10,500,lineStart_y+height*0+10+28);
         input_time(60,lineStart_y+height*0+5,p->time,1,3);
         clrmous(MouseX, MouseY);
         delay(100);
@@ -176,8 +179,8 @@ void baoan_1_click(AccidentInfo *p,int *page){
     }
     //地点
     if(mouse_press(0,lineStart_y+height*1,325,lineStart_y+height*2)==1){
-        // setfillstyle(SOLID_FILL,WHITE);
-        // bar(50,lineStart_y+height*1+10,150,lineStart_y+height*1+10+28);
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(50,lineStart_y+height*1+10,220,lineStart_y+height*1+10+28);
         input_location(p->location);
         puthz(50,lineStart_y+height*1+10,p->location,24,24,LIGHTGRAY);
         clrmous(MouseX, MouseY);
@@ -187,6 +190,8 @@ void baoan_1_click(AccidentInfo *p,int *page){
     }
     //weather
     if(mouse_press(325,lineStart_y+height*1,640,lineStart_y+height*2)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(400,lineStart_y+height*1+10,500,lineStart_y+height*1+10+28);
         input_weather(p->weather);
         puthz(400,lineStart_y+height*1+10,p->weather,24,24,LIGHTGRAY);
         clrmous(MouseX, MouseY);
@@ -196,6 +201,8 @@ void baoan_1_click(AccidentInfo *p,int *page){
     }
     //accident type
     if(mouse_press(0,lineStart_y+height*2,640,lineStart_y+height*3)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(100,lineStart_y+height*2+10,500,lineStart_y+height*2+10+28);
         input_accident_type(&(p->accident_type));
         put_accident_type(p->accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);
         clrmous(MouseX, MouseY);
@@ -205,6 +212,8 @@ void baoan_1_click(AccidentInfo *p,int *page){
     }
     //id card
     if(mouse_press(0,lineStart_y+height*4,640,lineStart_y+height*5)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(100,lineStart_y+height*4+10,500,lineStart_y+height*4+10+28);
         input_str(100,lineStart_y+height*4+10,p->per1_idcard,1,3,18);
         clrmous(MouseX, MouseY);
         delay(100);
@@ -213,6 +222,8 @@ void baoan_1_click(AccidentInfo *p,int *page){
     }
     //phone number
     if(mouse_press(0,lineStart_y+height*5,640,lineStart_y+height*6)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(100,lineStart_y+height*5+10,390,lineStart_y+height*5+10+28);
         input_str(100,lineStart_y+height*5+10,p->per1_phone,1,3,11);
         clrmous(MouseX, MouseY);
         delay(100);
@@ -221,6 +232,8 @@ void baoan_1_click(AccidentInfo *p,int *page){
     }
     //car type
     if(mouse_press(0,lineStart_y+height*6,325,lineStart_y+height*7)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(100,lineStart_y+height*6+10,230,lineStart_y+height*6+10+28);
         input_car_type(p->per1_car.type);
         puthz(120,lineStart_y+height*6+10,p->per1_car.type,24,24,LIGHTGRAY);
         clrmous(MouseX, MouseY);
@@ -230,6 +243,8 @@ void baoan_1_click(AccidentInfo *p,int *page){
     }
     //车牌号
     if(mouse_press(325,lineStart_y+height*6,640,lineStart_y+height*7)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(409,lineStart_y+height*6+10,540,lineStart_y+height*6+10+28);
         input_province(p->per1_car.province);
         puthz(410,lineStart_y+height*6+10,p->per1_car.province,24,24,LIGHTGRAY);
         input_str(430,lineStart_y+height*6+10,p->per1_car.plate,1,3,6);
@@ -240,6 +255,8 @@ void baoan_1_click(AccidentInfo *p,int *page){
     }
     //受损部位
     if(mouse_press(0,lineStart_y+height*7,640,lineStart_y+height*8)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(160,lineStart_y+height*7+10,400,lineStart_y+height*7+10+28);
         input_destroy_part(p->per1_destroied_part);
         puthz(160,lineStart_y+height*7+10,p->per1_destroied_part,24,24,LIGHTGRAY);
         clrmous(MouseX, MouseY);
@@ -334,6 +351,8 @@ void baoan_2_click(AccidentInfo *p,int *page){
     
     //时间
     if(mouse_press(0,lineStart_y+height*0,640,lineStart_y+height*1)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(60,lineStart_y+height*0+10,500,lineStart_y+height*0+10+28);
         input_time(60,lineStart_y+height*0+5,p->time,1,3);
         clrmous(MouseX, MouseY);
         delay(100);
@@ -343,7 +362,7 @@ void baoan_2_click(AccidentInfo *p,int *page){
     //地点
     if(mouse_press(0,lineStart_y+height*1,325,lineStart_y+height*2)==1){
         setfillstyle(SOLID_FILL,WHITE);
-        bar(50,lineStart_y+height*1+10,150,lineStart_y+height*1+10+28);
+        bar(50,lineStart_y+height*1+10,220,lineStart_y+height*1+10+28);
         input_location(p->location);
         puthz(50,lineStart_y+height*1+10,p->location,24,24,LIGHTGRAY);
         clrmous(MouseX, MouseY);
@@ -353,6 +372,8 @@ void baoan_2_click(AccidentInfo *p,int *page){
     }
     //weather
     if(mouse_press(325,lineStart_y+height*1,640,lineStart_y+height*2)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(400,lineStart_y+height*1+10,500,lineStart_y+height*1+10+28);
         input_weather(p->weather);
         puthz(400,lineStart_y+height*1+10,p->weather,24,24,LIGHTGRAY);
         clrmous(MouseX, MouseY);
@@ -362,6 +383,8 @@ void baoan_2_click(AccidentInfo *p,int *page){
     }
     //accident type
     if(mouse_press(0,lineStart_y+height*2,640,lineStart_y+height*3)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(100,lineStart_y+height*2+10,500,lineStart_y+height*2+10+28);
         input_accident_type(&(p->accident_type));
         put_accident_type(p->accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);
         clrmous(MouseX, MouseY);
@@ -371,6 +394,8 @@ void baoan_2_click(AccidentInfo *p,int *page){
     }
     //id card
     if(mouse_press(0,lineStart_y+height*4,640,lineStart_y+height*5)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(100,lineStart_y+height*4+10,500,lineStart_y+height*4+10+28);
         input_str(100,lineStart_y+height*4+10,p->per2_idcard,1,3,18);
         clrmous(MouseX, MouseY);
         delay(100);
@@ -379,6 +404,8 @@ void baoan_2_click(AccidentInfo *p,int *page){
     }
     //phone number
     if(mouse_press(0,lineStart_y+height*5,640,lineStart_y+height*6)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(100,lineStart_y+height*5+10,390,lineStart_y+height*5+10+28);
         input_str(100,lineStart_y+height*5+10,p->per2_phone,1,3,11);
         clrmous(MouseX, MouseY);
         delay(100);
@@ -387,6 +414,8 @@ void baoan_2_click(AccidentInfo *p,int *page){
     }
     //car type
     if(mouse_press(0,lineStart_y+height*6,325,lineStart_y+height*7)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(100,lineStart_y+height*6+10,230,lineStart_y+height*6+10+28);
         input_car_type(p->per2_car.type);
         puthz(120,lineStart_y+height*6+10,p->per2_car.type,24,24,LIGHTGRAY);
         clrmous(MouseX, MouseY);
@@ -396,6 +425,8 @@ void baoan_2_click(AccidentInfo *p,int *page){
     }
     //车牌号
     if(mouse_press(325,lineStart_y+height*6,640,lineStart_y+height*7)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(409,lineStart_y+height*6+10,540,lineStart_y+height*6+10+28);
         input_province(p->per2_car.province);
         puthz(410,lineStart_y+height*6+10,p->per2_car.province,24,24,LIGHTGRAY);
         input_str(430,lineStart_y+height*6+10,p->per2_car.plate,1,3,6);
@@ -406,6 +437,8 @@ void baoan_2_click(AccidentInfo *p,int *page){
     }
     //受损部位
     if(mouse_press(0,lineStart_y+height*7,640,lineStart_y+height*8)==1){
+        setfillstyle(SOLID_FILL,WHITE);
+        bar(160,lineStart_y+height*7+10,400,lineStart_y+height*7+10+28);
         input_destroy_part(p->per2_destroied_part);
         puthz(160,lineStart_y+height*7+10,p->per2_destroied_part,24,24,LIGHTGRAY);
         clrmous(MouseX, MouseY);
@@ -442,7 +475,6 @@ time:2025/3/9
  */
 
 int verify_baoan_1(AccidentInfo *p){
-    //time
     setfillstyle(SOLID_FILL,WHITE);
     bar(250,450,390,470);
     if(strlen(p->time)!=16){
@@ -495,8 +527,10 @@ int verify_baoan_1(AccidentInfo *p){
      return 1;
 }
 int verify_baoan_2(AccidentInfo *p){
+    setfillstyle(SOLID_FILL,WHITE);
+    bar(250,450,390,470);
      //time
-     if(strlen(p->time)!=16){
+     if(validate_time(p->time)!=1){
         puthz(250,450,"时间输入错误",16,16,RED);
         return -1;
     }
@@ -558,7 +592,9 @@ void show_per1_info(AccidentInfo *x){
         outtextxy(60,lineStart_y+height*0+5,x->time);
         puthz(50,lineStart_y+height*1+10,x->location,24,24,LIGHTGRAY);
         puthz(400,lineStart_y+height*1+10,x->weather,24,24,LIGHTGRAY);
-        put_accident_type(x->accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);//type
+        if(x->accident_type != '\0'){
+            put_accident_type(x->accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);//type
+        }
         outtextxy(100,lineStart_y+height*4+10,x->per1_idcard);//idcard
         outtextxy(100,lineStart_y+height*5+10,x->per1_phone);//phone
         puthz(120,lineStart_y+height*6+10,x->per1_car.type,24,24,LIGHTGRAY);//car type
@@ -574,7 +610,9 @@ void show_per2_info(AccidentInfo *x){
         outtextxy(60,lineStart_y+height*0+5,x->time);
         puthz(50,lineStart_y+height*1+10,x->location,24,24,LIGHTGRAY);
         puthz(400,lineStart_y+height*1+10,x->weather,24,24,LIGHTGRAY);
-        put_accident_type(x->accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);//type
+        if(x->accident_type != '\0'){
+            put_accident_type(x->accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);//type
+        }
         outtextxy(100,lineStart_y+height*4+10,x->per2_idcard);//idcard
         outtextxy(100,lineStart_y+height*5+10,x->per2_phone);//phone
         puthz(120,lineStart_y+height*6+10,x->per2_car.type,24,24,LIGHTGRAY);//car type

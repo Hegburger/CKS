@@ -11,7 +11,7 @@ int press;
 void *buffer;
 union REGS regs;
 int flag=0;
-
+void exit_input();
 void mouseinit()//初始化
 {
 	int retcode;
@@ -185,11 +185,20 @@ int mouse_press(int x1, int y1, int x2, int y2)
 		return 0;
 	}
 }
-
 void exit_input(){
 	free(buffer);
 	save_bk_mou(MouseX,MouseY);
 }
-
-
-
+//圆形鼠标检测
+int mouse_press_circle(int x,int y,int rad)
+{
+	//圆里面点击，返回1
+	if((MouseX-x)*(MouseX-x)+(MouseY-y)*(MouseY-y)<=rad*rad&&press==1&&(MouseX-x)*(MouseX-x)+(MouseY-y)*(MouseY-y)>=rad*rad*-1)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}

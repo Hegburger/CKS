@@ -69,7 +69,7 @@ author: CHENGKAI HUANG
 time:2025/3/30
 */
 int addInfo_user(char *phone_number, User *add){
-    FILE *fp;
+    FILE *fp = NULL;
     int result = 0;
     User x;//  ÓÃÓÚ±éÀú
     int validation = 1;
@@ -96,3 +96,4 @@ int addInfo_user(char *phone_number, User *add){
     fclose(fp);
     return result;
 }
+

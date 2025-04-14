@@ -43,13 +43,18 @@ int page_screen(char *user_idcard)
 		}
 		if(mouse_press(300,360,380,400)==1)//地图界面
 		{
-			return 7;
+			return 8;
 		}
+        if(mouse_press(50+50+longer*3+40*3,440,50+50+longer*4+40*3,440+height)==1){
+            //反馈
+            return 9;
+        }
 	}
 }
 void screen(char *user_idcard)
 {
 	FILE *fp;
+	char accident_type[20];
 	int height=40;
 	int longer=60;
 	int y=30;
@@ -104,12 +109,21 @@ void screen(char *user_idcard)
             current_row++;
             display_y = 30+y+12 + current_row * y;
             // 显示事故发生时间
-            settextstyle(DEFAULT_FONT, HORIZ_DIR, 1);
-            outtextxy(50, display_y, incident.time);
+            settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
+            outtextxy(20, display_y+5, incident.time);
             // 显示事故类型（转换为文字描述）
             //puthz(col_type, display_y, "事故类型",16,16,GRAY);
+            accident_type_trans(incident.accident_type,accident_type);
+            puthz(300, display_y,accident_type,24,24,LIGHTGRAY);
             // 显示处理状态，这里默认显示“已处理”
-            puthz(50+250*2, display_y, "已处理",16,16,LIGHTGRAY);
+            if(incident.processed_status=='1')
+            {
+                puthz(50+250*2, display_y, "已处理",24,24,LIGHTGRAY);	
+			}
+			else 
+			{
+	            puthz(50+250*2, display_y, "未处理",24,24,LIGHTGRAY);
+			}
         }
     }
     fclose(fp);
@@ -120,7 +134,6 @@ void screen(char *user_idcard)
     }
 
 }
-
 
 
 

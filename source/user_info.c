@@ -28,11 +28,25 @@ int page_person(char *phone_number,char *id_card)
     person_screen();
     save_bk_mou(MouseX,MouseY);
 	match_user(phone_number,&x);
-	
+	settextstyle(1,0,3);
+    outtextxy(x1+16,y-height,x.username);
+    outtextxy(x1+16,y+height,x.phone);
+    outtextxy(x1+16,y,x.idcard);
+    outtextxy(x1+16,y+height*2,x.student_id);
+    outtextxy(x1+40,y+height*3,x.driver_license_type);
+    outtextxy(x1+50,y+height*4,x.driver_license_validity);
+    puthz(x1+26,y+5+height*5,x.car.type,24,24,LIGHTBLUE);
+    puthz(x1+50,y+height*6+2,x.car.province,24,24,LIGHTBLUE);
+    outtextxy(x1+75,y+height*6,x.car.plate);
+    outtextxy(x1+100,y+height*7,x.ebike.campus_plate);
+    outtextxy(x1+100,y+height*8,x.ebike.wuhan_plate);
     while(1)
     {
 		mou_pos(&MouseX,&MouseY,&press);
-		if(mouse_press(595,0,640,45)==1)//退出按键 
+        if(mouse_press(0, 0, 45, 45)==1){
+            return 3;//返回主页面
+        }
+		else if(mouse_press(595,0,640,45)==1)//退出按键 
 		{
 			closegraph();
 			delay(1000);
@@ -200,7 +214,7 @@ void person_screen()
 {
 	int height=30;
 	int i;
-	int x=100,y=80;
+	int x1=100,y=80;
 	int blank=10
 ;	setbkcolor(WHITE);
 	//退出 
@@ -210,6 +224,11 @@ void person_screen()
      setlinestyle(SOLID_LINE,0,THICK_WIDTH);
      line(595,0,640,45);
      line(640,0,595,45);
+    // 绘制返回箭头（"<" 形状）
+    setcolor(BLUE);
+    setlinestyle(SOLID_LINE, 0, THICK_WIDTH);
+    line(30, 15, 15, 22);  // 右上角到箭头尖
+    line(15, 22, 30, 30);  // 箭头尖到右下角
      //线
 	 setcolor(LIGHTGRAY);
 	 setlinestyle(SOLID_LINE,0,NORM_WIDTH);
@@ -236,8 +255,6 @@ void person_screen()
 	bar(300,400,300+100,400+30);
 	puthz(300,400,"保存",32,32,WHITE);
 }
-
-
 
 
 
