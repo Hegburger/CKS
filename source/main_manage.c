@@ -25,6 +25,9 @@ int page_manage()
 		}
 		if(mouse_press(20,50,20+longer,50+height)==1)
 		{
+				clrmous(MouseX, MouseY);
+				delay(100);
+				save_bk_mou(MouseX,MouseY);
 			if(record_manage('0') == 11){
 				clrmous(MouseX, MouseY);
 				delay(100);
@@ -37,6 +40,9 @@ int page_manage()
 		}
 		if(mouse_press(20+longer+30,50,20+longer*2+30,50+height)==1)
 		{
+				clrmous(MouseX, MouseY);
+				delay(100);
+				save_bk_mou(MouseX,MouseY);
 			if(record_manage('1') == 11){
 				clrmous(MouseX, MouseY);
 				delay(100);
@@ -47,6 +53,9 @@ int page_manage()
 		    delay(100);
 		    save_bk_mou(MouseX,MouseY);
 		}
+        if(mouse_press(0, 0, 45, 45)==1){
+            return 2;//返回登录界面
+        }
 	}
 
 }
@@ -55,6 +64,15 @@ void manage_screen()
 	int height=200;
 	int longer=200;
 	setbkcolor(WHITE);
+     // 返回按键（左上角）
+    setcolor(LIGHTGRAY);
+    setlinestyle(SOLID_LINE, 0, NORM_WIDTH);
+    rectangle(0, 0, 45, 45); // 绘制返回按钮边框
+    // 绘制返回箭头（"<" 形状）
+    setcolor(BLUE);
+    setlinestyle(SOLID_LINE, 0, THICK_WIDTH);
+    line(30, 15, 15, 22);  // 右上角到箭头尖
+    line(15, 22, 30, 30);  // 箭头尖到右下角
 	//退出键
 	setcolor(LIGHTGRAY);
 	setlinestyle(DOTTED_LINE,0,NORM_WIDTH);

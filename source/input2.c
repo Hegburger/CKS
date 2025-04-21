@@ -341,7 +341,7 @@ void input_description4(char *save_description)
 */
 void input_image(int bmp_x,int bmp_y,char photo)
 {
-		char description_options[6][10]={
+		char description_options[6][7]={
 				"图片一",
 				"图片二",
 				"图片三",
@@ -349,11 +349,11 @@ void input_image(int bmp_x,int bmp_y,char photo)
 				"图片五",
 				"图片六"
 			};
-			char description_current[10];
+			char description_current[7];
 			int num_description=6;//一共5个选项
 			int max_per_column=1;//每行一个选项
-		    int width = 200;        // 按钮宽度
-		    int height = 30;        // 按钮高度
+		    int width = 180;        // 按钮宽度
+		    int height = 28;        // 按钮高度
 		    int start_x = 250;      // 起始横坐标
 		    int start_y = 10;      // 起始纵坐标
 		    int x, y, row, i;
@@ -396,7 +396,7 @@ void input_image(int bmp_x,int bmp_y,char photo)
 		            if (press_num < num_description+1) {
 		            	if(press_num==1)
 		            	{
-		            		photo=1;
+		            		photo='1';
 		            		bmp_convert("C:\\PROJECT\\photo\\TU1.bmp","C:\\PROJECT\\photo\\TU1.dbm");
 							show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU1.dbm",0);
     		                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
@@ -406,7 +406,7 @@ void input_image(int bmp_x,int bmp_y,char photo)
 						}
 		            	if(press_num==2)
 		            	{
-		            		photo=2;
+		            		photo='2';
 		            		bmp_convert("C:\\PROJECT\\photo\\TU2.bmp","C:\\PROJECT\\photo\\TU2.dbm");
 							show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU2.dbm",0);
     		                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
@@ -416,7 +416,7 @@ void input_image(int bmp_x,int bmp_y,char photo)
 						}
 		            	if(press_num==3)
 		            	{
-		            		photo=3;
+		            		photo='3';
 		            		bmp_convert("C:\\PROJECT\\photo\\TU3.bmp","C:\\PROJECT\\photo\\TU3.dbm");
 							show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU3.dbm",0);
     		                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
@@ -426,7 +426,7 @@ void input_image(int bmp_x,int bmp_y,char photo)
 						}
 		               if(press_num==4)
 		            	{
-		            		photo=4;
+		            		photo='4';
 		            		bmp_convert("C:\\PROJECT\\photo\\TU4.bmp","C:\\PROJECT\\photo\\TU4.dbm");
 							show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU4.dbm",0);
     		                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
@@ -436,7 +436,7 @@ void input_image(int bmp_x,int bmp_y,char photo)
 						}
 		            	if(press_num==5)
 		            	{
-		            		photo=5;
+		            		photo='5';
 		            		bmp_convert("C:\\PROJECT\\photo\\TU5.bmp","C:\\PROJECT\\photo\\TU5.dbm");
 							show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU5.dbm",0);
     		                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
@@ -446,7 +446,7 @@ void input_image(int bmp_x,int bmp_y,char photo)
 						}
 		            	if(press_num==6)
 		            	{
-		            		photo=6;
+		            		photo='6';
 		            		bmp_convert("C:\\PROJECT\\photo\\TU6.bmp","C:\\PROJECT\\photo\\TU6.dbm");
 							show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU6.dbm",0);
     		                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
@@ -465,11 +465,11 @@ void input_image(int bmp_x,int bmp_y,char photo)
 void input_judge_des1(char *save_description)
 {
 	char description_options[5][19]={
-		"评估一，",
-		"评估二，",
-		"评估三，",
-		"评估四，",
-		"评估五，"
+		"证据清晰完整，",
+		"人证陈述一致，",
+		"物证链条连贯，",
+		"数据存在缺失，",
+		"监控部分覆盖，"
 	};
 	char description_current[19];
 	int num_description=5;//一共5个选项
@@ -532,11 +532,11 @@ void input_judge_des1(char *save_description)
 void input_judge_des2(char *save_description)
 {
 	char description_options[5][19]={
-		"评估一，",
-		"评估二，",
-		"评估三，",
-		"评估四，",
-		"评估五，"
+		"人证可信度较高，",
+		"物证需进一步核验，",
+		"电子数据待恢复，",
+		"现场痕迹有矛盾，",
+		"证据关联性不足，"
 	};
 	char description_current[19];
 	int num_description=5;//一共5个选项
@@ -599,11 +599,11 @@ void input_judge_des2(char *save_description)
 void input_judge_des3(char *save_description)
 {
 	char description_options[5][19]={
-		"评估一，",
-		"评估二，",
-		"评估三，",
-		"评估四，",
-		"评估五，"
+		"师生情绪较稳定，",
+		"设施损坏需维修，",
+		"交通路线受影响，",
+		"存在潜在安全风险，",
+		"短期影响可控制，"
 	};
 	char description_current[19];
 	int num_description=5;//一共5个选项
@@ -633,7 +633,7 @@ void input_judge_des3(char *save_description)
         x = start_x + (i % max_per_column) * width; // 计算按钮的横坐标
 
         strcpy(description_current, description_options[i]);
-        
+
         setfillstyle(SOLID_FILL, LIGHTGRAY);
         bar(x, y, x + width, y + height); // 绘制按钮背景
         setcolor(BLACK);
@@ -666,11 +666,11 @@ void input_judge_des3(char *save_description)
 void input_judge_des4(char *save_description)
 {
 	char description_options[5][19]={
-		"评估一，",
-		"评估二，",
-		"评估三，",
-		"评估四，",
-		"评估五，"
+		"建议补充调查证据。",
+		"需协调部门联动。",
+		"可启动应急流程。",
+		"应通报相关院系。",
+		"需跟进后续影响。"
 	};
 	char description_current[19];
 	int num_description=5;//一共5个选项
@@ -683,7 +683,7 @@ void input_judge_des4(char *save_description)
     int press_num;
     void *background;
     unsigned int image_size;
-    
+
     // 存储画面
     image_size = imagesize(start_x, start_y, start_x + (width), start_y + ((num_description / max_per_column + 1) * (height)));
     background = malloc(image_size);
@@ -700,7 +700,7 @@ void input_judge_des4(char *save_description)
         x = start_x + (i % max_per_column) * width; // 计算按钮的横坐标
 
         strcpy(description_current, description_options[i]);
-        
+
         setfillstyle(SOLID_FILL, LIGHTGRAY);
         bar(x, y, x + width, y + height); // 绘制按钮背景
         setcolor(BLACK);
@@ -732,14 +732,14 @@ void input_judge_des4(char *save_description)
 */
 void input_judge_infect(char *save_description)
 {
-	char description_options[5][19]={
-		"因素一，",
-		"因素二，",
-		"因素三，",
-		"因素四，",
-		"因素五，"
+	char description_options[5][13]={
+		"现场痕迹清晰",
+		"目击证人在场",
+		"监控覆盖完整",
+		"人员受伤程度",
+		"道路设施状态"
 	};
-	char description_current[19];
+	char description_current[13];
 	int num_description=5;//一共5个选项
 	int max_per_column=1;//每行一个选项
     int width = 200;        // 按钮宽度
@@ -750,7 +750,7 @@ void input_judge_infect(char *save_description)
     int press_num;
     void *background;
     unsigned int image_size;
-    
+
     // 存储画面
     image_size = imagesize(start_x, start_y, start_x + (width), start_y + ((num_description / max_per_column + 1) * (height)));
     background = malloc(image_size);
@@ -793,20 +793,36 @@ void input_judge_infect(char *save_description)
         }
     }
 }
+void duty_auto(char *already, char *change){
+    int i;
+    char description_options[5][11]={
+        "负全部责任",
+        "负主要责任",
+		"负部分责任",
+		"负次要责任",
+		"不负责任"
+	};
+    for(i = 0;i<5;i++){
+        if(strcmp(description_options[i],already)==0){
+            strcpy(change,description_options[4-i]);
+            return;
+        }
+    }
+}
 /*
 让管理员选择责任
 彭减
 */
 void input_judge_duty(char *save_description)
 {
-	char description_options[5][19]={
+	char description_options[5][15]={
 		"负部分责任",
 		"负全部责任",
 		"负主要责任",
 		"负次要责任",
 		"不负责任"
 	};
-	char description_current[19];
+	char description_current[15];
 	int num_description=5;//一共5个选项
 	int max_per_column=1;//每行一个选项
     int width = 200;        // 按钮宽度
@@ -866,14 +882,14 @@ void input_judge_duty(char *save_description)
 */
 void input_judge_money(char *save_description)
 {
-	char description_options[5][19]={
+	char description_options[5][13]={
 		"不处赔偿",
 		"三千元以下",
 		"三千到一万元",
 		"一万到十万元",
 		"十万元以上"
 	};
-	char description_current[19];
+	char description_current[13];
 	int num_description=5;//一共5个选项
 	int max_per_column=1;//每行一个选项
     int width = 200;        // 按钮宽度
@@ -933,14 +949,14 @@ void input_judge_money(char *save_description)
 */
 void input_judge_punish(char *save_description)
 {
-	char description_options[5][19]={
+	char description_options[5][13]={
 		"不处法律惩罚",
 		"口头教育",
 		"行政拘留",
 		"刑事拘留",
 		"坐牢"
 	};
-	char description_current[19];
+	char description_current[13];
 	int num_description=5;//一共5个选项
 	int max_per_column=1;//每行一个选项
     int width = 200;        // 按钮宽度
@@ -988,8 +1004,8 @@ void input_judge_punish(char *save_description)
                 strcpy(save_description, description_options[press_num]); // 存储选中的类型
                 putimage(start_x, start_y, background, COPY_PUT); // 还原画面
                 free(background); // 释放内存
-                break;
                 exit_input();
+                break;
             }
         }
     }
@@ -1136,11 +1152,11 @@ void input_judge_log(char *save_description)
 void input_feedback1(char *save_description)
 {
 	char description_options[5][19]={
-		"反馈一",
-		"反馈二",
-		"反馈三",
-		"反馈四",
-		"反馈五"
+		"操作简单便捷，",
+		"操作流程常规，",
+		"操作步骤繁琐，",
+		"按键反应灵敏，",
+		"交互逻辑混乱，"
 	};
 	char description_current[19];
 	int num_description=5;//一共5个选项
@@ -1205,11 +1221,11 @@ void input_feedback1(char *save_description)
 void input_feedback2(char *save_description)
 {
 	char description_options[5][19]={
-		"反馈一",
-		"反馈二",
-		"反馈三",
-		"反馈四",
-		"反馈五"
+		"模拟贴近真实，",
+		"模拟效果一般，",
+		"模拟脱离实际，",
+		"报案响应迅速，",
+		"功能存在卡顿，"
 	};
 	char description_current[19];
 	int num_description=5;//一共5个选项
@@ -1273,11 +1289,11 @@ void input_feedback2(char *save_description)
 void input_feedback3(char *save_description)
 {
 	char description_options[5][19]={
-		"反馈一",
-		"反馈二",
-		"反馈三",
-		"反馈四",
-		"反馈五"
+		"界面简洁明了，",
+		"界面中规中矩，",
+		"界面杂乱无章，",
+		"图标清晰易懂，",
+		"字体模糊难辨，"
 	};
 	char description_current[19];
 	int num_description=5;//一共5个选项
@@ -1341,11 +1357,11 @@ void input_feedback3(char *save_description)
 void input_feedback4(char *save_description)
 {
 	char description_options[5][19]={
-		"反馈一",
-		"反馈二",
-		"反馈三",
-		"反馈四",
-		"反馈五"
+		"系统实用性强。",
+		"系统表现平平。",
+		"系统问题较多。",
+		"体验较为满意。",
+		"功能有待完善。"
 	};
 	char description_current[19];
 	int num_description=5;//一共5个选项
@@ -1401,9 +1417,6 @@ void input_feedback4(char *save_description)
         }
     }
 }
-
-
-
 
 
 

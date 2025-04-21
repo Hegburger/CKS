@@ -26,6 +26,9 @@ int baoan(char *phone_number){
     x.per1_car.province[0] = x.per2_car.province[0] = '\0';
     x.processed_status = '0';
     x.liability_ratio[0] = x.liability_result[0] = '\0';
+    x.judge.description1[0]=x.judge.description2[0]=x.judge.description2[0]=x.judge.description2[0]='\0';
+    x.judge.final_per1duty[0]=x.judge.final_per2duty[0]='\0';
+    x.judge.final_log[0]='\0';
     clrmous(MouseX,MouseY);
     cleardevice();
     init_per1(phone_number,&x);

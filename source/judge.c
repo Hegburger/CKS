@@ -15,6 +15,11 @@ int page_judge(AccidentInfo *p,int num_solid)
 	FILE *fw;
 	int row_height=30;
 
+    p->judge.final_log[0]=p->judge.final_time[0]=p->judge.final_punish[0]='\0';
+    p->judge.description1[0]=p->judge.description2[0]=p->judge.description3[0]=p->judge.description4[0]='\0';
+    p->judge.factor1[0]=p->judge.factor2[0]=p->judge.factor3[0]='\0';
+    p->judge.final_per1duty[0]=p->judge.final_per2duty[0]='\0';
+    p->judge.final_money[0]='\0';
 	clrmous(MouseX,MouseY);
 	delay(100);
 	cleardevice();
@@ -127,33 +132,39 @@ int page_judge(AccidentInfo *p,int num_solid)
 					else if(mouse_press(80+50,390,320,420)==1)
 					{
 						check_pick[5]=1;
+						check_pick[6]=1;
 						setfillstyle(SOLID_FILL,WHITE);
 						bar(80+50,392,318,418);
-						
+						setfillstyle(SOLID_FILL,WHITE);
+						bar(400+50,392,700,418);
 			            clrmous(MouseX, MouseY);
 					    delay(100);
 					    save_bk_mou(MouseX,MouseY);
 					    
-					    input_judge_duty(p->judge.final_per1_duty);
-					    puthz(82+50,396,p->judge.final_per1_duty,16,16,LIGHTGRAY);
-					    
+					    input_judge_duty(p->judge.final_per1duty);
+					    puthz(82+50,396,p->judge.final_per1duty,16,16,LIGHTGRAY);
+					    duty_auto(p->judge.final_per1duty,p->judge.final_per2duty);
+						puthz(402+50,396,p->judge.final_per2duty,16,16,LIGHTGRAY);
 			            clrmous(MouseX, MouseY);
 					    delay(100);
 					    save_bk_mou(MouseX,MouseY);
 					}
 					else if(mouse_press(400+50,390,700,420)==1)
-					{
+					{	
+						check_pick[5]=1;
 						check_pick[6]=1;
 						setfillstyle(SOLID_FILL,WHITE);
+						bar(80+50,392,318,418);
+						setfillstyle(SOLID_FILL,WHITE);
 						bar(400+50,392,700,418);
-						
 			            clrmous(MouseX, MouseY);
 					    delay(100);
 					    save_bk_mou(MouseX,MouseY);
 					    
-					    input_judge_duty(p->judge.final_per2_duty);
-					    puthz(402+50,396,p->judge.final_per2_duty,16,16,LIGHTGRAY);
-					    
+					    input_judge_duty(p->judge.final_per2duty);
+					    puthz(402+50,396,p->judge.final_per2duty,16,16,LIGHTGRAY);
+						duty_auto(p->judge.final_per2duty,p->judge.final_per1duty);
+						puthz(82+50,396,p->judge.final_per1duty,16,16,LIGHTGRAY);
 			            clrmous(MouseX, MouseY);
 					    delay(100);
 					    save_bk_mou(MouseX,MouseY);
@@ -180,9 +191,15 @@ int page_judge(AccidentInfo *p,int num_solid)
 					else if(mouse_press(0,450,300,480)==1)
 					{
 						page=2;
+			            clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
 						setfillstyle(SOLID_FILL,WHITE);
 						bar(0,0,700,700);
 						judge_screen2();
+			            clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
 						puthz(82+80,486-400,p->judge.final_punish,16,16,LIGHTGRAY);
 						puthz(82+80,516-400,p->judge.final_time,16,16,LIGHTGRAY);
 						puthz(82+80,546-400,p->judge.final_log,16,16,LIGHTGRAY);
@@ -269,7 +286,7 @@ int page_judge(AccidentInfo *p,int num_solid)
 											{
 												if(check_pick[10]!=0)
 												{
-					    							if((fw = fopen("ACCIDENT.dat","rb+"))==NULL)
+					    							if((fw = fopen("accident.dat","rb+"))==NULL)
 													{
 														setfillstyle(SOLID_FILL,WHITE);
 														bar(20,590-350,240,640-350); 
@@ -341,9 +358,15 @@ int page_judge(AccidentInfo *p,int num_solid)
 					else if(mouse_press(0,310,300,340)==1)
 					{
 						page=1;
+			            clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
 						setfillstyle(SOLID_FILL,WHITE);
 						bar(0,0,700,700);
 						judge_screen1();
+			            clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
 						puthz(30,70,p->judge.description1,16,16,LIGHTGRAY);
 						puthz(30+240,70,p->judge.description2,16,16,LIGHTGRAY);
 						puthz(30,70+40,p->judge.description3,16,16,LIGHTGRAY);
@@ -351,8 +374,8 @@ int page_judge(AccidentInfo *p,int num_solid)
 						puthz(82+30,246,p->judge.factor1,16,16,LIGHTGRAY);
 						puthz(82+30,246+30,p->judge.factor2,16,16,LIGHTGRAY);
 						puthz(82+30,246+60,p->judge.factor3,16,16,LIGHTGRAY);
-						puthz(82+50,396,p->judge.final_per1_duty,16,16,LIGHTGRAY);
-						puthz(402+50,396,p->judge.final_per2_duty,16,16,LIGHTGRAY);
+						puthz(82+50,396,p->judge.final_per1duty,16,16,LIGHTGRAY);
+						puthz(402+50,396,p->judge.final_per2duty,16,16,LIGHTGRAY);
 						puthz(82+40,426,p->judge.final_money,16,16,LIGHTGRAY);
 						break;
 					}	
@@ -438,11 +461,6 @@ void judge_screen2()
     puthz(5,164+150,"点击此处切换上一页",24,24,GREEN);
     draw_triangle(260,205+100,41);
 }
-
-
-
-
-
 
 
 

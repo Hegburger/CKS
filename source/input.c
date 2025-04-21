@@ -11,7 +11,6 @@ author:Chengkai Huang
 #include <time.h>
 #include <string.h>
 #include <stdio.h>
-
 void input_str(int x, int y, char *save_str, int font, int size, int num_max) {
     char tepStr[21];        // 存储输入字符串的缓冲区
     char kip;               // 当前按键字符
@@ -33,7 +32,7 @@ void input_str(int x, int y, char *save_str, int font, int size, int num_max) {
     strcpy(tepStr, save_str);
     num = strlen(tepStr);
     settextstyle(font, 0, size);
-
+    clrmous(MouseX,MouseY);
     // 备份背景
     background = malloc(imagesize(x, y, right_x, bottom_y));
     getimage(x, y, right_x, bottom_y, background);
@@ -77,7 +76,7 @@ void input_str(int x, int y, char *save_str, int font, int size, int num_max) {
             // 绘制光标
             if (cursor_on&&num>0) {
                 int text_w = textwidth(tepStr);
-                line(x + text_w-5, y, x + text_w-5, y + textheight("W"));
+                line(x + text_w-2, y, x + text_w-2, y + textheight("W"));
             }
         }
         
@@ -85,11 +84,91 @@ void input_str(int x, int y, char *save_str, int font, int size, int num_max) {
     }
 
     // 保存结果并清理
+
     strcpy(save_str, tepStr);
     putimage(x, y, background, COPY_PUT);
     outtextxy(x, y, tepStr);
+    exit_input();
     free(background);
 }
+//void input_str(int x, int y, char *save_str, int font, int size, int num_max) {
+//    char tepStr[21];        // 存储输入字符串的缓冲区
+//    char kip;               // 当前按键字符
+//    int num = 0;            // 当前字符数
+//    int cursor_on = 1;       // 光标显示状态
+//    int need_redraw = 0;
+////    clock_t last_toggle ;// 光标计时器
+//    
+//    // 图形相关变量
+//    int text_width = textwidth("W") * num_max;
+//    int text_height = textheight("W") + 10;
+//    void *background;
+//    int max_x = getmaxx();
+//    int max_y = getmaxy();
+//    int right_x = (x + text_width) > max_x ? max_x : (x + text_width);
+//    int bottom_y = (y + text_height) > max_y ? max_y : (y + text_height);
+////    last_toggle = clock();
+//    // 初始化字符串
+//    strcpy(tepStr, save_str);
+//    num = strlen(tepStr);
+//    settextstyle(font, 0, size);
+//
+//    // 备份背景
+//    background = malloc(imagesize(x, y, right_x, bottom_y));
+//    getimage(x, y, right_x, bottom_y, background);
+//    outtextxy(x, y, tepStr);
+//
+//    // 主输入循环
+//    while (1) {
+//        need_redraw = 0;
+//        
+//        // 处理键盘输入
+//        if (kbhit()) {
+//            kip = getch(); // 使用无回显的getch
+//            
+//            if (kip == 13) { // 回车确认
+//                break;
+//            } else if (kip == 8 && num > 0) { // 退格删除
+//                tepStr[--num] = '\0';
+//                need_redraw = 1;
+//            } else if (num < num_max && kip >= 32 && kip <= 126) { // 可打印字符
+//                tepStr[num++] = kip;
+//                tepStr[num] = '\0';
+//                need_redraw = 1;
+//            }
+////            
+//            cursor_on = 1; // 输入后重置光标状态
+////            last_toggle = clock();
+//        }
+//
+//        // 处理光标闪烁
+//        if ((clock() - last_toggle) * 1000.0 / CLOCKS_PER_SEC > 500) {
+//            cursor_on = !cursor_on;
+//            last_toggle = clock();
+//            need_redraw = 1;
+//        }
+//
+//        // 重绘界面
+//        if (need_redraw) {
+//            putimage(x, y, background, COPY_PUT); // 恢复背景
+//            outtextxy(x, y, tepStr);              // 绘制文本
+//            
+//            // 绘制光标
+//            if (cursor_on&&num>0) {
+//                int text_w = textwidth(tepStr);
+//                line(x + text_w-2, y, x + text_w-2, y + textheight("W"));
+//            }
+//        }
+//        
+//        delay(10); // 降低CPU占用
+//    }
+//
+//    // 保存结果并清理
+//    strcpy(save_str, tepStr);
+//    putimage(x, y, background, COPY_PUT);
+//    outtextxy(x, y, tepStr);
+//    free(background);
+//}
 // void input_str(int x, int y, char *save_str, int font ,int size,int num_max) {
 //     char tepStr[21];   // 用于存储当前输入的字符串
 //     char kip;          // 当前键入值

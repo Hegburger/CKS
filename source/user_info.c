@@ -63,6 +63,9 @@ int page_person(char *phone_number,char *id_card)
         // }
         else if(mouse_press(x1,y,x1+longer,y+height)==1)//输入身份证 
 		{
+			            clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
             setfillstyle(SOLID_FILL,WHITE);
             bar(x1+16,y+5,x1+longer,y+height-5);
             input_str(x1+16,y,x.idcard,1,3,18);
@@ -81,6 +84,9 @@ int page_person(char *phone_number,char *id_card)
         // }
         else if(mouse_press(x1,y+height*2,x1+longer,y+height*3)==1)//输入学号 
 		{
+			            clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
 	        setfillstyle(SOLID_FILL,WHITE);
 	        bar(x1+16,y+height*2+5,x1+longer,y+height*3-5);
 	        input_str(x1+16,y+height*2,x.student_id,1,3,10);
@@ -90,6 +96,9 @@ int page_person(char *phone_number,char *id_card)
 	    }
         else if(mouse_press(x1,y+height*3,x1+longer,y+height*4)==1)//输入驾驶证类型 
 		{
+			            clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
 	        setfillstyle(SOLID_FILL,WHITE);
 	        bar(x1+40,y+height*3+5,x1+longer,y+height*4-5);
 	        input_str(x1+40,y+height*3,x.driver_license_type,1,3,20);
@@ -99,6 +108,9 @@ int page_person(char *phone_number,char *id_card)
 	    }
         else if(mouse_press(x1,y+height*4,x1+longer,y+height*5)==1)//输入驾驶证有效期 
 		{
+			            clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
 	        setfillstyle(SOLID_FILL,WHITE);
 	        bar(x1+50,y+height*4+5,x1+longer,y+height*5-5);
 	        input_time(x1+50,y+height*4,x.driver_license_validity,1,3);
@@ -135,6 +147,9 @@ int page_person(char *phone_number,char *id_card)
 	    }
         else if(mouse_press(x1,y+height*7,x1+longer,y+height*8)==1)//输入电动车的校园车牌号 
 		{
+			            clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
 	        setfillstyle(SOLID_FILL,WHITE);
 	        bar(x1+100,y+height*7+5,x1+longer,y+height*8-5);
 	        input_str(x1+100,y+height*7,x.ebike.campus_plate,1,3,20);
@@ -144,6 +159,9 @@ int page_person(char *phone_number,char *id_card)
 	    }
         else if(mouse_press(x1,y+height*8,x1+longer,y+height*9)==1)//输入电动车的武汉车牌号 
 		{
+			            clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
 	        setfillstyle(SOLID_FILL,WHITE);
 	        bar(x1+100,y+height*8+5,x1+longer,y+height*9-5);
 	        input_str(x1+100,y+height*8,x.ebike.wuhan_plate,1,3,20);
@@ -255,7 +273,6 @@ void person_screen()
 	bar(300,400,300+100,400+30);
 	puthz(300,400,"保存",32,32,WHITE);
 }
-
 
 
 

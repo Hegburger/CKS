@@ -1,6 +1,6 @@
 #include"common.h"
 /****
-function:main鍑芥暟锛屼富寰幆鎵€鍦�
+function:main鍑芥暟锛屼富寰幆鎵€鍦?
 author:Chengkai Huang
 *****/
 void main(){
@@ -36,7 +36,7 @@ void main(){
 				page = page_login(user_phone_number,user_id_card);
 				continue;
 			case 3://主界面
-				page = page_screen();
+				page = page_screen(user_phone_number);
 				continue;
 			case 4://报案界面
 				if(user_id_card[0]=='\0'){

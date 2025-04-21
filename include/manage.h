@@ -8,18 +8,18 @@ typedef struct{
 //管理员对于用户事故的评估
 typedef struct{
 	//评估
-	char description1[17];
-	char description2[17];
-	char description3[17];
-	char description4[17];
+	char description1[19];
+	char description2[19];
+	char description3[19];
+	char description4[19];
 	//影响因素
-	char factor1[20];
-	char factor2[20];
-	char factor3[20];
+	char factor1[13];
+	char factor2[13];
+	char factor3[13];
 	//最终定罪
-	char final_per1_duty[11];
-	char final_per2_duty[11];
-	char final_money[20];
+	char final_per1duty[11];
+	char final_per2duty[11];
+	char final_money[13];
 	//惩罚类型
 	char final_punish[13];
 	//惩罚时间

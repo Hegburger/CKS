@@ -1,7 +1,8 @@
 #include"common.h"
 #include"verify.h"
 #include"input.h"
-int show_per1(AccidentInfo *x);
+#include<stdlib.h>
+int show_per1(AccidentInfo *x,char flag);
 int show_per2(AccidentInfo *x,char flag);
 int his_indi_screen(char *user_idcard,AccidentInfo *p);
 void history_indi(char *user_idcard) {
@@ -194,9 +195,11 @@ int his_indi_screen(char *user_idcard,AccidentInfo *p){
 }
 
 //展示第一个人信息，返回2进入第二个人信息
-int show_per1(AccidentInfo *x){
+int show_per1(AccidentInfo *x,char flag){
     int height = 40,i,page;
     int lineStart_y = 80,numBlank=9;
+    int check=0;
+    int random=0;
     clrmous(MouseX,MouseY);
     delay(100);
     cleardevice();
@@ -240,6 +243,13 @@ int show_per1(AccidentInfo *x){
     puthz(5,lineStart_y+height*8-29,"显著受损部位",24,24,GREEN);
     puthz(5,lineStart_y+height*9-29,"对方信息",24,24,BLUE);
     puthz(280,5,"报案记录",32,32,RED);
+    if(x->processed_status=='0'&&flag=='\0')
+    {
+	    puthz(5,lineStart_y+height*10-29,"点击这里催一下管理员处理你的报案",24,24,LIGHTBLUE);
+	    settextstyle(1,0,3);
+	    setcolor(LIGHTBLUE);
+	    outtextxy(410,lineStart_y+height*10-29-5,"\\(>w<)/");
+	}
 
     //信息输入
     settextstyle(1, 0, 3);  // 对应的字体样式和大小
@@ -253,7 +263,9 @@ int show_per1(AccidentInfo *x){
     puthz(410,lineStart_y+height*6+10,x->per1_car.province,24,24,LIGHTGRAY);
     outtextxy(430,lineStart_y+height*6+10,x->per1_car.plate);//plate
     puthz(160,lineStart_y+height*7+10,x->per1_destroied_part,24,24,LIGHTGRAY);//受损 
-
+    setfillstyle(SOLID_FILL,WHITE);
+	settextstyle(1,0,3);
+    srand(time(NULL));
     //循环
     while (1)
     {
@@ -275,7 +287,98 @@ int show_per1(AccidentInfo *x){
             delay(100);
             break;
         }
-
+	    if(mouse_press(0,451,450,480)==1&&check==0&&x->processed_status=='0')
+	    {
+	       	if(flag=='\0')
+	       	{
+				random=(rand()%6)+1;
+				if(random==1)
+				{
+				            clrmous(MouseX, MouseY);
+						    delay(100);
+						    save_bk_mou(MouseX,MouseY);
+					bar(0,451,700,480);
+		            puthz(5,lineStart_y+height*10-29,"点击这里催一下管理员处理你的报案",24,24,LIGHTCYAN);
+				    setcolor(LIGHTCYAN);
+				    outtextxy(410,lineStart_y+height*10-29-5,"\\(>w<)/");
+				    
+				            clrmous(MouseX, MouseY);
+						    delay(100);
+						    save_bk_mou(MouseX,MouseY);
+				}
+				if(random==2)
+				{
+				            clrmous(MouseX, MouseY);
+						    delay(100);
+						    save_bk_mou(MouseX,MouseY);
+					bar(0,451,700,480);
+		            puthz(5,lineStart_y+height*10-29,"点击这里催一下管理员处理你的报案",24,24,LIGHTRED);
+				    setcolor(LIGHTRED);
+				    outtextxy(410,lineStart_y+height*10-29-5,"\\(>w<)/");
+			
+					            clrmous(MouseX, MouseY);
+							    delay(100);
+							    save_bk_mou(MouseX,MouseY);
+				}
+				if(random==3)
+				{
+				            clrmous(MouseX, MouseY);
+						    delay(100);
+						    save_bk_mou(MouseX,MouseY);
+					bar(0,451,700,480);
+		            puthz(5,lineStart_y+height*10-29,"点击这里催一下管理员处理你的报案",24,24,LIGHTGREEN);
+				    setcolor(LIGHTGREEN);
+				    outtextxy(410,lineStart_y+height*10-29-5,"\\(>w<)/");
+				    
+				            clrmous(MouseX, MouseY);
+						    delay(100);
+						    save_bk_mou(MouseX,MouseY);
+				}
+				if(random==4)
+				{
+				            clrmous(MouseX, MouseY);
+						    delay(100);
+						    save_bk_mou(MouseX,MouseY);
+					bar(0,451,700,480);
+		            puthz(5,lineStart_y+height*10-29,"点击这里催一下管理员处理你的报案",24,24,BLUE);
+				    setcolor(BLUE);
+				    outtextxy(410,lineStart_y+height*10-29-5,"\\(>w<)/");
+		
+				            clrmous(MouseX, MouseY);
+						    delay(100);
+						    save_bk_mou(MouseX,MouseY);
+				}
+				if(random==5)
+				{
+				            clrmous(MouseX, MouseY);
+						    delay(100);
+						    save_bk_mou(MouseX,MouseY);
+					bar(0,451,700,480);
+		            puthz(5,lineStart_y+height*10-29,"点击这里催一下管理员处理你的报案",24,24,LIGHTMAGENTA);
+				    setcolor(LIGHTMAGENTA);
+				    outtextxy(410,lineStart_y+height*10-29-5,"\\(>w<)/");
+				    
+				            clrmous(MouseX, MouseY);
+						    delay(100);
+						    save_bk_mou(MouseX,MouseY);
+				}
+				if(random==6)
+				{
+				            clrmous(MouseX, MouseY);
+						    delay(100);
+						    save_bk_mou(MouseX,MouseY);
+					bar(0,451,700,480);
+		            puthz(5,lineStart_y+height*10-29,"别催啦，管理员要头秃了",24,24,BROWN);
+				    setcolor(BROWN);
+				    outtextxy(410-100,lineStart_y+height*10-29-5,"_(QAQ)_");
+				    check++;
+				    
+				            clrmous(MouseX, MouseY);
+						    delay(100);
+						    save_bk_mou(MouseX,MouseY);
+				}
+			}
+		}
     }
     return page;
 
@@ -284,7 +387,6 @@ int show_per1(AccidentInfo *x){
 int show_per2(AccidentInfo *x, char flag) {
     int height = 40, i,page;
     int lineStart_y = 80, numBlank = 9;
-    
     clrmous(MouseX, MouseY);
     delay(100);
     cleardevice();
@@ -325,8 +427,10 @@ int show_per2(AccidentInfo *x, char flag) {
     
     // 在第二人信息下方添加责任信息
     puthz(5, lineStart_y + height * 6 - 29, "处理状态", 24, 24, BLUE);
-    puthz(5, lineStart_y + height * 7 - 29, "责任认定结果", 24, 24, BLUE);
-    puthz(5, lineStart_y + height * 8 - 29, "责任比例", 24, 24, BLUE);
+    puthz(5, lineStart_y + height * 7 - 29, "审理单位", 24, 24, BLUE);
+    puthz(5, lineStart_y + height * 8 - 29, "肇事者责任", 24, 24, BLUE);
+    line(300,lineStart_y+height*7,300,lineStart_y+height*8);
+    puthz(305, lineStart_y + height * 8 - 29, "被害者责任", 24, 24, BLUE);
     puthz(5,lineStart_y + height * 9 - 29,"当事人信息",24,24,BLUE);
     
     puthz(280, 5, "报案记录", 32, 32, RED);
@@ -339,17 +443,16 @@ int show_per2(AccidentInfo *x, char flag) {
     puthz(120, lineStart_y + height * 2 + 10, x->per2_car.type, 24, 24, LIGHTGRAY); // 车辆类型
     puthz(410, lineStart_y + height * 2 + 10, x->per2_car.province, 24, 24, LIGHTGRAY);
     outtextxy(430, lineStart_y + height * 2 + 10, x->per2_car.plate);    // 车牌号
+    puthz(120,lineStart_y+height*6+10,x->judge.final_log,24,24,BROWN);//审理单位
     puthz(160, lineStart_y + height * 3 + 10, x->per2_destroied_part, 24, 24, LIGHTGRAY); // 显著受损部位
-
+    puthz(140,lineStart_y+height*7+10,x->judge.final_per1duty,24,24,BROWN);//甲方责任
+    puthz(140+300,lineStart_y+height*7+10,x->judge.final_per2duty,24,24,BROWN);//乙方责任
     // 责任信息（显示在第二人信息下方）
     if(x->processed_status == '0'){
         puthz(120, lineStart_y + height * 5 + 10,"未处理",24,24,RED); 
     } else {
         puthz(120, lineStart_y + height * 5 + 10,"已处理",24,24,GREEN);
     }// 处理状态
-    puthz(160, lineStart_y + height * 6 + 10, x->liability_result,24,24,BROWN);    // 责任认定结果
-    outtextxy(120, lineStart_y + height * 7 + 10, x->liability_ratio);       // 责任比例
-    
     if(flag != '\0'&&x->processed_status!='1'){
         setcolor(LIGHTCYAN);
         setlinestyle(SOLID_LINE, 0, THICK_WIDTH);

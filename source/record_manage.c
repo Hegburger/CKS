@@ -34,7 +34,9 @@ int record_manage(char status){
     }
     while(1){
         mou_pos(&MouseX,&MouseY,&press);
-        
+        if(mouse_press(0, 0, 45, 30)==1){
+            return 11;//返回管理端
+        }
         if (mouse_press(600, 0, 640, 30) == 1) {
             closegraph();
             delay(1000);
@@ -42,12 +44,18 @@ int record_manage(char status){
             continue;
         }//exit
         if(mouse_press(600,30,640,90)==1){
+            clrmous(MouseX, MouseY);
+		    delay(100);
+		    save_bk_mou(MouseX,MouseY);
             status_filter = type_filter = date_filter[0]=idcard_filter[0]='\0';
             setfillstyle(SOLID_FILL,WHITE);
-            bar(60,31,318,59);//clear date
-            bar(430,32,599,59);//clear type
-            bar(100,61,219,89);//clear status
-            bar(320,61,599,89);//clear idcard
+            bar(60,31+2,318,59-2);//clear date
+            bar(430,32+1,599,59-1);//clear type
+            bar(100,61+2,219,89-2);//clear status
+            bar(320,61+2,599,89-2);//clear idcard
+            clrmous(MouseX, MouseY);
+		    delay(100);
+		    save_bk_mou(MouseX,MouseY);
             //clear all
             current_num = list(&x,date_filter,type_filter,status_filter,idcard_filter,page_current);
             pagenum_max = (current_num + perpage_max - 1) / perpage_max;//更新最大页数
@@ -56,8 +64,14 @@ int record_manage(char status){
             continue;
         }
         if(mouse_press(0,30,320,60) == 1){//date
-            bar(60,31,318,59);
+            clrmous(MouseX, MouseY);
+		    delay(100);
+		    save_bk_mou(MouseX,MouseY);
+            bar(60,31+2,318,59-2);
             input_time(60,30,date_filter,1,3);
+            clrmous(MouseX, MouseY);
+		    delay(100);
+		    save_bk_mou(MouseX,MouseY);
             current_num = list(&x,date_filter,type_filter,status_filter,idcard_filter,page_current);
             pagenum_max = (current_num + perpage_max - 1) / perpage_max;
             page_current = 0;
@@ -65,8 +79,14 @@ int record_manage(char status){
             continue;
         }
         if(mouse_press(320,30,600,60)==1){
-            bar(430,32,599,59);
+            clrmous(MouseX, MouseY);
+		    delay(100);
+		    save_bk_mou(MouseX,MouseY);
+            bar(430,32+1,599,59-2);
             input_accident_type(&type_filter);
+            clrmous(MouseX, MouseY);
+		    delay(100);
+		    save_bk_mou(MouseX,MouseY);
             put_accident_type(type_filter,430,32,24,24,DARKGRAY);
             current_num = list(&x,date_filter,type_filter,status_filter,idcard_filter,page_current);
             pagenum_max = (current_num + perpage_max - 1) / perpage_max;
@@ -77,8 +97,14 @@ int record_manage(char status){
         }
 
         if(mouse_press(0,60,220,90)==1){
-            bar(100,61,219,89);
+            clrmous(MouseX, MouseY);
+		    delay(100);
+		    save_bk_mou(MouseX,MouseY);
+            bar(100,61+2,219,89-2);
             input_status(&status_filter);
+            clrmous(MouseX, MouseY);
+		    delay(100);
+		    save_bk_mou(MouseX,MouseY);
             if(status_filter == '0'){
                 //未处理
                 puthz(100,61,"未处理",24,24,DARKGRAY);
@@ -97,12 +123,18 @@ int record_manage(char status){
         }
         if(mouse_press(220,60,600,90)==1){
             //idcard
-            bar(320,61,599,89);
+            clrmous(MouseX, MouseY);
+		    delay(100);
+		    save_bk_mou(MouseX,MouseY);
+            bar(320,61+2,599,89-2);
             input_str(320,60,idcard_filter,1,3,18);
             current_num = list(&x,date_filter,type_filter,status_filter,idcard_filter,page_current);
             pagenum_max = (current_num + perpage_max - 1) / perpage_max;
             page_current = 0;
             pagefresh(page_current,pagenum_max);
+            clrmous(MouseX, MouseY);
+		    delay(100);
+		    save_bk_mou(MouseX,MouseY);
         }
         if(mouse_press(30,430,120,460)==1&&page_current>0){
             page_current--;
@@ -147,7 +179,12 @@ void initial_screen(){
     line(600, 0, 640, 30);
     line(640, 0, 600, 30);
 
-
+     // 返回按键（左上角）
+    // 绘制返回箭头（"<" 形状）
+    setcolor(BLUE);
+    setlinestyle(SOLID_LINE, 0, THICK_WIDTH);
+    line(30, 15, 15, 22);  // 右上角到箭头尖
+    line(15, 22, 30, 30);  // 箭头尖到右下角
     puthz(275,3,"记录与检索",24,24,BLUE);
     setcolor(DARKGRAY);
     rectangle(0,30,320,60);
@@ -263,7 +300,7 @@ int record_click(AccidentInfo *incident,int current_page,const char *date_filter
                     return 1;
                         break;
                     case 1://第一人信息
-                        page=show_per1(incident);
+                        page=show_per1(incident,flag);
                         delay(100);
                         break;
 
@@ -281,12 +318,10 @@ int record_click(AccidentInfo *incident,int current_page,const char *date_filter
                         page = page_judge(incident,num_solid);
                     default:
                         break;
+                        }
                     }
                 }
-                }
-            }
-            
-        
+            } 
         }
 
     }

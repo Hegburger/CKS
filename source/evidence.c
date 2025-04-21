@@ -15,6 +15,8 @@ int page_evidence(int num_solid,AccidentInfo *p)
 	int y=40;
 	int longer=400;
 	FILE *fw;
+	p->evidence_per1[0]=p->evidence_per2[0]='\0';
+	p->description1[0]=p->description2[0]=p->description3[0]=p->description4[0]='\0';
 	clrmous(MouseX,MouseY);
 	delay(100);
 	cleardevice();
@@ -29,7 +31,7 @@ int page_evidence(int num_solid,AccidentInfo *p)
 			delay(1000);
 			exit(0);
 		}
-		if(mouse_press(30,0,30+longer,height)==1)//输入证人1 
+		else if(mouse_press(30,0,30+longer,height)==1)//输入证人1 
 		{
 			setfillstyle(SOLID_FILL,WHITE);
 			bar(90,10,30+longer,height);
@@ -42,7 +44,7 @@ int page_evidence(int num_solid,AccidentInfo *p)
 		    delay(100);
 		    save_bk_mou(MouseX,MouseY);
 		}
-		if(mouse_press(30,height,30+longer,height*2)==1)//输入证人2
+		else if(mouse_press(30,height,30+longer,height*2)==1)//输入证人2
 		{
 			setfillstyle(SOLID_FILL,WHITE); 
 			bar(90,height+10,30+longer,height*2-3);
@@ -55,8 +57,11 @@ int page_evidence(int num_solid,AccidentInfo *p)
 		    delay(100);
 		    save_bk_mou(MouseX,MouseY);
 		} 
-		if(mouse_press(30,height*2,30+longer,height*3+100)==1)//输入证词
+		else if(mouse_press(0,height*2+5,30+longer,height*3+100)==1)//输入证词
 		{
+            clrmous(MouseX, MouseY);
+		    delay(100);
+		    save_bk_mou(MouseX,MouseY);
 			setfillstyle(SOLID_FILL,WHITE);
 			bar(30,height*3+10,30+700,height*3+100-30);
             clrmous(MouseX, MouseY);
@@ -70,31 +75,25 @@ int page_evidence(int num_solid,AccidentInfo *p)
 		    save_bk_mou(MouseX,MouseY);
 		    
 		    input_description2(p->description2); 
-			setfillstyle(SOLID_FILL,WHITE);
-			bar(160,height*3+10,160+700,height*3+10+25);
 			puthz(160,height*3+10,p->description2,16,16,LIGHTGRAY);
             clrmous(MouseX, MouseY);
 		    delay(100);
 		    save_bk_mou(MouseX,MouseY);
 		    
 		    input_description3(p->description3); 
-			setfillstyle(SOLID_FILL,WHITE);
-			bar(30,height*3+10+30,30+100,height*3+10+30+25);
 			puthz(30,height*3+10+30,p->description3,16,16,LIGHTGRAY);
             clrmous(MouseX, MouseY);
 		    delay(100);
 		    save_bk_mou(MouseX,MouseY);
 		    
 		    input_description4(p->description4); 
-			setfillstyle(SOLID_FILL,WHITE);
-			bar(160,height*3+10+30,160+700,height*3+10+30+25);
 			puthz(160,height*3+10+30,p->description4,16,16,LIGHTGRAY);
             clrmous(MouseX, MouseY);
 		    delay(100);
 		    save_bk_mou(MouseX,MouseY);
 		} 
 		//录入图片
-		if(mouse_press(8,45+height*3+100,5+130,45+height*3+100+100-13)==1)
+		if(mouse_press(8,45+height*3+100,5+130,45+height*3+100+100-13+45)==1)
 		{
             clrmous(MouseX, MouseY);
 		    delay(100);
@@ -106,7 +105,7 @@ int page_evidence(int num_solid,AccidentInfo *p)
 		    save_bk_mou(MouseX,MouseY);
 		} 
 		
-		if(mouse_press(8+130+30,45+height*3+100,5+130*2+30,45+height*3+100+100-13)==1)
+		if(mouse_press(8+130+30,45+height*3+100,5+130*2+30,45+height*3+100+100-13+45)==1)
 		{
             clrmous(MouseX, MouseY);
 		    delay(100);
@@ -118,7 +117,7 @@ int page_evidence(int num_solid,AccidentInfo *p)
 		    save_bk_mou(MouseX,MouseY);
 		} 
 		
-		if(mouse_press(8+130*2+60,45+height*3+100,5+130*3+60,45+height*3+100+100-13)==1)
+		if(mouse_press(8+130*2+60,45+height*3+100,5+130*3+60,45+height*3+100+100-13+45)==1)
 		{
             clrmous(MouseX, MouseY);
 		    delay(100);
@@ -130,7 +129,7 @@ int page_evidence(int num_solid,AccidentInfo *p)
 		    save_bk_mou(MouseX,MouseY);
 		} 
 		
-		if(mouse_press(8+130*3+90,45+height*3+100,5+130*4+90,45+height*3+100+100-13)==1)
+		if(mouse_press(8+130*3+90,45+height*3+100,5+130*4+90,45+height*3+100+100-13+45)==1)
 		{
             clrmous(MouseX, MouseY);
 		    delay(100);
@@ -150,14 +149,14 @@ int page_evidence(int num_solid,AccidentInfo *p)
 				//检验证词是否填写
 				if(p->description1!='\0'&&p->description2!='\0'&&p->description3!='\0'&&p->description4!='\0')
 				{
-    							if((fw = fopen("list.dat","rb+"))==NULL)
+    							if((fw = fopen("accident.dat","rb"))==NULL)
 								{
 									setfillstyle(SOLID_FILL,WHITE);
 									bar(10,365+40,200,365+80); 
 									puthz(10,425,"数据库打开失败",16,16,RED);
 								}
 								else{
-									fwrite(p,num_solid*sizeof(User),1,fw);
+									fwrite(p,num_solid*sizeof(AccidentInfo),1,fw);
 									fclose(fw);
 									setfillstyle(SOLID_FILL,WHITE);
 									bar(10,365+40,200,365+80); 
@@ -216,17 +215,15 @@ void evidence_screen()
     //证据
 	puthz(5,45+y*2+100-29+30,"证据图片",24,24,BLUE);
 	setfillstyle(SOLID_FILL,LIGHTGRAY);
-	bar(8,45+y*3+100,5+longer,45+y*3+100+height-13);
-	bar(8+longer+30,45+y*3+100,5+longer*2+30,45+y*3+100+height-13);
-	bar(8+longer*2+60,45+y*3+100,5+longer*3+60,45+y*3+100+height-13);
-	bar(8+longer*3+90,45+y*3+100,5+longer*4+90,45+y*3+100+height-13);
+	bar(8,45+y*3+100,5+longer,45+y*3+100+height-13+45);
+	bar(8+longer+30,45+y*3+100,5+longer*2+30,45+y*3+100+height-13+45);
+	bar(8+longer*2+60,45+y*3+100,5+longer*3+60,45+y*3+100+height-13+45);
+	bar(8+longer*3+90,45+y*3+100,5+longer*4+90,45+y*3+100+height-13+45);
 	//保存
 	setfillstyle(SOLID_FILL,GREEN);
 	bar(240,45+y*3+100+height+40,360,45+y*3+100+height+40+40);
 	puthz(240,45+y*3+100+height+40+12,"保存证据",24,24,WHITE); 
 }
-
-
 
 
 

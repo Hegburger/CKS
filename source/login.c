@@ -32,13 +32,25 @@ int page_login(char *phone_nuber,char *id_card) {
             return 7;
         }
         if (mouse_press(265+65, 128, 265+65+280, 128+height) == 1) {
+        	            clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
             setfillstyle(SOLID_FILL,LIGHTGRAY);
             bar(265+120+1,128, 265+65+280, 128+height);
             input_str(265+120+16, 128+5, input_name, 1, 3,20);
+                        clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
         } else if (mouse_press(265+65, 128+height+gap, 265+65+280, 128+height*2+gap) == 1) {
+        	            clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
             setfillstyle(SOLID_FILL,LIGHTGRAY);
             bar(265+65+16, 128+height+gap, 265+65+280, 128+height*2+gap);
             input_password(265+65+16, 128+height+gap+5, password, 1, 3,20);
+                        clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
         } else if (mouse_press(290+70+90, 128+height*2+gap*2, 290+70+90+70, 128+height*2+gap*2+50) == 1) {
             //更新提示行
             setfillstyle(SOLID_FILL,WHITE);
@@ -127,4 +139,3 @@ void login_screen() {
 	puthz(5,440,"彭减",24,24,RED);
 	puthz(70,440,"黄城楷",24,24,RED);
 }
-

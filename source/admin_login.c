@@ -36,15 +36,27 @@ int page_admin_login() {
         }
         // 输入账号
         if (mouse_press(265+65, 128, 265+65+280, 128+height) == 1) {
+        	            clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
             setfillstyle(SOLID_FILL, LIGHTGRAY);
             bar(265+65+16, 128+5, 265+65+280, 128+height);
             input_str(265+65+16, 128+5, input_account, 1, 3, 20);
+                        clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
         } 
         // 输入密码
         else if (mouse_press(265+65, 128+height+gap, 265+65+280, 128+height*2+gap) == 1) {
+        	            clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
             setfillstyle(SOLID_FILL, LIGHTGRAY);
             bar(265+65+16, 128+height+gap+5, 265+65+280, 128+height*2+gap);
             input_password(265+65+16, 128+height+gap+5, input_pass, 1, 3, 20);
+                        clrmous(MouseX, MouseY);
+					    delay(100);
+					    save_bk_mou(MouseX,MouseY);
         }
         // 点击确定按钮
         else if (mouse_press(290+70+90, 128+height*2+gap*2, 290+70+90+70, 128+height*2+gap*2+50) == 1) {
