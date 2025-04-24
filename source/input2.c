@@ -113,7 +113,7 @@ void input_description1(char *save_description)
         bar(x, y, x + width, y + height); // 绘制按钮背景
         setcolor(BLACK);
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
-        puthz(x + (width - textwidth(description_current)) / 2, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
+        puthz(x + 30, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
     }
 
     // 选择地点
@@ -180,7 +180,7 @@ void input_description2(char *save_description)
         bar(x, y, x + width, y + height); // 绘制按钮背景
         setcolor(BLACK);
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
-        puthz(x + (width - textwidth(description_current)) / 2, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
+        puthz(x +30, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
     }
 
     // 选择地点
@@ -247,7 +247,7 @@ void input_description3(char *save_description)
         bar(x, y, x + width, y + height); // 绘制按钮背景
         setcolor(BLACK);
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
-        puthz(x + (width - textwidth(description_current)) / 2, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
+        puthz(x + 30, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
     }
 
     // 选择地点
@@ -314,7 +314,7 @@ void input_description4(char *save_description)
         bar(x, y, x + width, y + height); // 绘制按钮背景
         setcolor(BLACK);
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
-        puthz(x + (width - textwidth(description_current)) / 2, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
+        puthz(x +30, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
     }
 
     // 选择地点
@@ -504,7 +504,7 @@ void input_judge_des1(char *save_description)
         bar(x, y, x + width, y + height); // 绘制按钮背景
         setcolor(BLACK);
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
-        puthz(x + (width - textwidth(description_current)) / 2, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
+        puthz(x +30, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
     }
 
     // 选择地点
@@ -571,7 +571,7 @@ void input_judge_des2(char *save_description)
         bar(x, y, x + width, y + height); // 绘制按钮背景
         setcolor(BLACK);
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
-        puthz(x + (width - textwidth(description_current)) / 2, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
+        puthz(x +30, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
     }
 
     // 选择地点
@@ -638,7 +638,7 @@ void input_judge_des3(char *save_description)
         bar(x, y, x + width, y + height); // 绘制按钮背景
         setcolor(BLACK);
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
-        puthz(x + (width - textwidth(description_current)) / 2, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
+        puthz(x +30, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
     }
 
     // 选择地点
@@ -705,7 +705,7 @@ void input_judge_des4(char *save_description)
         bar(x, y, x + width, y + height); // 绘制按钮背景
         setcolor(BLACK);
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
-        puthz(x + (width - textwidth(description_current)) / 2, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
+        puthz(x + 30, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
     }
 
     // 选择地点
@@ -1191,7 +1191,7 @@ void input_feedback1(char *save_description)
         bar(x, y, x + width, y + height); // 绘制按钮背景
         setcolor(BLACK);
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
-        puthz(x + (width - textwidth(description_current)) / 2, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
+        puthz(x + 30, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
     }
 
     // 选择地点
@@ -1260,7 +1260,7 @@ void input_feedback2(char *save_description)
         bar(x, y, x + width, y + height); // 绘制按钮背景
         setcolor(BLACK);
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
-        puthz(x + (width - textwidth(description_current)) / 2, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
+        puthz(x + 30, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
     }
 
     // 选择地点
@@ -1328,7 +1328,7 @@ void input_feedback3(char *save_description)
         bar(x, y, x + width, y + height); // 绘制按钮背景
         setcolor(BLACK);
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
-        puthz(x + (width - textwidth(description_current)) / 2, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
+        puthz(x +30, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
     }
 
     // 选择地点
@@ -1396,7 +1396,7 @@ void input_feedback4(char *save_description)
         bar(x, y, x + width, y + height); // 绘制按钮背景
         setcolor(BLACK);
         rectangle(x, y, x + width, y + height); // 绘制按钮边框
-        puthz(x + (width - textwidth(description_current)) / 2, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
+        puthz(x +30, y + (height - textheight(description_current)) / 2, description_current, 16, 16, BLACK); // 显示地点选项
     }
 
     // 选择地点

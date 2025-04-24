@@ -81,7 +81,7 @@ void screen(char *user_idcard)
     line(595,0,640,45);
     line(640,0,595,45);
     //事故公告
-    puthz(250,12,"事故公告",32,32,LIGHTGRAY);
+    puthz(250,12,"事故公告",32,32,RED);
     //公告通知
     puthz(50,30+12+y,"事故时间",24,24,GREEN);
     puthz(50+250,30+y+12,"事故类型",24,24,LIGHTGRAY);
@@ -129,7 +129,7 @@ void screen(char *user_idcard)
     // 计算读取起始位置（考虑不足5条的情况）
     read_pos = (total_records > max_show) ? 
                    (total_records - max_show) * sizeof(AccidentInfo) : 0L;
-    
+    i = (total_records>max_show) ? max_show : total_records;
     // 定位到读取起始位置
     fseek(fp, read_pos, SEEK_SET);
     
@@ -137,7 +137,7 @@ void screen(char *user_idcard)
     while (fread(&incident, sizeof(AccidentInfo), 1, fp) == 1 && read_count < max_show) {
         read_count++;  // 递增已显示数量
         // 显示位置计算
-        display_y = 30 + y + 12 + read_count * y;  // 使用read_count代替current_row
+        display_y = 30+2*y+ 12 + (i-read_count) * y;  // 使用read_count代替current_row
         
         /* 原有显示代码保持不变 */
         setcolor(GREEN);

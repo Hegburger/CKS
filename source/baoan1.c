@@ -169,7 +169,6 @@ void draw_triangle(int x, int y, int blank_width) {
 void baoan_1_click(AccidentInfo *p,int *page){
     int height = 40;
     int lineStart_y = 80,numBlank=9;
-    
     //时间
     if(mouse_press(0,lineStart_y+height*0,640,lineStart_y+height*1)==1){
         setfillstyle(SOLID_FILL,WHITE);
@@ -208,6 +207,46 @@ void baoan_1_click(AccidentInfo *p,int *page){
         bar(100,lineStart_y+height*2+10,500,lineStart_y+height*2+10+28);
         input_accident_type(&(p->accident_type));
         put_accident_type(p->accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);
+        if(p->accident_type=='E'){
+            if(strcmp(p->per1_car.province,"武")==0){
+                p->per1_car.province[0] = '\0';
+            }
+            p->per1_car.type[0]='\0';
+            setfillstyle(SOLID_FILL,WHITE);
+            bar(100,lineStart_y+height*6+10,230,lineStart_y+height*6+10+28);
+            puthz(120,lineStart_y+height*6+10,p->per1_car.type,24,24,LIGHTGRAY);
+            setfillstyle(SOLID_FILL,WHITE);
+            bar(409,lineStart_y+height*6+10,540,lineStart_y+height*6+10+28);
+            puthz(410,lineStart_y+height*6+10,p->per1_car.province,24,24,LIGHTGRAY);
+        }
+        if(p->accident_type=='A'||p->accident_type=='C'){
+            strcpy(p->per2_car.type,"电动车");
+            strcpy(p->per2_car.province,"武");
+            p->per2_car.plate[0] = '\0';
+        }else{
+            if(strcmp(p->per2_car.province,"武")==0){
+                p->per2_car.province[0]='\0';
+            }
+        }
+        if(p->accident_type=='C'||p->accident_type=='D'){
+            p->per1_car.plate[0] = '\0';
+            strcpy(p->per1_car.type,"电动车");
+            strcpy(p->per1_car.province,"武");
+            setfillstyle(SOLID_FILL,WHITE);
+            bar(100,lineStart_y+height*6+10,230,lineStart_y+height*6+10+28);
+            puthz(120,lineStart_y+height*6+10,p->per1_car.type,24,24,LIGHTGRAY);
+            setfillstyle(SOLID_FILL,WHITE);
+            bar(409,lineStart_y+height*6+10,540,lineStart_y+height*6+10+28);
+            puthz(410,lineStart_y+height*6+10,p->per1_car.province,24,24,LIGHTGRAY);
+        }
+
+        if(p->accident_type=='A'||p->accident_type=='B'){
+            p->per1_car.plate[0] = p->per1_car.province[0]=p->per1_car.type[0] = '\0';
+            setfillstyle(SOLID_FILL,WHITE);
+            bar(100,lineStart_y+height*6+10,230,lineStart_y+height*6+10+28);
+            setfillstyle(SOLID_FILL,WHITE);
+            bar(409,lineStart_y+height*6+10,540,lineStart_y+height*6+10+28);
+        }
         clrmous(MouseX, MouseY);
         delay(100);
         save_bk_mou(MouseX,MouseY);
@@ -234,7 +273,7 @@ void baoan_1_click(AccidentInfo *p,int *page){
         return;
     }
     //car type
-    if(mouse_press(0,lineStart_y+height*6,325,lineStart_y+height*7)==1){
+    if(mouse_press(0,lineStart_y+height*6,325,lineStart_y+height*7)==1&&p->accident_type=='E'){
         setfillstyle(SOLID_FILL,WHITE);
         bar(100,lineStart_y+height*6+10,230,lineStart_y+height*6+10+28);
         input_car_type(p->per1_car.type);
@@ -245,10 +284,13 @@ void baoan_1_click(AccidentInfo *p,int *page){
         return;
     }
     //车牌号
-    if(mouse_press(325,lineStart_y+height*6,640,lineStart_y+height*7)==1){
+    if(mouse_press(325,lineStart_y+height*6,640,lineStart_y+height*7)==1&&p->accident_type!='A'&&p->accident_type!='B'){
         setfillstyle(SOLID_FILL,WHITE);
         bar(409,lineStart_y+height*6+10,540,lineStart_y+height*6+10+28);
-        input_province(p->per1_car.province);
+        p->per1_car.plate[0]='\0';
+        if(p->accident_type=='E'||p->accident_type=='\0'){
+            input_province(p->per1_car.province);
+        }
         puthz(410,lineStart_y+height*6+10,p->per1_car.province,24,24,LIGHTGRAY);
         input_str(430,lineStart_y+height*6+10,p->per1_car.plate,1,3,6);
         clrmous(MouseX, MouseY);
@@ -390,6 +432,40 @@ void baoan_2_click(AccidentInfo *p,int *page){
         bar(100,lineStart_y+height*2+10,500,lineStart_y+height*2+10+28);
         input_accident_type(&(p->accident_type));
         put_accident_type(p->accident_type,100,lineStart_y+height*2+10,24,24,LIGHTGRAY);
+        if(p->accident_type=='E'&&strcmp(p->per1_car.province,"武")==0){
+            p->per1_car.province[0] = '\0';
+        }
+        if(p->accident_type=='A'||p->accident_type=='C'){
+            strcpy(p->per2_car.type,"电动车");
+            strcpy(p->per2_car.province,"武");
+            setfillstyle(SOLID_FILL,WHITE);
+            bar(409,lineStart_y+height*6+10,540,lineStart_y+height*6+10+28);
+            p->per2_car.plate[0]='\0';
+            puthz(410,lineStart_y+height*6+10,p->per2_car.province,24,24,LIGHTGRAY);
+            setfillstyle(SOLID_FILL,WHITE);
+            bar(100,lineStart_y+height*6+10,230,lineStart_y+height*6+10+28);
+            puthz(120,lineStart_y+height*6+10,p->per2_car.type,24,24,LIGHTGRAY);
+        }else{
+            if(strcmp(p->per2_car.province,"武")==0){
+                p->per2_car.province[0]='\0';
+            }
+            p->per2_car.type[0]='\0';
+            setfillstyle(SOLID_FILL,WHITE);
+            bar(100,lineStart_y+height*6+10,230,lineStart_y+height*6+10+28);
+            puthz(120,lineStart_y+height*6+10,p->per2_car.type,24,24,LIGHTGRAY);
+            setfillstyle(SOLID_FILL,WHITE);
+            bar(409,lineStart_y+height*6+10,540,lineStart_y+height*6+10+28);
+            puthz(410,lineStart_y+height*6+10,p->per2_car.province,24,24,LIGHTGRAY);
+        }
+        if(p->accident_type=='C'||p->accident_type=='D'){
+            p->per1_car.plate[0] = '\0';
+            strcpy(p->per1_car.type,"电动车");
+            strcpy(p->per1_car.province,"武");
+            
+        }
+        if(p->accident_type=='A'||p->accident_type=='B'){
+            p->per1_car.plate[0] = p->per1_car.province[0]=p->per1_car.type[0] = '\0';
+        }
         clrmous(MouseX, MouseY);
         delay(100);
         save_bk_mou(MouseX,MouseY);
@@ -416,7 +492,7 @@ void baoan_2_click(AccidentInfo *p,int *page){
         return;
     }
     //car type
-    if(mouse_press(0,lineStart_y+height*6,325,lineStart_y+height*7)==1){
+    if(mouse_press(0,lineStart_y+height*6,325,lineStart_y+height*7)==1&&p->accident_type!='A'&&p->accident_type!='C'){
         setfillstyle(SOLID_FILL,WHITE);
         bar(100,lineStart_y+height*6+10,230,lineStart_y+height*6+10+28);
         input_car_type(p->per2_car.type);
@@ -430,7 +506,10 @@ void baoan_2_click(AccidentInfo *p,int *page){
     if(mouse_press(325,lineStart_y+height*6,640,lineStart_y+height*7)==1){
         setfillstyle(SOLID_FILL,WHITE);
         bar(409,lineStart_y+height*6+10,540,lineStart_y+height*6+10+28);
-        input_province(p->per2_car.province);
+        p->per2_car.plate[0]='\0';
+        if(p->accident_type!='A'&&p->accident_type!='C'){
+            input_province(p->per2_car.province);
+        }
         puthz(410,lineStart_y+height*6+10,p->per2_car.province,24,24,LIGHTGRAY);
         input_str(430,lineStart_y+height*6+10,p->per2_car.plate,1,3,6);
         clrmous(MouseX, MouseY);
@@ -452,7 +531,7 @@ void baoan_2_click(AccidentInfo *p,int *page){
     
     //下一步
     if(mouse_press(270,lineStart_y+height*8+5,390,lineStart_y+height*8+40)==1){
-        if(verify_baoan_2(p)==1){
+        if(verify_baoan_2(p)==1&&verify_baoan_1(p)==1){
             if(save_accident_info(p)==1){
                 puthz(250,450,"报案成功",16,16,GREEN);
                 *page =3;
@@ -510,12 +589,12 @@ int verify_baoan_1(AccidentInfo *p){
         return -1;
     }
     //per_1_type
-    if(p->per1_car.type[0]=='\0'){
+    if(p->per1_car.type[0]=='\0'&&p->accident_type!='A'&&p->accident_type!='B'){
         puthz(250,450,"请输入车辆类型",16,16,RED);
         return -1;
     }
     //per_1_carplate
-    if(validate_licence_car(p->per1_car.plate)!=1){
+    if(validate_licence_car(p->per1_car.plate)!=1&&p->accident_type!='A'&&p->accident_type!='B'){
         puthz(250,450,"车牌号输入错误",16,16,RED);
         return -1;
     }
