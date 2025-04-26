@@ -99,7 +99,7 @@ int page_evidence(int num_solid,AccidentInfo *p)
 		    delay(100);
 		    save_bk_mou(MouseX,MouseY);
 		    
-		    input_image(8,45+height*3+100-1,p->photo1);
+		    input_image(8,45+height*3+100-1,&p->photo1);
             clrmous(MouseX, MouseY);
 		    delay(100);
 		    save_bk_mou(MouseX,MouseY);
@@ -111,7 +111,7 @@ int page_evidence(int num_solid,AccidentInfo *p)
 		    delay(100);
 		    save_bk_mou(MouseX,MouseY);
 		    
-		    input_image(8+130+30,45+height*3+100-1,p->photo2);
+		    input_image(8+130+30,45+height*3+100-1,&p->photo2);
             clrmous(MouseX, MouseY);
 		    delay(100);
 		    save_bk_mou(MouseX,MouseY);
@@ -123,7 +123,7 @@ int page_evidence(int num_solid,AccidentInfo *p)
 		    delay(100);
 		    save_bk_mou(MouseX,MouseY);
 		    
-		    input_image(8+130*2+60,45+height*3+100-1,p->photo3);
+		    input_image(8+130*2+60,45+height*3+100-1,&p->photo3);
             clrmous(MouseX, MouseY);
 		    delay(100);
 		    save_bk_mou(MouseX,MouseY);
@@ -135,7 +135,7 @@ int page_evidence(int num_solid,AccidentInfo *p)
 		    delay(100);
 		    save_bk_mou(MouseX,MouseY);
 		    
-		    input_image(8+130*3+90,45+height*3+100-1,p->photo4);
+		    input_image(8+130*3+90,45+height*3+100-1,&p->photo4);
             clrmous(MouseX, MouseY);
 		    delay(100);
 		    save_bk_mou(MouseX,MouseY);
@@ -224,7 +224,6 @@ void evidence_screen()
 	bar(240,45+y*3+100+height+40,360,45+y*3+100+height+40+40);
 	puthz(240,45+y*3+100+height+40+12,"±£¥Ê÷§æ›",24,24,WHITE); 
 }
-
 
 
 

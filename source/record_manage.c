@@ -310,11 +310,17 @@ int record_click(AccidentInfo *incident,int current_page,const char *date_filter
                         break;
                     case 3://取证
                         fclose(fp);
-                        page = page_evidence(incident,num_solid);
+                        page = page_evidence(num_solid,incident);
+                        break;
+                    case 4://取证展示
+                        page = show_evidence(incident);
+                        break;
+                    case 5://判定展示
+                        page = show_judge(incident);
                         break;
                     case 11://结束
                         return 11;
-                    case 17://
+                    case 17://判定
                         page = page_judge(incident,num_solid);
                     default:
                         break;

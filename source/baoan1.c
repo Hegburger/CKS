@@ -211,13 +211,17 @@ void baoan_1_click(AccidentInfo *p,int *page){
             if(strcmp(p->per1_car.province,"武")==0){
                 p->per1_car.province[0] = '\0';
             }
-            p->per1_car.type[0]='\0';
+            if(strcmp(p->per1_car.type,"电动车")==0){
+                p->per1_car.type[0]='\0';
+            }
             setfillstyle(SOLID_FILL,WHITE);
             bar(100,lineStart_y+height*6+10,230,lineStart_y+height*6+10+28);
             puthz(120,lineStart_y+height*6+10,p->per1_car.type,24,24,LIGHTGRAY);
             setfillstyle(SOLID_FILL,WHITE);
             bar(409,lineStart_y+height*6+10,540,lineStart_y+height*6+10+28);
             puthz(410,lineStart_y+height*6+10,p->per1_car.province,24,24,LIGHTGRAY);
+            settextstyle(1, 0, 3);  // 对应的字体样式和大小
+            outtextxy(430,lineStart_y+height*6+10,p->per1_car.plate);//plate
         }
         if(p->accident_type=='A'||p->accident_type=='C'){
             strcpy(p->per2_car.type,"电动车");

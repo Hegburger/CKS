@@ -339,7 +339,7 @@ void input_description4(char *save_description)
 功能：允许用户选择图片并且输出
 彭减 
 */
-void input_image(int bmp_x,int bmp_y,char photo)
+void input_image(int bmp_x,int bmp_y,char *photo)
 {
 		char description_options[6][7]={
 				"图片一",
@@ -396,7 +396,7 @@ void input_image(int bmp_x,int bmp_y,char photo)
 		            if (press_num < num_description+1) {
 		            	if(press_num==1)
 		            	{
-		            		photo='1';
+		            		*photo='1';
 		            		bmp_convert("C:\\PROJECT\\photo\\TU1.bmp","C:\\PROJECT\\photo\\TU1.dbm");
 							show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU1.dbm",0);
     		                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
@@ -406,7 +406,7 @@ void input_image(int bmp_x,int bmp_y,char photo)
 						}
 		            	if(press_num==2)
 		            	{
-		            		photo='2';
+		            		*photo='2';
 		            		bmp_convert("C:\\PROJECT\\photo\\TU2.bmp","C:\\PROJECT\\photo\\TU2.dbm");
 							show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU2.dbm",0);
     		                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
@@ -416,7 +416,7 @@ void input_image(int bmp_x,int bmp_y,char photo)
 						}
 		            	if(press_num==3)
 		            	{
-		            		photo='3';
+		            		*photo='3';
 		            		bmp_convert("C:\\PROJECT\\photo\\TU3.bmp","C:\\PROJECT\\photo\\TU3.dbm");
 							show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU3.dbm",0);
     		                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
@@ -426,7 +426,7 @@ void input_image(int bmp_x,int bmp_y,char photo)
 						}
 		               if(press_num==4)
 		            	{
-		            		photo='4';
+		            		*photo='4';
 		            		bmp_convert("C:\\PROJECT\\photo\\TU4.bmp","C:\\PROJECT\\photo\\TU4.dbm");
 							show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU4.dbm",0);
     		                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
@@ -436,7 +436,7 @@ void input_image(int bmp_x,int bmp_y,char photo)
 						}
 		            	if(press_num==5)
 		            	{
-		            		photo='5';
+		            		*photo='5';
 		            		bmp_convert("C:\\PROJECT\\photo\\TU5.bmp","C:\\PROJECT\\photo\\TU5.dbm");
 							show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU5.dbm",0);
     		                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
@@ -446,7 +446,7 @@ void input_image(int bmp_x,int bmp_y,char photo)
 						}
 		            	if(press_num==6)
 		            	{
-		            		photo='6';
+		            		*photo='6';
 		            		bmp_convert("C:\\PROJECT\\photo\\TU6.bmp","C:\\PROJECT\\photo\\TU6.dbm");
 							show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU6.dbm",0);
     		                putimage(start_x, start_y, background, COPY_PUT); // 还原画面
@@ -1417,7 +1417,6 @@ void input_feedback4(char *save_description)
         }
     }
 }
-
 
 
 

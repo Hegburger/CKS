@@ -42,8 +42,6 @@ typedef struct {
     char per2_phone[12];
     CarInfo per1_car;
     CarInfo per2_car;
-    EBikeInfo per1_ebike;
-    EBikeInfo per2_ebike;
     char location[17];           // 事故发生地点
     char weather[7];             // 事故发生时的天气
     char time[17];                // 事故发生时间，精确到分钟，例如："2025—05—10 14:30"
@@ -54,12 +52,12 @@ typedef struct {
     char processed_status;       // 处理状态：'0' 表示未处理，'1' 表示已处理
     char liability_result[20];   // 责任认定结果，如 "主责", "次责", "同责", "无责"
     char liability_ratio[10];      // 责任比例，例如 "80/20" 或 "50%"
-    char description1[10];       //证词第一段
-    char description2[10];       //证词第二段
-    char description3[10];       //证词第三段
-    char description4[10];       //证词第四段
-    char evidence_per1[7];		//证人1 
-    char evidence_per2[7];		//证人2 
+    char description1[17];       //证词第一段
+    char description2[15];       //证词第二段
+    char description3[17];       //证词第三段
+    char description4[17];       //证词第四段
+    char evidence_per1[5];		//证人1 
+    char evidence_per2[5];		//证人2 
     char photo1;//证据图片1
     char photo2;
     char photo3;

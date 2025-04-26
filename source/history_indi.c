@@ -5,6 +5,7 @@
 int show_per1(AccidentInfo *x,char flag);
 int show_per2(AccidentInfo *x,char flag);
 int his_indi_screen(char *user_idcard,AccidentInfo *p);
+void evidence_screen_indi(AccidentInfo *p);
 void history_indi(char *user_idcard) {
     int num,end_y,num_press,page;
     int header_y = 50;
@@ -459,6 +460,12 @@ int show_per2(AccidentInfo *x, char flag) {
         rectangle(295,lineStart_y + height * 9+7,405,lineStart_y + height * 9+38);
         puthz(300,lineStart_y + height * 9+10,"进入取证",24,24,BLUE);
     }
+    if(x->processed_status == '1'){
+        setcolor(LIGHTCYAN);
+        setlinestyle(SOLID_LINE, 0, THICK_WIDTH);
+        rectangle(295,lineStart_y + height * 9+7,405,lineStart_y + height * 9+38);
+        puthz(300,lineStart_y + height * 9+10,"证据详情",24,24,BLUE);
+    }
     while (1)
     {
         mou_pos(&MouseX,&MouseY,&press);
@@ -484,6 +491,11 @@ int show_per2(AccidentInfo *x, char flag) {
             delay(100);
             break;
         }
+        if(mouse_press(295,lineStart_y + height * 9+7,405,lineStart_y + height * 9+38)==1 && x->processed_status=='1'){
+            page = 4;
+            delay(100);
+            break;//进入证据
+        }
         
 
     }
@@ -502,4 +514,98 @@ void warning_screen(){
         mou_pos(&MouseX,&MouseY,&press);
         current = clock();
     }
+}
+
+
+int show_evidence(AccidentInfo *x){
+    clrmous(MouseX,MouseY);
+	delay(100);
+	cleardevice();
+    evidence_screen_indi(x);
+    save_bk_mou(MouseX,MouseY);
+    while (1)
+    {
+        mou_pos(&MouseX,&MouseY,&press);
+        if(mouse_press(595,0,640,45)==1)//退出键 
+		{
+			closegraph();
+			delay(1000);
+			exit(0);
+		}
+        if(mouse_press(0, 0, 45, 45)==1){
+            delay(100);
+            return 2;
+        }
+        if(mouse_press(295,450,370,475)==1){
+            delay(100);
+            return 5;
+        }
+    }
+    
+
+}
+
+void evidence_screen_indi(AccidentInfo *p)
+{
+	int height=100;
+	int longer=130;
+    int height2 = 40;
+	int i;
+	int y=40;
+	setbkcolor(WHITE);
+    // 返回按键（左上角）
+    setcolor(LIGHTGRAY);
+    setlinestyle(SOLID_LINE, 0, NORM_WIDTH);
+    rectangle(0, 0, 45, 45); // 绘制返回按钮边框
+    // 绘制返回箭头（"<" 形状）
+    setcolor(BLUE);
+    setlinestyle(SOLID_LINE, 0, THICK_WIDTH);
+    line(30, 15, 15, 22);  // 右上角到箭头尖
+    line(15, 22, 30, 30);  // 箭头尖到右下角
+	//退出键
+	setcolor(LIGHTGRAY);
+	setlinestyle(DOTTED_LINE,0,NORM_WIDTH);
+	rectangle(595,0,640,45);
+    setlinestyle(SOLID_LINE,0,THICK_WIDTH);
+    line(595,0,640,45);
+    line(640,0,595,45);
+    //证人1
+	setcolor(LIGHTGRAY);
+    setlinestyle(SOLID_LINE,0,THICK_WIDTH);
+    line(0,45+y,640,45+y);
+    line(0,45,640,45);
+    puthz(5,45-29,"证人一",24,24,BLUE);
+    //证人2
+	setcolor(LIGHTGRAY);
+    setlinestyle(SOLID_LINE,0,THICK_WIDTH);
+    //line(0,45+y*2,640,45+y*2);
+    puthz(5,45+y-29,"证人二",24,24,BLUE);
+    //证词
+	setcolor(LIGHTGRAY);
+    setlinestyle(SOLID_LINE,0,THICK_WIDTH);
+    line(0,45+y+100+30,640,45+y+100+30);
+    puthz(5,45+y*2-29,"证词",24,24,BLUE); 
+    //证据
+	puthz(5,45+y*2+100-29+30,"证据图片",24,24,BLUE);
+	setfillstyle(SOLID_FILL,LIGHTGRAY);
+	bar(8,45+y*3+100,5+longer,45+y*3+100+height-13+45);
+	bar(8+longer+30,45+y*3+100,5+longer*2+30,45+y*3+100+height-13+45);
+	bar(8+longer*2+60,45+y*3+100,5+longer*3+60,45+y*3+100+height-13+45);
+	bar(8+longer*3+90,45+y*3+100,5+longer*4+90,45+y*3+100+height-13+45);
+    //info
+    puthz(90,17,p->evidence_per1,24,24,LIGHTGRAY);
+    puthz(90,height2+17,p->evidence_per2,24,24,LIGHTGRAY);
+    puthz(30,height2*3+10,p->description1,16,16,LIGHTGRAY);
+    puthz(160,height2*3+10,p->description2,16,16,LIGHTGRAY);
+    puthz(30,height2*3+10+30,p->description3,16,16,LIGHTGRAY);
+    puthz(160,height2*3+10+30,p->description4,16,16,LIGHTGRAY);
+    
+    photo_trans(8,45+height2*3+100-1,p->photo1);
+    photo_trans(8+130+30,45+height2*3+100-1,p->photo2);
+    photo_trans(8+130*2+60,45+height2*3+100-1,p->photo3);
+    photo_trans(8+130*3+90,45+height2*3+100-1,p->photo4);
+    setcolor(LIGHTCYAN);
+    setlinestyle(SOLID_LINE, 0, THICK_WIDTH);
+    rectangle(295,450,410,475);
+    puthz(300,450,"判定详情",24,24,BLUE);
 }

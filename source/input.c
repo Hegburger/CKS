@@ -76,11 +76,11 @@ void input_str(int x, int y, char *save_str, int font, int size, int num_max) {
             // 绘制光标
             if (cursor_on&&num>0) {
                 int text_w = textwidth(tepStr);
-                line(x + text_w-2, y, x + text_w-2, y + textheight("W"));
+                line(x + text_w-2, y+2, x + text_w-2, y + textheight("W")-4);
             }
         }
         
-        delay(10); // 降低CPU占用
+        delay(20); // 降低CPU占用
     }
 
     // 保存结果并清理
@@ -792,6 +792,7 @@ void input_destroy_part(char *save_des_type) {
 
     // 绘制按钮
     for (i = 0; i < num_locations; i++) {
+
         row = i / max_per_column;  // 计算当前选项所在的行
         y = start_y + row * (height); // 计算按钮的纵坐标
         x = start_x + (i % max_per_column) * width; // 计算按钮的横坐标
@@ -812,6 +813,7 @@ void input_destroy_part(char *save_des_type) {
         // 判断是否点击类型区域
         if (mouse_press(start_x, start_y, start_x + (max_per_column * width), start_y + ((num_locations / max_per_column + 1) * height)) == 1) {
             // 计算点击位置在数组中的位置
+
             press_num = (MouseY - start_y) / height;
             if (press_num < num_locations) {
                 strcpy(save_des_type, des_part_options[press_num]); // 存储选中的类型
@@ -885,4 +887,36 @@ void input_status(char *processed_status) {
 
     free(background);
     exit_input();
+}
+
+void photo_trans(int bmp_x,int bmp_y,char photo){
+    switch (photo)
+    {
+    case '1':
+        bmp_convert("C:\\PROJECT\\photo\\TU1.bmp","C:\\PROJECT\\photo\\TU1.dbm");
+        show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU1.dbm",0);
+        break;
+    case '2':
+        bmp_convert("C:\\PROJECT\\photo\\TU2.bmp","C:\\PROJECT\\photo\\TU2.dbm");
+        show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU2.dbm",0);
+        break;
+    case '3':
+        bmp_convert("C:\\PROJECT\\photo\\TU3.bmp","C:\\PROJECT\\photo\\TU3.dbm");
+        show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU3.dbm",0);
+    case '4':
+        bmp_convert("C:\\PROJECT\\photo\\TU4.bmp","C:\\PROJECT\\photo\\TU4.dbm");
+        show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU4.dbm",0);
+        break;
+    case '5':
+        bmp_convert("C:\\PROJECT\\photo\\TU5.bmp","C:\\PROJECT\\photo\\TU5.dbm");
+	    show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU5.dbm",0);
+        break;
+    case '6':
+        bmp_convert("C:\\PROJECT\\photo\\TU6.bmp","C:\\PROJECT\\photo\\TU6.dbm");
+	    show_dbm(bmp_x,bmp_y,"C:\\PROJECT\\photo\\TU6.dbm",0);
+        break;
+
+    default:
+        break;
+    }
 }

@@ -54,6 +54,7 @@ void happen_screen()
     //²¥·Å¶¯»­
     bmp_convert("C:\\PROJECT\\photo\\CAR1.bmp","C:\\PROJECT\\photo\\CAR1.dbm");
 	bmp_convert("C:\\PROJECT\\photo\\CAR2.bmp","C:\\PROJECT\\photo\\CAR2.dbm");
+	delay(1000);
     for(i=0;i<=60;i++)
     {
     	bar(start_l-4,row,start_l+i*2,row+160);
